@@ -1,0 +1,18 @@
+citHeader("To cite nadiv in publications use:")
+
+citEntry(entry = "Article",
+  title        = "{nadiv}: an {R} package to create relatedness matrices for estimating non-additive genetic variances in animal models",
+  author       = personList(as.person("Matthew E. Wolak")),
+  journal      = "Methods in Ecology and Evolution",
+  year         = "2012",
+  volume       = "3",
+  number       = "5",
+  pages        = "792-796",
+  url          = "http://onlinelibrary.wiley.com/doi/10.1111/j.2041-210X.2012.00213.x/full",
+
+  textVersion  =
+  paste("Matthew E. Wolak (2012).",
+        "nadiv: an R package to create relatedness matrices for estimating non-additive genetic variances in animal models.",
+        "Methods in Ecology and Evolution, 3(5), 792-796.")
+)
+
