@@ -48,3 +48,4 @@ makeAinv <- function(pedigree, det = FALSE){
 
  return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))
 }
+

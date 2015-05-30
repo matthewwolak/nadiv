@@ -170,10 +170,10 @@ makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "h
     Sinv@Dimnames <- list(pedigree[,1], NULL) 
 
     if(returnS){
-       cat(paste("S-inverse made: Starting to make S..."))
+       cat("S-inverse made: Starting to make S...")
           T <- as(solve(Q), "dgCMatrix")
           S <- as(t(T) %*% Diagonal(N, Vii) %*% T, "dgCMatrix")
-       cat(paste(".done", "\n"))
+       cat(".done", "\n")
     } else{
          S <- NULL
       }

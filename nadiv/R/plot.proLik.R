@@ -10,3 +10,4 @@ plot.proLik <- function(x, CL = TRUE, alpha = 0.05, type = "l", ...)
         abline(h = chi, lty = "dotted", col = "red", lwd = 2)
     }  
 }
+

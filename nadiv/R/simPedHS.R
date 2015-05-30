@@ -23,3 +23,4 @@ simPedHS <- function(s, d, n, uniqueDname = TRUE, prefix = NULL){
     }
 ped
 }
+

@@ -49,3 +49,4 @@ Meyer, K. 2008.  Likelihood calculations to evaluate experimental designs to est
 \examples{
   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2)
 }
+

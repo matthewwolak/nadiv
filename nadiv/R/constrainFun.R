@@ -20,3 +20,4 @@ constrainFun <- function(parameter.val, full, fm2, comp, G, mit = 600){
   }
   if(con.mod$converge) return((2*(abs(full$loglik) - abs(con.mod$loglik)))) else return(NA)
 }
+

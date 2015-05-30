@@ -10,3 +10,4 @@ aiCI <- function(asr.model, Dimnames = NULL, alpha = 0.05)
   dimnames(CIframe)[[2]] <- c("LCL", "estimate", "UCL")
 return(CIframe)
 }
+

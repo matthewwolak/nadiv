@@ -9,3 +9,4 @@ varTrans <- function(asr.object){
       }
 vars
 }
+

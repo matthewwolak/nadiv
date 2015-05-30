@@ -64,3 +64,4 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
 
 }
 
+

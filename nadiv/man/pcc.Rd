@@ -46,3 +46,4 @@ Returns \code{TRUE} if all variance parameters change less than the value specif
    pcc(object = NULL, trace = tracein)
 
 }
+
