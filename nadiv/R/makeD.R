@@ -13,7 +13,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
   }
 
   if(!parallel){
-     cat(paste("starting to make D..."))
+     cat("starting to make D...")
      Cout <- .C("dij",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
@@ -55,7 +55,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
          Cout[[9]]
         }
 
-        cat(paste("starting to make D..."))
+        cat("starting to make D...")
         Dijs <- pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
         D <- Matrix(0, N, N, sparse = TRUE)
@@ -69,11 +69,13 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 
      }
 
-  cat(paste(".done", "\n"))
+  cat(".done", "\n")
   
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertD){
+    cat("starting to invert D...")
     Dinv <- as(solve(D), "dgCMatrix")
+    cat(".done", "\n")
     Dinv@Dimnames <- list(pedigree[,1], NULL)
     listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
@@ -81,4 +83,3 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
     return(list(A = A, D = D, logDet = logDet))
     } 
 }
-
