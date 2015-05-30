@@ -30,7 +30,6 @@ Returns a numeric vector of variances for each variance component in an ASReml-R
     warcolak.mod <- asreml(trait1 ~ 1, random = ~ped(ID) + giv(IDD), 
 	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
     summary(warcolak.mod)$varcomp
-    varTrans(warcolak.mod)    
+    sqrt(varTrans(warcolak.mod))  # sqrt() so can compare with standard errors from summary
    }
 }
-
