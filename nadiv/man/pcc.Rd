@@ -6,7 +6,7 @@ REML convergence checks
 \description{
 Mainly checks to ensure the variance components in a REML mixed model do not change between the last two iterations more than what is allowed by the tolerance value.  See details for extra check on asreml-R models.}
 \usage{
-pcc(object, traces = NULL, tol = 0.01)
+pcc(object, traces = NULL, tol = 0.01, silent = FALSE)
 }
 \arguments{
   \item{object }{
@@ -17,6 +17,9 @@ Optionally, a matrix to substitute instead of the monitor element to \code{objec
 }
   \item{tol }{
 The tolerance level for which to check against all of the changes in variance component parameter estimates
+}
+  \item{silent }{
+Optional argument to silence the output of helpful (indicating default underlying behavior) messages
 }
 }
 
@@ -43,4 +46,3 @@ Returns \code{TRUE} if all variance parameters change less than the value specif
    pcc(object = NULL, trace = tracein)
 
 }
-
