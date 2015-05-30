@@ -1,7 +1,7 @@
 Package: nadiv
 Type: Package
 Title: (Non)Additive Genetic Relatedness Matrices in Animal Model Analyses
-Version: 2.13.3
+Version: 2.14.1
 Date: 2015-05-30
 Author: Matthew Wolak
 Maintainer: Matthew Wolak <matthewwolak@gmail.com>
