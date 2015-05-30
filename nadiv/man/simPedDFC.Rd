@@ -7,7 +7,7 @@ Double first cousin pedigree construction
 Simulates a pedigree for the "double first cousin" mating design (Fairbairn and Roff 2006).
 }
 \usage{
-simPedDFC(F, gpn = 4, fsn = 4, s = 2)
+simPedDFC(F, gpn = 4, fsn = 4, s = 2, prefix = NULL)
 }
 \arguments{
   \item{F }{
@@ -22,6 +22,10 @@ Number of offspring in the full-sib families of the second/P generation (must be
   \item{s }{
 Number of sires per full-sib family in the second/P generation (must be >=2)
 }
+  \item{prefix }{
+Optional prefix every identity
+}
+
 }
 \details{
 This is an adaption to a half-sib breeding design which also produces first cousins and double first cousins.  Double first cousins are produced by mating two brothers to two sisters (the offspring of the resulting two families are double first cousins with one another).  This is described in Fairbairn and Roff (2006) as being particularly effective for separating autosomal additive genetic variance from sex chromosomal additive genetic variance.  It is also amenable to estimating dominance variance, however, it still has difficulty separating dominance variance from common maternal environmental variance (Meyer 2008).
@@ -45,4 +49,3 @@ Meyer, K. 2008.  Likelihood calculations to evaluate experimental designs to est
 \examples{
   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2)
 }
-
