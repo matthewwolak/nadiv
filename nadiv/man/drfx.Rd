@@ -8,17 +8,20 @@ This function simulates effects for random terms in a linear mixed model based o
 
 }
 \usage{
-drfx(G, fac, dataf)
+drfx(G, fac, dataf, ...)
 }
 \arguments{
-  \item{G}{
+  \item{G }{
 The variance-covariance matrix to model the effects after
 }
-  \item{fac}{
+  \item{fac }{
 A character indicating the factor in \code{dataf} with which to construct the design matrix
 }
-  \item{dataf}{
+  \item{dataf }{
 A dataframe with \code{fac} in it
+}
+  \item{... }{
+Arguments to be passed to the internal use of \code{\link{grfx}}
 }
 }
 
@@ -45,4 +48,3 @@ If G = x, where 'x' is a single number, then 'x' should still be specified as a 
   cfx <- drfx(G = Gmat, fac = "Dam", dataf = warcolak[1:200, ])
 
 }
-
