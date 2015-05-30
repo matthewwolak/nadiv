@@ -6,8 +6,7 @@ plot.proLik <- function(x, CL = TRUE, alpha = 0.05, type = "l", ...)
      xlab = x$component, ylab = "LRT statistic", 
      type = type, lwd = 2, ...)
      if(CL){  
-        chi <- (-0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))
+        chi <- (0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))
         abline(h = chi, lty = "dotted", col = "red", lwd = 2)
     }  
 }
-
