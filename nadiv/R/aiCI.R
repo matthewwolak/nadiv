@@ -2,7 +2,7 @@ aiCI <- function(asr.model, Dimnames = NULL, alpha = 0.05)
 {
    za2 <- qnorm(alpha/2, mean = 0, sd = 1) 
    hii.vec <- varTrans(asr.model)
-   theta.vec <- summary(asr.model)$varcomp$component
+   theta.vec <- asr.model$gammas * asr.model$sigma2
    UCL <- theta.vec - za2*sqrt(hii.vec)
    LCL <- theta.vec + za2*sqrt(hii.vec)
   CIframe <- cbind(LCL, theta.vec, UCL)
@@ -10,4 +10,3 @@ aiCI <- function(asr.model, Dimnames = NULL, alpha = 0.05)
   dimnames(CIframe)[[2]] <- c("LCL", "estimate", "UCL")
 return(CIframe)
 }
-
