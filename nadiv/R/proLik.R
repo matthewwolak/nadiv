@@ -3,7 +3,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
 
   s2 <- full.model$sigma2
   gamma.ind <- which(names(full.model$gammas) == component)
-  bound.check <- as.character(summary(full.model)$varcomp$constraint[gamma.ind][[1]])
+  bound.check <- names(full.model$gammas.con)[gamma.ind]
     warned <- FALSE
     if(bound.check == "Boundary"){
       warned <- TRUE
@@ -14,21 +14,21 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
   std.err <- sqrt(diag(aiFun(full.model))[gamma.ind])
   if(is.na(std.err) | std.err == 0) std.err <- 0.1 
   full.mod2 <- update.asreml(object = full.model, start.values = TRUE)$gammas.table
-  chi.val <- -0.5 * qchisq(alpha, df = 1, lower.tail = FALSE)
+  chi.val <- 0.5 * qchisq(alpha, df = 1, lower.tail = FALSE)
 
   proLik_keep_uniQUe_UCL <- list(gam = NULL, lambdas = NULL)
   tmpLRTU <- function(st, chi){
       proLik_keep_uniQUe_UCL[[1]] <<- c(proLik_keep_uniQUe_UCL[[1]], st)
       lrt <- constrainFun(st, full.model, full.mod2, component, G)
       proLik_keep_uniQUe_UCL[[2]] <<- c(proLik_keep_uniQUe_UCL[[2]], lrt)
-      abs(lrt - chi)
+      abs(chi - lrt)
   }
   proLik_keep_uniQUe_LCL <- list(gam = NULL, lambdas = NULL)
   tmpLRTL <- function(st, chi){
       proLik_keep_uniQUe_LCL[[1]] <<- c(proLik_keep_uniQUe_LCL[[1]], st)
       lrt <- constrainFun(st, full.model, full.mod2, component, G)
       proLik_keep_uniQUe_LCL[[2]] <<- c(proLik_keep_uniQUe_LCL[[2]], lrt)
-      abs(lrt - chi)
+      abs(chi - lrt)
   }
 
 
@@ -77,4 +77,3 @@ return(list(lambdas = profile$lambdas[ord.index],
 	LCL = LCL$minimum * s2, 
 	component = component))
 }
-
