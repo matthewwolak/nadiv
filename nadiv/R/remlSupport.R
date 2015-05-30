@@ -22,13 +22,13 @@ pin <- function (object, transform){
 }
 
 
-pcc <- function(object, traces = NULL, tol = 0.01){
+pcc <- function(object, traces = NULL, tol = 0.01, silent = FALSE){
     if(is.null(object) & is.null(traces)){
        stop("one of object or traces must be non-NULL")
     }
 
     if(!is.null(object)){
-       message("trimming the asreml monitor matrix")
+       if(!silent) message("trimming the asreml monitor matrix")
        rc <- dim(object$monitor)
        traces <- object$monitor[4:rc[1], 1:(rc[2]-1)]
        if(object$loglik == 0.00 | object$converge == FALSE) return(FALSE)
