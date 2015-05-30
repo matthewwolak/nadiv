@@ -7,7 +7,7 @@ Simulated genetic random effects
 This function simulates effects for random terms in a linear mixed model based on relatedness matrices. The intended purpose is for simulating genetic and environmental effects from a pedigree.
 }
 \usage{
-grfx(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", warn = TRUE)
+grfx(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", stdnorms = NULL, warn = TRUE)
 }
 
 \arguments{
@@ -26,13 +26,16 @@ A logical or NULL, indicating if the cholesky decomposition of the incidence mat
   \item{output }{
 Format for the output
 }
+  \item{stdnorms }{
+Standard normal deviates to use
+}
   \item{warn }{
-Should a warning be produced when \code{incidence = NULL} indicating that a previous incidence matrix is being used
+Should a warning be produced when \code{incidence = NULL} indicating that a previous incidence matrix is being used if one exists, otherwise an Identity matrix
 }
 }
 
 \details{
-The total number of effects simulated will be n*d, where d is the number of columns in the 'G' matrix.
+The total number of effects simulated will be n*d, where d is the number of columns in the 'G' matrix. The standard normal deviates can be supplied instead of generated within the function when \code{stdnorms != NULL}. The length of this vector must be \code{n*nrow(G)}.
 
 Supplied incidence matrices should be n-by-n symmetric matrices.  For simulated random effects using design matrices, see \code{\link{drfx}}.  If no incidence matrix is supplied, \code{incidence = NULL}, the function first checks the environment to see if anything with the name 'nadiv_prev_Mincidence' exists when checking \code{ls()}.  If so, this saved version is used with a warning.  Otherwise the Identity matrix is used, which assumes that all 'n' random effects are independently and identically distributed (default to Identity matrix).
 
@@ -61,5 +64,12 @@ The random effects coerced to be in the format specified by output.  The default
   Gmat <- matrix(c(20, 0, 0, 10), 2, 2)
   breedingValues <- grfx(n = 200, G = Gmat, incidence = A, saveIncidence = FALSE)
 
-}
+ # Now with a user supplied set of standard normal deviates
+  snorms <- rnorm(nrow(warcolak[1:200,]) * ncol(Gmat))
+  breedingValues2a <- grfx(n = 200, G = Gmat, incidence = A, stdnorms = snorms)
+  breedingValues2b <- grfx(n = 200, G = Gmat, incidence = A, stdnorms = snorms)
+  identical(breedingValues2a, breedingValues2b)  # TRUE
+  var(breedingValues2a)
+  var(breedingValues2b)
 
+}
