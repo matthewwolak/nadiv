@@ -1,0 +1,14 @@
+Package: nadiv
+Type: Package
+Title: Functions to construct (non)additive genetic relatedness
+        matrices and facilitate animal model analyses
+Version: 2.13.2
+Date: 2014-06-20
+Author: Matthew Wolak
+Maintainer: Matthew Wolak <matthewwolak@gmail.com>
+Depends: Matrix
+Suggests: parallel, asreml
+Description: Constructs (non)additive genetic relationship matrices, and their inverses, from a pedigree to be used in linear mixed effect models (A.K.A. the 'animal model').  Also includes other functions to facilitate the use of animal models.  Some functions have been created to be used in conjunction with the R package for ASReml software, which can be obtained upon purchase from VSN international (<www.vsni.co.uk/software/asreml>).
+License: GPL (>=2)
+LazyData: yes
+Packaged: 2014-08-18 09:20:45 UTC; matthew
