@@ -1,4 +1,4 @@
-ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL){
+ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
 
   if(is.null(ggroups)){
      ptype <- "A"
@@ -83,5 +83,5 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL){
   } else{
        T@Dimnames <- list(pedalt[, 1], pedalt[, 1])   
     }
- return(T[-c(nggroups), nggroups])
+ return(as(T[-c(nggroups), nggroups], output))
 }
