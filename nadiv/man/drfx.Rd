@@ -48,3 +48,4 @@ If G = x, where 'x' is a single number, then 'x' should still be specified as a 
   cfx <- drfx(G = Gmat, fac = "Dam", dataf = warcolak[1:200, ])
 
 }
+

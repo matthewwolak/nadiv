@@ -9,3 +9,4 @@ drfx <- function(G, fac, dataf, ...){
    fx <- sapply(seq.int(d), FUN = function(c){ (Z %*% M[, c])@x})
  return(list(fx = fx, Z = Z))
 }
+

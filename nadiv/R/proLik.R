@@ -77,3 +77,4 @@ return(list(lambdas = profile$lambdas[ord.index],
 	LCL = LCL$minimum * s2, 
 	component = component))
 }
+

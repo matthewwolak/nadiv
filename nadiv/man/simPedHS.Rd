@@ -45,3 +45,4 @@ A \code{data.frame} with columns corresponding to: id, dam, sire, and sex.  Sex 
 \examples{
   simPedHS(s = 1, d = 3, n = 2)
 }
+

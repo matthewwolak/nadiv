@@ -33,3 +33,4 @@ Returns a numeric vector of variances for each variance component in an ASReml-R
     sqrt(varTrans(warcolak.mod))  # sqrt() so can compare with standard errors from summary
    }
 }
+

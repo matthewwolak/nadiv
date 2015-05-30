@@ -32,3 +32,4 @@ grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix
 
  return(as(X, output))
 }
+
