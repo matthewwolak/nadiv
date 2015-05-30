@@ -1,4 +1,4 @@
-simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2)
+simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, prefix = NULL)
 {
 
 if(gpn < 2) stop("Number of founding grand-parents ('gpn') must be greater than or equal to 2")
@@ -18,10 +18,19 @@ unitFun <- function(Fx){
    }
    sexDesign <- grepl(paste("^u", Fx, "_s", sep = ""), design)
 
-   unitPed <- data.frame(id = as.character(c(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), paste("u", Fx, "_gd", seq.int(gpn), sep = ""), c(design), paste("u", Fx, "_m", rep(seq.int((fsn*(gpn-1))), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq.int(fsn/2), (fsn*(gpn-1))), sep = ""))),
+   if(is.null(prefix)){
+     unitPed <- data.frame(id = as.character(c(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), paste("u", Fx, "_gd", seq.int(gpn), sep = ""), c(design), paste("u", Fx, "_m", rep(seq.int((fsn*(gpn-1))), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq.int(fsn/2), (fsn*(gpn-1))), sep = ""))),
 	dam = as.character(c(rep(NA, (2*gpn)), rep(paste("u", Fx, "_gd", seq.int(gpn), sep = ""), each = fsn), rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^u", Fx, "_d", sep = ""), x)]})), each = fsn))),
 	sire = as.character(c(rep(NA, (2*gpn)), rep(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), each = fsn), rep(sires, each = ((gpn-1)*fsn)))),
 	sex = c(rep("M", gpn), rep("F", gpn), sapply(sexDesign, FUN = function(x) {if(x) "M" else "F"}), rep(rep(c("M", "F"), each = (fsn/2)), ((gpn-1)*fsn))))
+   } else{
+       p <- as.character(prefix)   
+       unitPed <- data.frame(id = as.character(paste0(p, c(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), paste("u", Fx, "_gd", seq.int(gpn), sep = ""), c(design), paste("u", Fx, "_m", rep(seq.int((fsn*(gpn-1))), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq.int(fsn/2), (fsn*(gpn-1))), sep = "")))),
+	dam = as.character(c(rep(NA, (2*gpn)), paste0(p, c(rep(paste("u", Fx, "_gd", seq.int(gpn), sep = ""), each = fsn), rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^u", Fx, "_d", sep = ""), x)]})), each = fsn))))),
+	sire = as.character(c(rep(NA, (2*gpn)), paste0(p, c(rep(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), each = fsn), rep(sires, each = ((gpn-1)*fsn)))))),
+	sex = c(rep("M", gpn), rep("F", gpn), sapply(sexDesign, FUN = function(x) {if(x) "M" else "F"}), rep(rep(c("M", "F"), each = (fsn/2)), ((gpn-1)*fsn))))
+     }
+
 
    unitPed
    }
@@ -32,4 +41,3 @@ unitFun <- function(Fx){
 
 return(ped_out)
 }
-
