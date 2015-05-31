@@ -11,7 +11,6 @@ findDFC <- function(pedigree, exact = FALSE, parallel = FALSE, ncores = getOptio
   if(exact) exct <- 1 else exct <- 0
 
   if(parallel) {
-     require(parallel)
      wrap_DFC <- function(x){
          i.tmp <- i[min(x):max(x)]
          j.tmp <- j[min(x):max(x)]
@@ -24,7 +23,7 @@ findDFC <- function(pedigree, exact = FALSE, parallel = FALSE, ncores = getOptio
 	    as.integer(exct))
         Cout[[3]]
      }
-     dfcs.vec <- pvec(seq.int(length(i)), FUN = wrap_DFC, mc.set.seed = FALSE, mc.silent = TRUE, mc.cores = ncores, mc.cleanup = TRUE)
+     dfcs.vec <- parallel::pvec(seq.int(length(i)), FUN = wrap_DFC, mc.set.seed = FALSE, mc.silent = TRUE, mc.cores = ncores, mc.cleanup = TRUE)
      } else{ 
           Cout <- .C("dfc",
 	     as.integer(numeric.pedigree[, 2] - 1),

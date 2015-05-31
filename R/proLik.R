@@ -38,8 +38,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
   if(negative == TRUE & Uint[2] > 1) Uint[2] <- 0.999999
   if(negative == TRUE & Lint[1] < -1) Lint[1] <- -0.999999
   if(parallel){
-     require(parallel)
-     tmpUCL <- mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = tolerance), proLik_keep_uniQUe_UCL)))
+     tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = tolerance), proLik_keep_uniQUe_UCL)))
 
   } else{
        UCL <- optimize(f = tmpLRTU, interval = Uint, chi = chi.val, tol = tolerance)

@@ -77,8 +77,8 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertD){
     Dinv <- as(solve(D), "dgCMatrix")
-    Dinv@Dimnames <- list(pedigree[pedigree$oseq, 1], NULL)
-    listDinv <- sm2list(Dinv, rownames=pedigree[pedigree$oseq, 1], colnames=c("row", "column", "Dinverse"))
+    Dinv@Dimnames <- list(as.character(pedigree[pedigree$oseq, 1]), NULL)
+    listDinv <- sm2list(Dinv, rownames = pedigree[pedigree$oseq, 1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
   } else{
     return(list(A = A, D = D, logDet = logDet))
