@@ -79,9 +79,9 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
 
   T <- as(solve(t(Tinv)), "dgCMatrix")
   if(ptype == "A"){
-     T@Dimnames <- list(as.character(pedigree[, 1]), as.character(pedigree[, 1]))
+     T@Dimnames <- list(pedigree[, 1], pedigree[, 1])
   } else{
-       T@Dimnames <- list(as.character(pedalt[, 1]), as.character(pedalt[, 1]))
+       T@Dimnames <- list(pedalt[, 1], pedalt[, 1])   
     }
  return(as(T[-c(nggroups), nggroups], output))
 }

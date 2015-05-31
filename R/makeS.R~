@@ -61,7 +61,7 @@ makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "h
             as.double(0.25), #DC
             as.double(Vii))  #sex
 
-          Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
+          Sinv <- Matrix(0, N, N)
           Sinv[1, 2] <- 1
           Sinv@i <- Cout[[10]][1:Cout[[13]]]
           Sinv@p <- Cout[[11]]
@@ -110,7 +110,7 @@ makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "h
                as.double(1), #DC
                as.double(Vii))  #sex
 
-             Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
+             Sinv <- Matrix(0, N, N)
              Sinv[1, 2] <- 1
              Sinv@i <- Cout[[10]][1:Cout[[13]]]
              Sinv@p <- Cout[[11]]
@@ -154,7 +154,7 @@ makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "h
                as.double(0), #DC
                as.double(Vii))  #sex
 
-             Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
+             Sinv <- Matrix(0, N, N)
              Sinv[1, 2] <- 1
              Sinv@i <- Cout[[10]][1:Cout[[13]]]
              Sinv@p <- Cout[[11]]
@@ -167,6 +167,8 @@ makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "h
 
 
     listSinv <- sm2list(Sinv, rownames = as.character(pedigree[, 1]), colnames = c("Row", "Column", "Sinverse"))
+    Sinv@Dimnames <- list(pedigree[,1], NULL) 
+
     if(returnS){
        cat("S-inverse made: Starting to make S...")
           T <- as(solve(Q), "dgCMatrix")

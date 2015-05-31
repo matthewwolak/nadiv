@@ -37,12 +37,13 @@ makeAinv <- function(pedigree, det = FALSE){
 	    as.double(rep(0, nA)), #xAP
 	    as.integer(nA)) #nzmaxAP
 
-   Ainv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[, 1]), NULL))
+   Ainv <- Matrix(0, N, N)
    Ainv[1, 2] <- 1
    Ainv@i <- Cout[[9]][1:Cout[[12]]]
    Ainv@p <- Cout[[10]]
    Ainv@x <- Cout[[11]][1:Cout[[12]]]
    Ainv <- as(Matrix::tcrossprod(Ainv), "dgCMatrix")
+   Ainv@Dimnames <- list(pedigree[, 1], NULL)
    if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))

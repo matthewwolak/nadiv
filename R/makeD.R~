@@ -1,10 +1,8 @@
-makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
+makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
 
-  N <- nrow(pedigree)
-  pedigree <- cbind(pedigree, gen = genAssign(pedigree), oseq = seq.int(N))
-  pedigree <- pedigree[order(pedigree$gen, pedigree[, 2], pedigree[, 3]), ]
-  numeric.pedigree <- numPed(pedigree[, 1:3]) 
-  A <- makeA(pedigree[, 1:3])
+  numeric.pedigree <- numPed(pedigree) 
+  N <- dim(pedigree)[1]
+  A <- makeA(pedigree)
   dA <- diag(A)
 
   if(parallel){
@@ -15,8 +13,8 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
   }
 
   if(!parallel){
-     cat(paste("starting to make D..."))
-     Cout <- .C("dijjskip",
+     cat("starting to make D...")
+     Cout <- .C("dij",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
 		as.integer(A@i), 			
@@ -57,7 +55,7 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
          Cout[[9]]
         }
 
-        cat(paste("starting to make D..."))
+        cat("starting to make D...")
         Dijs <- pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
         D <- Matrix(0, N, N, sparse = TRUE)
@@ -71,14 +69,15 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
 
      }
 
-  cat(paste(".done", "\n"))
-  D <- D[pedigree$oseq, pedigree$oseq]
-  if(returnA) A <- A[pedigree$oseq, pedigree$oseq]
+  cat(".done", "\n")
+  
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertD){
+    cat("starting to invert D...")
     Dinv <- as(solve(D), "dgCMatrix")
-    Dinv@Dimnames <- list(as.character(pedigree[pedigree$oseq, 1]), NULL)
-    listDinv <- sm2list(Dinv, rownames = pedigree[pedigree$oseq, 1], colnames=c("row", "column", "Dinverse"))
+    cat(".done", "\n")
+    Dinv@Dimnames <- list(pedigree[,1], NULL)
+    listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
   } else{
     return(list(A = A, D = D, logDet = logDet))
