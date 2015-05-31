@@ -1,3 +1,5 @@
+
+
 proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001, parallel = FALSE, ncores = getOption("mc.cores", 2L)){
 
 
@@ -13,7 +15,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
   if(full.model$gammas[gamma.ind] == summary(full.model)$varcomp[gamma.ind, 2]) s2 <- 1
   std.err <- sqrt(diag(aiFun(full.model))[gamma.ind])
   if(is.na(std.err) | std.err == 0) std.err <- 0.1 
-  full.mod2 <- update.asreml(object = full.model, start.values = TRUE)$gammas.table
+  full.mod2 <- asreml::update.asreml(object = full.model, start.values = TRUE)$gammas.table
   chi.val <- 0.5 * qchisq(alpha, df = 1, lower.tail = FALSE)
 
   proLik_keep_uniQUe_UCL <- list(gam = NULL, lambdas = NULL)
@@ -45,7 +47,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
     }
   LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = tolerance)
   if(parallel){
-     tmpUCL.out <- mccollect(tmpUCL, wait = TRUE)[[1]]
+     tmpUCL.out <- parallel::mccollect(tmpUCL, wait = TRUE)[[1]]
      UCL <- list(minimum = tmpUCL.out$minimum[[1]], objective = tmpUCL.out$objective[[1]])
      proLik_keep_uniQUe_UCL <- list(gam = tmpUCL.out$gam, lambdas = tmpUCL.out$lambdas)
   }
@@ -56,7 +58,7 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
 
   if(parallel){
     if(length(gamma.vec) < ncores) ncores <- length(gamma.vec)
-    profile <- list(lambdas = pvec(v = seq(1,length(gamma.vec),1), FUN = parConstrainFun, parameters = gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE), var.estimates = gamma.vec)
+    profile <- list(lambdas = parallel::pvec(v = seq(1,length(gamma.vec),1), FUN = parConstrainFun, parameters = gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE), var.estimates = gamma.vec)
     } else{
     profile <- list(lambdas = vapply(gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G), var.estimates = gamma.vec)
       }
@@ -70,10 +72,15 @@ proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.un
       }
 
 
-return(list(lambdas = profile$lambdas[ord.index], 
+return(structure(list(lambdas = profile$lambdas[ord.index], 
 	var.estimates = profile$var.estimates[ord.index] * s2, 
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
-	component = component))
+	component = component), class = "proLik"))
 }
+
+
+is.proLik <- function(x) inherits(x, "proLik")
+
+
 

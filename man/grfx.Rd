@@ -7,7 +7,8 @@ Simulated genetic random effects
 This function simulates effects for random terms in a linear mixed model based on relatedness matrices. The intended purpose is for simulating genetic and environmental effects from a pedigree.
 }
 \usage{
-grfx(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", stdnorms = NULL, warn = TRUE)
+grfx(n, G, incidence = NULL, saveIncidence = FALSE,
+	output = "matrix", stdnorms = NULL, warn = TRUE)
 }
 
 \arguments{

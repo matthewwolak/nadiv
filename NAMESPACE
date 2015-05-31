@@ -28,3 +28,5 @@ simPedDFC,
 simPedHS,
 sm2list,
 varTrans)
+
+S3method(plot, proLik)
