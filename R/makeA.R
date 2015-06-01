@@ -37,7 +37,6 @@ makeA <- function(pedigree)
    Ainv@i <- Cout[[9]][1:Cout[[12]]]
    Ainv@p <- Cout[[10]]
    Ainv@x <- Cout[[11]][1:Cout[[12]]]
-
  chol2inv(t(Ainv))
 }
 
