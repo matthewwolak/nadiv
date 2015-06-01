@@ -8,7 +8,6 @@
 ## Note: also, this is 'backwards' from Quaas - where I put the groups on top of the list of equations and the normal pedigree below (this mixes up the modified MME).
 #TODO: Could consider reducing steps to be unique for each unique family (i.e., do all Full-sibs at once)
 
-library(nadiv)
 #rm(list = ls()); source("~/Dropbox/nadiv_parent/makeQuaas1988Fig1Ped.R"); pedigree <- Q1988_2; ggroups <- groups; fuzz <- NULL; det <- FALSE  
 #TODO: I THINK THIS ONLY WORKS WHEN NO INBREEDING OCCURS! (hence why DMU has only implemented non-inbreeding scenario) - but see top of p. 4 of Fikse 2009: x=d^-1
 makeAinvGGR <- function(pedigree, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE){
