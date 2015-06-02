@@ -41,7 +41,7 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
   Dsim.col<- lapproxD[,2]
   Dsim.x<- lapproxD[,4]
   order.index<-order(Dsim.col + Dsim.row/(n+1), decreasing=FALSE)
-  Dsim<-Matrix(0, n, n)
+  Dsim<-Matrix(0, n, n, dimnames = list(as.character(pedigree[, 1]), NULL))
   Dsim@uplo<-"U"
   Dsim@i<-as.integer(Dsim.row[order.index]-1)
   Dsim@p<-as.integer(c(match(1:n, Dsim.col[order.index]), length(order.index)+1)-1)
@@ -54,7 +54,6 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
     cat("inverting Dsim ...")
     Dsiminv <- solve(Dsim)
     cat(".done", "\n")
-    Dsiminv@Dimnames <- list(as.character(pedigree[,1]), NULL)
     listDsiminv <- sm2list(Dsiminv, rownames = pedigree[,1], colnames = c("row", "column", "simDinverse"))
     Dsim <- as(Dsim, "dgCMatrix")
     return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet, Dinv = approxD$Dinv, listDinv = approxD$listDinv, Dsim = Dsim, logDetDsim = logDetDsim, Dsiminv = Dsiminv, listDsim = listDsim, listDsiminv = listDsiminv))

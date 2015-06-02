@@ -26,7 +26,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
                 as.integer(rep(0, N)),                  
 		as.integer(0))	                        
 
-     D <- Matrix(0, N, N, sparse = TRUE)
+     D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
      D@uplo <- "U"
      D@i <- Cout[[8]][1:Cout[[10]]]
      D@p <- c(Cout[[9]], Cout[[10]])
@@ -57,7 +57,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
         cat("starting to make D...")
         Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
-        D <- Matrix(0, N, N, sparse = TRUE)
+        D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
         D@uplo <- "U"
         D@i <- A@i
         D@p <- A@p
@@ -75,7 +75,6 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
     cat("starting to invert D...")
     Dinv <- as(solve(D), "dgCMatrix")
     cat(".done", "\n")
-    Dinv@Dimnames <- list(as.character(pedigree[,1]), NULL)
     listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
   } else{

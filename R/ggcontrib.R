@@ -71,17 +71,15 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
 		as.double(c(0.5, 0.5, 1.0, 1.0))) #maternal, paternal, self, diagonal
 
 # fuzz parameter should alter the entries below to be the input as opposed to -0.5
-  Tinv <- Matrix(0, N, N, sparse = TRUE)
+  if(ptype == "A"){
+     Tinv <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), as.character(pedigree[, 1])))
+  } else{
+      Tinv <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedalt[, 1]), as.character(pedalt[, 1])))
+    }
   Tinv[1, 2] <- 1
   Tinv@i <- Cout[[3]][1:Cout[[6]]]
   Tinv@p <- Cout[[4]]
   Tinv@x <- Cout[[5]][1:Cout[[6]]]
-
   T <- as(solve(t(Tinv)), "dgCMatrix")
-  if(ptype == "A"){
-     T@Dimnames <- list(as.character(pedigree[, 1]), as.character(pedigree[, 1]))
-  } else{
-       T@Dimnames <- list(as.character(pedalt[, 1]), as.character(pedalt[, 1]))
-    }
  return(as(T[-c(nggroups), nggroups], output))
 }
