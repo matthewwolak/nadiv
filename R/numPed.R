@@ -4,8 +4,7 @@
 #in the 'MCMCglmm' package
 ################################################
 
-numPed<-function(pedigree, check = TRUE)
-{
+numPed <- function(pedigree, check = TRUE){
  if(check){      
   if(length(which(pedigree[, 2] == 0)) > 0){
     pedigree[which(pedigree[, 2] == 0), 2] <- NA
@@ -14,6 +13,14 @@ numPed<-function(pedigree, check = TRUE)
   if(length(which(pedigree[, 3] == 0)) > 0){
     pedigree[which(pedigree[, 3] == 0), 3] <- NA
     warning("Zero in the sire column interpreted as a missing parent")
+  }
+  if(length(which(pedigree[, 2] == -998)) > 0){
+    pedigree[which(pedigree[, 2] == -998), 2] <- NA
+    if(!is.numPed(pedigree)) warning("-998 in the dam column interpreted as a missing parent")
+  }
+  if(length(which(pedigree[, 3] == -998)) > 0){
+    pedigree[which(pedigree[, 3] == -998), 3] <- NA
+    if(!is.numPed(pedigree)) warning("-998 in the sire column interpreted as a missing parent")
   }
   if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
   if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
@@ -34,25 +41,28 @@ numPed<-function(pedigree, check = TRUE)
      stop("some individuals appear more than once in the pedigree")
   }
  }
-  numped <- matrix(as.integer(-998), dim(pedigree)[1], dim(pedigree)[2])
-  numped[, 1] <- as.integer(seq(1, dim(pedigree)[1], 1))
-  numped[, 2] <- match(pedigree[, 2], pedigree[, 1], nomatch = -998)
-  numped[, 3] <- match(pedigree[, 3], pedigree[, 1], nomatch = -998)
-  dnmiss <- which(numped[, 2] != -998)
-  snmiss <- which(numped[, 3] != -998)
-  bnmiss <- which(numped[, 2] != -998 & numped[, 3] != -998)
+  nPed <- matrix(as.integer(-998), dim(pedigree)[1], dim(pedigree)[2])
+  nPed[, 1] <- as.integer(seq(1, dim(pedigree)[1], 1))
+  nPed[, 2] <- match(pedigree[, 2], pedigree[, 1], nomatch = -998)
+  nPed[, 3] <- match(pedigree[, 3], pedigree[, 1], nomatch = -998)
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  bnmiss <- which(nPed[, 2] != -998 & nPed[, 3] != -998)
  if(check){
-  if(length(intersect(numped[, 2][dnmiss], numped[, 3][snmiss])) > 0 & (length(dnmiss) > 0) & (length(snmiss) > 0)){
+  if(length(intersect(nPed[, 2][dnmiss], nPed[, 3][snmiss])) > 0 & (length(dnmiss) > 0) & (length(snmiss) > 0)){
       warning("Dams appearing as Sires - assumed selfing in pedigree")
   }
-  if(any(numped[, 2][dnmiss] > numped[, 1][dnmiss]) & (length(dnmiss) > 0)){
+  if(any(nPed[, 2][dnmiss] > nPed[, 1][dnmiss]) & (length(dnmiss) > 0)){
      stop("Offspring appearing before their dams: first use the 'prepPed' function")
   }
-  if(any(numped[, 3][snmiss] > numped[, 1][snmiss]) & (length(snmiss) > 0)){
+  if(any(nPed[, 3][snmiss] > nPed[, 1][snmiss]) & (length(snmiss) > 0)){
      stop("Offspring appearing before their Sires: first use the 'prepPed' function")
   }
  }
- numped
+  nPed <- structure(nPed, class = "numPed")
+ nPed
 }
+
+is.numPed <- function(x) inherits(x, "numPed")
 
 

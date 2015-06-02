@@ -10,7 +10,11 @@ founderLine,
 genAssign,
 ggcontrib,
 grfx,
+<<<<<<< HEAD
 is.proLik,
+=======
+is.numPed,
+>>>>>>> 6e573eb2c6581087422bcbcaf2bb9513405cd709
 makeA,
 makeAA,
 makeAinv,
