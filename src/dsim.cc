@@ -13,15 +13,10 @@ void dsim(int *da,
 	int *sdij
 ){         
 
-  int seg, i, j, k, m, p, l;
+  int i, j, k, m, p, l;
   int mi, si, cdama, csirea, rdama, rsirea;
   int adij = 0;
-  srand ( time(NULL) );
-// TEMPORARY TEST
-//GetRNGstate();
-//double segg;
-
-
+  GetRNGstate();
 
   for(i = 0; i < en[0]; i++){
      mi = dam[i];
@@ -29,13 +24,7 @@ void dsim(int *da,
      if(mi != -999){
      k = i*eN[0];
         for(j = 0; j < eN[0]; j++){
-           seg = (rand() % (int)(2));
-           if(seg == 1){
- // TEMPORARY TEST
-//segg = runif(0.0, 2.0);
-//if(seg > 1.0){
-
-
+           if(runif(0.0, 2.0) > 1.0){
               da[k] = da[(mi*eN[0]) + j];
            } 
               else {
@@ -48,13 +37,7 @@ void dsim(int *da,
      if(si != -999){
      k = i*eN[0];
         for(j = 0; j < eN[0]; j++){
-           seg = (rand() % (int)(2));
-           if(seg == 1){
- // TEMPORARY TEST
-//segg = runif(0.0, 2.0);
-//if(seg > 1.0){
-
-
+           if(runif(0.0, 2.0) > 1.0){
 	      sa[k] = da[(si*eN[0]) + j];
 	   } 
               else {
@@ -65,7 +48,7 @@ void dsim(int *da,
      }
   }  
 
-//  PutRNGstate(); // TEMPORARY TEST
+  PutRNGstate();
 
 
   for(m = 0; m < en[0]; m++){
