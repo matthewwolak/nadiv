@@ -79,9 +79,9 @@ May be unfeasible to estimate profile likelihoods for complex models with many v
 
     x11(w = 6, h = 8)
     par(mfrow = c(3,1))
-      plot.proLik(profileA) 
-      plot.proLik(profileD)
-      plot.proLik(profileE)
+      plot(profileA) 
+      plot(profileD)
+      plot(profileE)
    }
 
 }
