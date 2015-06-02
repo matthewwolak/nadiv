@@ -16,11 +16,11 @@ numPed <- function(pedigree, check = TRUE){
   }
   if(length(which(pedigree[, 2] == -998)) > 0){
     pedigree[which(pedigree[, 2] == -998), 2] <- NA
-    warning("-998 in the dam column interpreted as a missing parent")
+    if(!is.numPed(pedigree)) warning("-998 in the dam column interpreted as a missing parent")
   }
   if(length(which(pedigree[, 3] == -998)) > 0){
     pedigree[which(pedigree[, 3] == -998), 3] <- NA
-    warning("-998 in the sire column interpreted as a missing parent")
+    if(!is.numPed(pedigree)) warning("-998 in the sire column interpreted as a missing parent")
   }
   if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
   if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
@@ -59,7 +59,10 @@ numPed <- function(pedigree, check = TRUE){
      stop("Offspring appearing before their Sires: first use the 'prepPed' function")
   }
  }
+  nPed <- structure(nPed, class = "numPed")
  nPed
 }
+
+is.numPed <- function(x) inherits(x, "numPed")
 
 

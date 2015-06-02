@@ -25,7 +25,7 @@ Based on code from the \code{MCMCglmm} package}
 
 
 \value{
-The pedigree, where individuals are now numbered from 1 to n and unknown parents are assigned a value of '-998'.
+An S3 object of class "numPed" representing the pedigree, where individuals are now numbered from 1 to n and unknown parents are assigned a value of '-998'.
 }
 
 
