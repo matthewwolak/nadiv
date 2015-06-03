@@ -1,20 +1,35 @@
 ## Test environments
-* Ubuntu 14.04, R 3.2  #FIXME:
+* Ubuntu 14.04, R 3.2  **FIXME:**
 * win-builder (devel and release)
+  * R Under development (unstable) (2015-06-02 r68457)
+  * R version 3.2.0 (2015-04-16)
 
 ## R CMD check results
 There were no ERRORs or WARNINGs. 
 
-There was 1 NOTE:
+There were 2 NOTEs:
 
-* checking dependencies in R code ... NOTE
-  Namespace in Imports field not imported from: 'R6'
+* checking CRAN incoming feasibility ... NOTE
+  Maintainer: 'Matthew Wolak <matthewwolak@gmail.com>'
+  Possibly mis-spelled words in DESCRIPTION:
+    ASReml (5:328)
+    VSN (5:386)
+    Suggests or Enhances not in mainstream repositories:
+      asreml
+  
+  * Spellings are, in fact, correct.
+  package 'asreml' availability is noted in DESCRIPTION
 
-  R6 is a build-time dependency.
+
+* checking package dependencies ... NOTE
+  Package which this enhances but not available for checking: 'asreml'
+
+  * see response to above NOTE
+
 
 ## Downstream dependencies
-I have also run R CMD check on downstream dependencies of nadiv 
-(https://github.com/wch/checkresults/blob/master/httr/r-release). 
-All packages that I could install passed except:
+I have also run R CMD check on downstream dependencies of nadiv: 
+  dmm 
+All packages that I could install passed except: **FIXME:**
 
 * 
