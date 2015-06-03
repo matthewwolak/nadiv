@@ -18,7 +18,7 @@ There were 2 NOTEs:
     Suggests or Enhances not in mainstream repositories:
       asreml
   
-  * Spellings are, in fact, correct.
+  * spellings are, in fact, correct.
   package 'asreml' availability is noted in DESCRIPTION
 
 
