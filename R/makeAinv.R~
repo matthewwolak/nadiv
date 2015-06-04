@@ -59,7 +59,7 @@ makeAinv <- function(pedigree, algorithm = c("H", "ML"), det = FALSE){
             as.integer(N),   #n
 #	    as.integer(length(Tinv@x)), #nzmaxTinvP
 
-           as.double(rep(0, 6*N)))  # xA
+            as.double(rep(0, 6*N)))  # xA
 	    as.integer(rep(0, nA)), #iA
 	    as.integer(rep(0, N + 1)), #pA
 	    as.integer(nA)) #nzmaxA

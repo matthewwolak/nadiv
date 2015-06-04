@@ -165,7 +165,7 @@ void acinvML(
   double  *AN = new double[2*n[0]];
   double  *li = new double[n[0]];
 //  cs *Tinv, *D, *tTinv, *tTD;
-  cs *Ainv;
+//  cs *Ainv;
 
   for(k=0; k<n[0]; k++){
      li[k]=0.0;               // set l to zero
@@ -227,7 +227,7 @@ void acinvML(
 
 
 
-  Ainv = cs_spalloc(n[0], n[0], nzmaxA[0], true, false);
+//  Ainv = cs_spalloc(n[0], n[0], nzmaxA[0], true, false);
   cnt = 0;
   for(k=0; k<n[0]; k++){  // iterate through each individual 
 
