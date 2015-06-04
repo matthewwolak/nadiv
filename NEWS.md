@@ -1,4 +1,4 @@
-# 2.13.3  Released 30 May 2015
+# 2.13.3  Released 4 June 2015
 
 ## New
    * Added `LDtL()`, a function to take the LDL' Cholesky decomposition of a matrix (not currently exported).
