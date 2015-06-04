@@ -1,5 +1,9 @@
 #include "ddiag.h"
 
+////////////////////////////////
+
+////   H algorithm (nadiv < v2.13.4)
+
 extern "C"{  
 
 void acinv(
@@ -119,6 +123,147 @@ void acinv(
   cs_spfree(tTinv);
   cs_spfree(D);
   cs_spfree(tTD);
+  delete[] AN;
+  delete[] li;
+}
+}
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////
+
+//   M&L algorithm below
+extern "C"{  
+
+void acinvML(
+        int *dam,       
+        int *sire,         
+        double *f, 
+        double *dii,    
+//	int *iTinvP,              
+//	int *pTinvP,	         
+//	double *xTinvP,
+        int *n,
+//	int *nzmaxTinvP,
+
+        double *xA
+	int *iA,
+	int *pA,
+	int *nzmaxA
+){         
+
+  int     j, k, h, cnt, sj, dj, tstart;
+  double  ai, alphai;
+  double  *AN = new double[2*n[0]];
+  double  *li = new double[n[0]];
+//  cs *Tinv, *D, *tTinv, *tTD;
+  cs *Ainv;
+
+  for(k=0; k<n[0]; k++){
+     li[k]=0.0;               // set l to zero
+  }
+  for(k=0; k<n[0]; k++){
+     AN[k]=-1;               // set AN to zero
+  }
+
+    
+  for(k=0; k<n[0]; k++){  // iterate through each row of l 
+
+    li[k] = 1.0;                   // set l_ii to one
+    ai=0.0;                        // set a_ii to zero
+    dii[k] = 0.5-0.25*(f[dam[k]]+f[sire[k]]);
+
+    j=k;
+    cnt=0;
+
+    while(j>=0){
+
+      sj=sire[j];
+      dj=dam[j];
+
+      if(sj!= n[0]){
+        AN[cnt] = sj;
+        li[sj] += 0.5*li[j];
+        cnt++;
+      }
+
+      if(dj!= n[0]){ 
+        AN[cnt] = dj;
+        li[dj] += 0.5*li[j];
+        cnt++;
+      }
+
+      ai += li[j]*li[j]*dii[j];
+
+      j=-1;
+
+      for(h=0; h<cnt; h++){   // find eldest individual
+       if(AN[h]>j){
+         j = AN[h];
+       }
+      }
+      for(h=0; h<cnt; h++){   // delete duplicates
+        if(AN[h]==j){
+          AN[h] -= n[0]; 
+        }
+      }
+    }  // end of while
+    f[k] = ai-1.0;
+// ADDED bit
+//FIXME: try sticking her the part with the separate for loop through k<n[0] (N individs)
+// END added bit
+    for(h=0; h<n[0]; h++){
+      li[h]  = 0.0;            // reset l to zero except l_ii =1
+    }
+  } // end of for
+
+
+
+  Ainv = cs_spalloc(n[0], n[0], nzmaxA[0], true, false);
+  cnt = 0;
+  for(k=0; k<n[0]; k++){  // iterate through each individual 
+
+// LEFT OFF HERE
+      alphai = sqrt(1.0/(dii[k]));
+      tstart = k*6;
+      // i,i
+      xA[tstart] += alphai;
+      if(sire[j] != n[0]){
+         // i,sire
+         xA[tstart+1] += alphai * -0.5;
+         // sire,sire
+         xA[tstart+3] += alphai * 0.25;
+      }
+      if(dam[j] != n[0]){
+         // i,dam
+         xA[tstart+2] += alphai * -0.5;
+         // dam,dam
+         xA[tstart+5] += alphai * 0.25;
+         if(sire[j] != n[0]){
+            //sire,dam/dam,sire
+            xA[tstart+4] += alphai * 0.25;
+         }
+      }
+  }
+
+  
+//  for (k = 0 ; k < tTD->nzmax; k++){
+//    iAP[k] = tTD->i[k];
+//    xAP[k] = tTD->x[k];
+//  }
+//  for (k = 0 ; k <= tTD->n; k++){
+//    pAP[k] = tTD->p[k];
+//  }
+//  nzmaxAP[0] = tTD->nzmax;
+
   delete[] AN;
   delete[] li;
 }

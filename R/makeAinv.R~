@@ -3,8 +3,8 @@
 # written by Jarrod Hadfield
 #in the 'MCMCglmm' package
 ################################################
-
-makeAinv <- function(pedigree, det = FALSE){
+#pedigree <- Mrode2; algorithm <- "ML"; det <- FALSE
+makeAinv <- function(pedigree, algorithm = c("H", "ML"), det = FALSE){
   numped <- numPed(pedigree)
   N <- dim(numped)[1]
   dnmiss <- which(numped[, 2] != -998)
@@ -23,6 +23,8 @@ makeAinv <- function(pedigree, det = FALSE){
   nA <- nA + sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
   numped[numped == -998] <- N + 1
+  al2use <- match.arg(algorithm, choices = c("H", "ML"))
+  if(al2use == "H"){
     Cout <- .C("acinv",
 	    as.integer(numped[, 2] - 1), #dam
 	    as.integer(numped[, 3] - 1),  #sire
@@ -37,13 +39,47 @@ makeAinv <- function(pedigree, det = FALSE){
 	    as.double(rep(0, nA)), #xAP
 	    as.integer(nA)) #nzmaxAP
 
-   Ainv <- Matrix(0, N, N)
-   Ainv[1, 2] <- 1
-   Ainv@i <- Cout[[9]][1:Cout[[12]]]
-   Ainv@p <- Cout[[10]]
-   Ainv@x <- Cout[[11]][1:Cout[[12]]]
-   Ainv <- as(Matrix::tcrossprod(Ainv), "dgCMatrix")
-   Ainv@Dimnames <- list(pedigree[, 1], NULL)
+     Ainv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[, 1]), NULL))
+     Ainv[1, 2] <- 1
+     Ainv@i <- Cout[[9]][1:Cout[[12]]]
+     Ainv@p <- Cout[[10]]
+     Ainv@x <- Cout[[11]][1:Cout[[12]]]
+     Ainv <- as(Matrix::tcrossprod(Ainv), "dgCMatrix")
+   }
+   if(al2use == "ML"){
+#     dii <- rep(0, N)
+     Cout <- .C("acinvML",
+	    as.integer(numped[, 2] - 1), #dam
+	    as.integer(numped[, 3] - 1),  #sire
+	    as.double(inbreeding),  #f
+            as.double(rep(0, N)),  #dii
+#            as.integer(Tinv@i),  #iTinvP
+#	    as.integer(c(Tinv@p, length(Tinv@x))),  #pTinvP
+#            as.double(Tinv@x),  #xTinvP
+            as.integer(N),   #n
+#	    as.integer(length(Tinv@x)), #nzmaxTinvP
+
+           as.double(rep(0, 6*N)))  # xA
+	    as.integer(rep(0, nA)), #iA
+	    as.integer(rep(0, N + 1)), #pA
+	    as.integer(nA)) #nzmaxA
+# Triplets are lower triangle!
+#order of triplets in xA: i,i; i,sire; i,dam; sire,sire; sire,dam/dam,sire; dam,dam;  
+#     Ainv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[, 1]), NULL))
+#     Ainv[1, 2] <- 1
+#     Ainv@i <- Cout[[9]][1:Cout[[12]]]
+#     Ainv@p <- Cout[[10]]
+#     Ainv@x <- Cout[[11]][1:Cout[[12]]]
+
+tmp <- cbind(i = c(rep(seq(N), 3), numped[, 3], apply(numped[, 2:3], MARGIN = 1, FUN = max), numped[, 2]),
+	j = c(seq(N), numped[, 3], numped[, 2], numped[, 3], apply(numped[, 2:3], MARGIN = 1, FUN = min), numped[, 2]),
+	x = Cout[[6]])[tmp[, 1] != N+1 & tmp[, 2] != N+1, ]
+
+      Ainv <- sparseMatrix(i = tmp[, 1], j = tmp[, 2], x = tmp[, 3])
+#     Ainv <- as(Ainv, "dgCMatrix")
+   }
+
+
    if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))
