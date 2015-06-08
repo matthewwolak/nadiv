@@ -5,7 +5,7 @@
 ################################################
 
 numPed <- function(pedigree, check = TRUE){
- if(check){      
+ if(!is.numPed(pedigree) && check){      
   if(length(which(pedigree[, 2] == 0)) > 0){
     pedigree[which(pedigree[, 2] == 0), 2] <- NA
     warning("Zero in the dam column interpreted as a missing parent")
