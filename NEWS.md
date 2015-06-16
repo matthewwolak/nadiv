@@ -1,4 +1,7 @@
-# 2.13.4
+# 2.14.0
+
+## New
+   * improved the algorithm underlying `makeAinv()` yielding significant time savings
 
 
 # 2.13.3  Released 4 June 2015

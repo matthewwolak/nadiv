@@ -2,7 +2,7 @@
 \alias{makeAinv}
 \title{Creates the Inverse additive genetic relationship matrix
 }
-\description{This returns the inverse of the additive relationship matrix.  It can also be used to obtain coefficients of inbreeding for the pedigreed population.
+\description{This returns the inverse of the additive relationship matrix. It can also be used to obtain coefficients of inbreeding for the pedigreed population.
 }
 \usage{
 makeAinv(pedigree, det = FALSE)
@@ -18,7 +18,7 @@ Logical, indicating if the (log) determinant of the A matrix should be returned
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
-The function implements an adaptation of the Meuwissen and Luo (1992) algorithm and the code was borrowed heavily from the \code{inverseA} function by Jarrod Hadfield in the \code{MCMCglmm} package. 
+The function implements an adaptation of the Meuwissen and Luo (1992) algorithm with some code borrowed from the \code{inverseA} function by Jarrod Hadfield in the \code{MCMCglmm} package. 
 }
 
 \value{
