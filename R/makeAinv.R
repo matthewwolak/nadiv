@@ -20,7 +20,7 @@ makeAinv <- function(pedigree, det = FALSE){
   # 1: Adds Ainv elements in same for loop as calculation of f
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
-     Cout <- .C("ainvML",
+  Cout <- .C("ainvML",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f
@@ -30,9 +30,10 @@ makeAinv <- function(pedigree, det = FALSE){
 	    as.integer(Ainv@i), #iA
 	    as.integer(Ainv@p), #pA
 	    as.integer(length(Ainv@x))) #nzmaxA
-     Ainv@x <- Cout[[6]]
-     fsOrd <- as(as.integer(renPed), "pMatrix")
-     Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
+  Ainv@x <- Cout[[6]]
+  fsOrd <- as(as.integer(renPed), "pMatrix")
+  Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
+  if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))
 }
