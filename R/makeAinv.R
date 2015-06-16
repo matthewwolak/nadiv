@@ -6,14 +6,13 @@ makeAinv <- function(pedigree, det = FALSE){
   snmiss <- which(nPed[, 3] != -998)
   Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
   Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
-  Tinv.x <- c(rep(-0.5, length(dnmiss) + length(snmiss)), rep(1, N))
   el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
   inbreeding <- c(rep(0, N), -1)
   dii <- rep(0, N)
 
   sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
 	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
-	x = TRUE, index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
 	dimnames = list(as.character(nPed[, 1]), NULL))
   nPed[nPed == -998] <- N + 1
   Ainv <- t(crossprod(crossprod(Diagonal(n = N, x = TRUE), sTinv))) # transpose gives lower triangle
