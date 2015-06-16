@@ -20,7 +20,7 @@ makeAinv <- function(pedigree, det = FALSE){
   # 1: Adds Ainv elements in same for loop as calculation of f
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
-     Cout <- .C("ainv",
+     Cout <- .C("ainvML",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f
