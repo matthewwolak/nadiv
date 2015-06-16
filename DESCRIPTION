@@ -7,7 +7,7 @@ Date: 2015-06-16
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
 URL: http://github.com/matthewwolak/nadiv
 BugReports: http://github.com/matthewwolak/nadiv/issues
-Depends: Matrix (>=1.2.1)
+Depends: Matrix
 Suggests: parallel
 Enhances: asreml
 License: GPL (>=2)
