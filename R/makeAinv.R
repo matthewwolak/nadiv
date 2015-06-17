@@ -14,11 +14,11 @@ makeAinv <- function(pedigree, det = FALSE){
 	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
 	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
 	dimnames = list(as.character(nPed[, 1]), NULL))
-  nPed[nPed == -998] <- N + 1
   Ainv <- t(crossprod(crossprod(Diagonal(n = N, x = TRUE), sTinv))) # transpose gives lower triangle
   # 1: Adds Ainv elements in same for loop as calculation of f
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
+  nPed[nPed == -998] <- N + 1
   Cout <- .C("ainvML",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
