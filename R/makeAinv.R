@@ -24,11 +24,9 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
        if(any(is.na(ggroups))) ggroups <- na.omit(ggroups)
        pedalt <- data.frame(id = c(ggroups, as.character(pedigree[, 1])), dam = c(rep(NA, length(ggroups)), as.character(pedigree[, 2])), sire = c(rep(NA, length(ggroups)), as.character(pedigree[, 3])))
      #TODO: write method for numPed to handle genetic group pedigree
-     ## consider automatically naming genetic group missing parents as seq(-1, No. GGs, -1) for c++ below
      ## same genetic group for dam and sire won't throw warning about selfing
-       nPed <- suppressWarnings(numPed(pedalt))    # FIXME: remove suppressWarnings()
-     ##TODO: numPed() from genetic group - automatically name genetic group missing parents as seq(-1, No. GGs, -1) for c++ below
-     ## return below command as attribute
+       nPed <- suppressWarnings(numPed(pedalt))    # FIXME: remove suppressWarnings() throughout file
+     ## return command below as attribute
        groupRows <- nPed[which(nPed[, 2] == -998), 1]
     }
 
@@ -36,10 +34,6 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
     if(length(ggroups) == 1){
        ptype <- "A"
           if(length(naPed) == ggroups){
-     #TODO: catch the warning Dams appearing as Sires - selfing assumed
-     ## do not print it in this instance
-     ## (because individual dam and sire are the same genetic group)
-     ## Alternatively, give pedigree a genetic group attribute and change numPed() to not run this warning if the dam==sire is a genetic group
              nPed <- suppressWarnings(numPed(pedigree))
              groupRows <- naPed
           } else {
@@ -49,7 +43,6 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
 
   nggroups <- length(groupRows)
   renPed <- order(suppressWarnings(genAssign(nPed)), nPed[, 2], nPed[, 3])
-  #FIXME: remove warning suppression
   nPed <- suppressWarnings(numPed(nPed[renPed, ]))
   }
   ####
