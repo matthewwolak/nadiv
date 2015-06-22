@@ -56,15 +56,15 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
   if(is.null(ggroups)){
      sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
 	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
-	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+	index1 = FALSE, dims = c(N, N), symmetric = FALSE,
 	dimnames = list(as.character(nPed[, 1]), NULL))
   } else {
      sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
 	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
-	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+	index1 = FALSE, dims = c(N, N), symmetric = FALSE,
 	dimnames = list(as.character(nPed[, 1]), NULL))[-groupRows, ]
   }
-  Ainv <- t(crossprod(crossprod(Diagonal(n = eN, x = TRUE), sTinv))) # transpose gives lower triangle
+  Ainv <- t(crossprod(sTinv)) # transpose gives lower triangle
   # 1: Adds Ainv elements in same for loop as calculation of f
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
