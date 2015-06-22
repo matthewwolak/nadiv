@@ -10,8 +10,8 @@
 \tabular{ll}{
 Package: \tab nadiv\cr
 Type: \tab Package\cr
-Version: \tab 2.13.3\cr
-Date: \tab 2015-06-03\cr
+Version: \tab 2.14.0\cr
+Date: \tab 2015-06-16\cr
 URL: \tab http://github.com/matthewwolak/nadiv\cr
 BugReports: \tab http://github.com/matthewwolak/nadiv/issues\cr
 License: \tab GPL (>=2)\cr

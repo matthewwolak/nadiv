@@ -1,50 +1,99 @@
-################################################
-#Adapted from part of the 'inverseA' function
-# written by Jarrod Hadfield
-#in the 'MCMCglmm' package
-################################################
+makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
+  if(is.null(ggroups)){
+     ptype <- "O"
+     renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
+     nPed <- numPed(pedigree[renPed, ])
+     groupRows <- NULL
+     nggroups <- 0
+  } else {
+    if(length(ggroups) == dim(pedigree)[1]){
+       stop("length(ggroups) should either be:\n  == 1 and a numeric indicating the number of genetic groups (type 'A')\n  == length(unique(ggroups)) and a character vector indicating the names of each unique genetic goup (type 'D')")
+    }
+    if(!is.null(fuzz)) stop("fuzzy genetic groups not yet implemented: fuzz must be NULL")
+    zerNA <- union(which(pedigree[, 2] == "0"), which(pedigree[, 3] == "0"))
+    astNA <- union(which(pedigree[, 2] == "*"), which(pedigree[, 3] == "*"))
+    naNA <- union(which(is.na(pedigree[, 2])), which(is.na(pedigree[, 3])))
+    naPed <- union(union(zerNA, astNA), naNA)
 
-makeAinv <- function(pedigree, det = FALSE){
-  numped <- numPed(pedigree)
-  N <- dim(numped)[1]
-  dnmiss <- which(numped[, 2] != -998)
-  snmiss <- which(numped[, 3] != -998)
-  bnmiss <- which(numped[, 2] != -998 & numped[, 3] != -998)
-  Tinv.row <- c(numped[, 1][dnmiss], numped[, 1][snmiss], 1:N)
-  Tinv.col <- c(numped[, 2][dnmiss], numped[, 3][snmiss], 1:N)
-  Tinv.x <- c(rep(-0.5, length(dnmiss) + length(snmiss)), rep(1, N))
+    ####    pedigree type "D"     ####
+    if(!is.numeric(ggroups) && length(ggroups) == length(unique(ggroups))){
+       ptype <- "D"
+       if(is.null(fuzz) && length(naPed) > 0){
+          stop("When supplying a vector of unique genetic group names in the 'ggroups' argument, all individuals in the pedigree must have a genetic group when a parent is unknown (<NA>, '0' and '*' are considered unknown parents)")# or be identified as a phantom parent in 'fuzz'")
+       }
+       if(any(is.na(ggroups))) ggroups <- na.omit(ggroups)
+       pedalt <- data.frame(id = c(ggroups, as.character(pedigree[, 1])), dam = c(rep(NA, length(ggroups)), as.character(pedigree[, 2])), sire = c(rep(NA, length(ggroups)), as.character(pedigree[, 3])))
+     #TODO: write method for numPed to handle genetic group pedigree
+     ## same genetic group for dam and sire won't throw warning about selfing
+       nPed <- suppressWarnings(numPed(pedalt))    # FIXME: remove suppressWarnings() throughout file
+     ## return command below as attribute
+       groupRows <- nPed[which(nPed[, 2] == -998), 1]
+    }
+
+  ####    pedigree type "A"     ####
+    if(length(ggroups) == 1){
+       ptype <- "A"
+          if(length(naPed) == ggroups){
+             nPed <- suppressWarnings(numPed(pedigree))
+             groupRows <- naPed
+          } else {
+             stop("Only rows identifying genetic groups should have missing parents.\n  All individuals in the pedigree must have a genetic group when a parent is unknown")# or be identified as a phantom parent in 'fuzz'")
+         }
+    }
+
+  nggroups <- length(groupRows)
+  renPed <- order(suppressWarnings(genAssign(nPed)), nPed[, 2], nPed[, 3])
+  nPed <- suppressWarnings(numPed(nPed[renPed, ]))
+  }
+  ####
+  N <- nrow(nPed)
+  eN <- N - nggroups
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
   el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
-  Tinv <- Matrix(0, N, N, sparse = TRUE)
-  Tinv[1, 2] <- 1
-  Tinv@i <- as.integer(Tinv.row[el.order] - 1)
-  Tinv@p <- as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1)
-  Tinv@x <- as.double(Tinv.x[el.order])
-  nA <- N + length(dnmiss) + length(snmiss)
-  nA <- nA + sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
-  inbreeding <- c(rep(0, N), -1)
-  numped[numped == -998] <- N + 1
-    Cout <- .C("acinv",
-	    as.integer(numped[, 2] - 1), #dam
-	    as.integer(numped[, 3] - 1),  #sire
-	    as.double(inbreeding),  #f
-            as.integer(Tinv@i),  #iTinvP
-	    as.integer(c(Tinv@p, length(Tinv@x))),  #pTinvP
-            as.double(Tinv@x),  #xTinvP
-            as.integer(N),   #nTinvP
-	    as.integer(length(Tinv@x)), #nzmaxTinvP
-	    as.integer(rep(0, nA)), #iAP
-	    as.integer(rep(0, N + 1)), #pAP
-	    as.double(rep(0, nA)), #xAP
-	    as.integer(nA)) #nzmaxAP
+  if(is.null(ggroups)){
+     sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+	dimnames = list(as.character(nPed[, 1]), NULL))
+  } else {
+     sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+	x = as.integer(1, length(Tinv.row)), index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+	dimnames = list(as.character(nPed[, 1]), NULL))[-groupRows, ]
+  }
+  Ainv <- t(crossprod(crossprod(Diagonal(n = eN, x = TRUE), sTinv))) # transpose gives lower triangle
+  # 1: Adds Ainv elements in same for loop as calculation of f
+  # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
+  # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
+  nPed[nPed == -998] <- N + 1
+  Cout <- .C("ainvml",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(c(rep(-1, nggroups), rep(0, eN), -1)),	#f
+            as.double(rep(0, N)),  				#dii
+            as.integer(N),   					#n
+            as.integer(nggroups),   				#g
+            as.double(rep(0, length(Ainv@x))),  		#xA
+	    as.integer(Ainv@i), 				#iA
+	    as.integer(Ainv@p), 				#pA
+	    as.integer(length(Ainv@x))) 			#nzmaxA
+  Ainv@x <- Cout[[7]]
+  fsOrd <- as(as.integer(renPed), "pMatrix")
+  Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
+   if(ptype == "D"){
+      Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
+   } else {
+      Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+     }
+  if(!is.null(ggroups) && !gOnTop){ 
+     permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
+     Ainv <- t(permute) %*% Ainv %*% permute
+  }
+  if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
-   Ainv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[, 1]), NULL))
-   Ainv[1, 2] <- 1
-   Ainv@i <- Cout[[9]][1:Cout[[12]]]
-   Ainv@p <- Cout[[10]]
-   Ainv@x <- Cout[[11]][1:Cout[[12]]]
-   Ainv <- as(Matrix::tcrossprod(Ainv), "dgCMatrix")
-   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
-
- return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = pedigree[, 1], colnames = c("row", "column", "Ainv")), f = Cout[[3]][-(N+1)], logDet = logDet))
+ return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), f = Cout[[3]][seq(nggroups+1, N, 1)], logDet = logDet))
 }
 

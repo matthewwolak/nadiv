@@ -11,13 +11,15 @@ numPed(pedigree, check = TRUE)
   \item{pedigree }{
 A three column pedigree object, where the columns correspond to: ID, Dam, & Sire}
   \item{check }{
-A logical argument indicating if checks on the validity of the pedigree structure should be made}
+A logical argument indicating if checks on the validity of the pedigree structure should be made, but see Details}
 
 }
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0',, '-998', or '*'.
 
-Individuals must appear in the ID column in rows preceeding where they appear in either the Dam or Sire column.  See the \code{\link[nadiv]{prepPed}} function if this is not the case.  If \code{check = FALSE} any pedigree will be transformed into a pedigree consisting of integers and missing values denoted by '-998'.
+Individuals must appear in the ID column in rows preceeding where they appear in either the Dam or Sire column.  See the \code{\link[nadiv]{prepPed}} function if this is not the case.
+
+If pedigree inherits the class "numPed" (from a previous call to \code{numPed()}) and \code{check = TRUE}, the checks are skipped. If \code{check = FALSE} any pedigree will be transformed into a pedigree consisting of integers and missing values denoted by '-998'.
 
 Based on code from the \code{MCMCglmm} package}
 
