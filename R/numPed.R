@@ -63,6 +63,15 @@ numPed <- function(pedigree, check = TRUE){
  nPed
 }
 
+
+
 is.numPed <- function(x) inherits(x, "numPed")
+
+
+# re-ordering rows of object with class 'numPed'
+ronPed <- function(x, i, ...){
+   r <- structure(unclass(x)[i, ,...], class = "numPed")
+   r
+}
 
 

@@ -43,7 +43,7 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
 
   nggroups <- length(groupRows)
   renPed <- order(suppressWarnings(genAssign(nPed)), nPed[, 2], nPed[, 3])
-  nPed <- suppressWarnings(numPed(nPed[renPed, ]))
+  nPed <- numPed(ronPed(nPed, renPed))
   }
   ####
   N <- nrow(nPed)
