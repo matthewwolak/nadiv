@@ -2,9 +2,9 @@
 \alias{Mrode3}
 \docType{data}
 \title{
-Pedigree with genetic groups and data from chapter 3 of Mrode (2005)}
+Pedigree, from chapter 3 of Mrode (2005)}
 \description{
-An example pedigree and data set
+An example pedigree with genetic groups and a data column
 }
 \usage{data(Mrode3)}
 \format{
