@@ -1,5 +1,4 @@
 # 2.14.0
-#TODO: `numPed()` changes
 ## New
    * `makeAinv()` now can construct the augmented A-inverse matrix for genetic groups
      * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse. For more information and examples, read the help documentation `makeAinv.Rd` or in R type:
@@ -13,6 +12,7 @@ examples("makeAinv")   # runs the examples in the help documentation
 ?Q1988
 ?Mrode3
 ```
+#TODO: `numPed()` changes
 
 
 # 2.13.3  Released 4 June 2015
