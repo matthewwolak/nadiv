@@ -1,7 +1,10 @@
 # 2.14.0
 
 ## New
-   * improved the algorithm underlying `makeAinv()` yielding significant time savings
+   * `makeAinv()` now can construct the augmented A-inverse matrix for genetic groups
+     * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse.
+   * improved algorithm underlying `makeAinv()` now - significant speed-up of the function
+   * Added two new datasets/example pedigrees: (1) `Q1988` from Quaas 1988 and (2) `Mrode3` from Mrode (2005) chapter 3
 
 
 # 2.13.3  Released 4 June 2015
