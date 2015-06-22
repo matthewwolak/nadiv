@@ -8,7 +8,7 @@ R package that constructs (non)additive genetic relationship matrices, and their
    ```R
    install.packages("nadiv")
    ```
-   then selecting your favorite [CRAN mirror](http://cran.r-project.org/)
+   then select your favorite [CRAN mirror](http://cran.r-project.org/)
    
  * From GitHub:
    * clone or download the latest development version here
