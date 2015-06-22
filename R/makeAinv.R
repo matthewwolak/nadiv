@@ -76,10 +76,11 @@ makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
             as.double(rep(0, N)),  				#dii
             as.integer(N),   					#n
             as.integer(nggroups),   				#g
-            as.double(rep(0, length(Ainv@x))),  		#xA
+            as.double(rep(0, length(Ainv@i))),  		#xA
 	    as.integer(Ainv@i), 				#iA
 	    as.integer(Ainv@p), 				#pA
-	    as.integer(length(Ainv@x))) 			#nzmaxA
+	    as.integer(length(Ainv@i))) 			#nzmaxA
+  Ainv <- as(Ainv, "dsCMatrix")
   Ainv@x <- Cout[[7]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
