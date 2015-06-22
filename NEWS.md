@@ -1,10 +1,18 @@
 # 2.14.0
-
+#TODO: `numPed()` changes
 ## New
    * `makeAinv()` now can construct the augmented A-inverse matrix for genetic groups
-     * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse.
-   * improved algorithm underlying `makeAinv()` now - significant speed-up of the function
-   * Added two new datasets/example pedigrees: (1) `Q1988` from Quaas 1988 and (2) `Mrode3` from Mrode (2005) chapter 3
+     * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse. For more information and examples, read the help documentation `makeAinv.Rd` or in R type:
+```R
+?makeAinv              # launches the help documentation
+examples("makeAinv")   # runs the examples in the help documentation
+```
+   * improved algorithm underlying `makeAinv()` now - significant speed-up
+   * Added two new datasets/example pedigrees: (1) `Q1988` from Quaas 1988 and (2) `Mrode3` from Mrode (2005) chapter 3. See their descriptions in `Q1988.Rd` and `Mrode3.Rd` or in R type:
+```R
+?Q1988
+?Mrode3
+```
 
 
 # 2.13.3  Released 4 June 2015
