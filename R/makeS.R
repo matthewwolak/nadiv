@@ -1,4 +1,4 @@
-makeS <- function(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"), returnS = FALSE){
+makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"), returnS = FALSE){
 
     if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
     nPed <- numPed(pedigree[, 1:3])

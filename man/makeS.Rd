@@ -5,7 +5,7 @@
 \description{The function returns the inverse of the additive relationship matrix in sparse matrix format for the sex chromosomes (e.g., either X or Z).
 }
 \usage{
-makeS(pedigree, heterogametic = "0", DosageComp = c(NULL, "ngdc",
+makeS(pedigree, heterogametic, DosageComp = c(NULL, "ngdc",
 "hori", "hedo", "hoha", "hopi"), returnS = FALSE)
 }
 \arguments{
