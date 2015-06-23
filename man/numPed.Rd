@@ -1,16 +1,17 @@
 \name{numPed}
 \alias{numPed}
+\alias{is.numPed}
 \alias{ronPed}
 
 \title{Integer Format Pedigree}
 
 \description{
-Conversion of a pedigree into a standard integer form used by many functions in the 'nadiv' package and row re-ordering of numeric pedigrees of the class \sQuote{numPed}.}
+Conversion, checking, and row re-ordering of a pedigree in integer form of class \sQuote{numPed}.}
 
 \usage{
 numPed(pedigree, check = TRUE)
-  \method{is.numPed}{numPed}(x)
-  \method{ronPed}{numPed}(x, i, \dots)
+is.numPed(x)
+ronPed(x, i, \dots)
 }
 \arguments{
   \item{pedigree }{
@@ -20,7 +21,7 @@ A logical argument indicating if checks on the validity of the pedigree structur
   \item{x }{
 A pedigree of class \sQuote{\code{numPed}}}
   \item{i, \dots }{
-Index specifying elements to extract or replace: see \code{\link[base]{sQuote{[}}}}
+Index specifying elements to extract or replace: see \code{\link[base]{[}}}
 
 
 }
@@ -33,7 +34,7 @@ If pedigree inherits the class "numPed" (from a previous call to \code{numPed()}
 
 Based on code from the \code{MCMCglmm} package}
 
-\seealso{\code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}}}, \code{\link[base]{sQuote{[}}}
+\seealso{\code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}}, \code{\link[base]{[}}}
 
 
 \value{
