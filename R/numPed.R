@@ -6,24 +6,24 @@
 
 numPed <- function(pedigree, check = TRUE){
  if(!is.numPed(pedigree) && check){      
-  if(any(pedigree[, 2] == 0)){
+  if(any(pedigree[, 2] == 0, na.rm = TRUE)){
     pedigree[which(pedigree[, 2] == 0), 2] <- NA
     warning("Zero in the dam column interpreted as a missing parent")
   }
-  if(any(pedigree[, 3] == 0)){
+  if(any(pedigree[, 3] == 0, na.rm = TRUE)){
     pedigree[which(pedigree[, 3] == 0), 3] <- NA
     warning("Zero in the sire column interpreted as a missing parent")
   }
-  if(any(pedigree[, 2] == -998)){
+  if(any(pedigree[, 2] == -998, na.rm = TRUE)){
     pedigree[which(pedigree[, 2] == -998), 2] <- NA
     if(!is.numPed(pedigree)) warning("-998 in the dam column interpreted as a missing parent")
   }
-  if(any(pedigree[, 3] == -998)){
+  if(any(pedigree[, 3] == -998, na.rm = TRUE)){
     pedigree[which(pedigree[, 3] == -998), 3] <- NA
     if(!is.numPed(pedigree)) warning("-998 in the sire column interpreted as a missing parent")
   }
-  if(any(pedigree[,2] == "*")) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
-  if(any(pedigree[,3] == "*")) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+  if(any(pedigree[,2] == "*", na.rm = TRUE)) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
+  if(any(pedigree[,3] == "*", na.rm = TRUE)) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
 
   if(all(is.na(pedigree[, 2])) & all(is.na(pedigree[, 3]))){
      stop("All dams and sires are missing")
