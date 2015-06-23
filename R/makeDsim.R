@@ -3,12 +3,12 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
   approxD <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
   lapproxD <- summary(approxD$D)
 
-  numped <- numPed(pedigree)
+  nPed <- numPed(pedigree)
   n <- dim(pedigree)[1]
   alleles <- matrix(as.integer(-998), nrow = n, ncol=2) 
-  dfounders <- which(numped[, 2] == -998)
-  sfounders <- which(numped[, 3] == -998)
-  uniqp <- c(unique(numped[, 2])[-1], unique(numped[, 3])[-1])
+  dfounders <- which(nPed[, 2] == -998)
+  sfounders <- which(nPed[, 3] == -998)
+  uniqp <- c(unique(nPed[, 2])[-1], unique(nPed[, 3])[-1])
   ndfounders <- length(dfounders)
   
   alleles[dfounders, 1] <- as.integer(seq(1, ndfounders, 1)) 
@@ -23,8 +23,8 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
 	as.integer(salleles),
 	as.integer(N),
 	as.integer(n),
-	as.integer(numped[, 2] - 1),
-	as.integer(numped[, 3] - 1),
+	as.integer(nPed[, 2] - 1),
+	as.integer(nPed[, 3] - 1),
 	as.integer(approxD$D@i),
 	as.integer(approxD$D@p),
 	as.integer(rep(0, length(approxD$D@i))))

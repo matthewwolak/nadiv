@@ -4,12 +4,12 @@
 #in the 'MCMCglmm' package
 ################################################
 prunePed <- function (pedigree, phenotyped) {
-   numped <- numPed(pedigree[, 1:3])
+   nPed <- numPed(pedigree[, 1:3])
    ikeep <- keep <- match(phenotyped, pedigree[, 1])
    nind <- length(ikeep) + 1
    while(length(ikeep) != nind){
       nind <- length(ikeep)
-      ikeep <- union(c(numped[ikeep, 2:3]), ikeep)
+      ikeep <- union(c(nPed[ikeep, 2:3]), ikeep)
       ikeep <- ikeep[which(ikeep > 0)]
    }
 

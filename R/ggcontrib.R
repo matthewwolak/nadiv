@@ -2,13 +2,13 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
 
   if(is.null(ggroups)){
      ptype <- "A"
-     numped <- numPed(pedigree)
-     ggroupsD <- as.character(pedigree[which(numped[, 2] == -998), 1])
-     ggroupsS <- as.character(pedigree[which(numped[, 3] == -998), 1])
+     nPed <- numPed(pedigree)
+     ggroupsD <- as.character(pedigree[which(nPed[, 2] == -998), 1])
+     ggroupsS <- as.character(pedigree[which(nPed[, 3] == -998), 1])
      if(!all(ggroupsD == ggroupsS)){
         stop("Only rows identifying genetic groups should have missing parents.  All individuals in the pedigree must have a genetic group when a parent is unknown")
      }
-     nggroups <- numped[which(numped[, 2] == -998), 1]
+     nggroups <- nPed[which(nPed[, 2] == -998), 1]
 
   } else{
             if(length(ggroups) == length(unique(ggroups))){
@@ -17,8 +17,8 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
                   stop("When specifying the unique genetic groups as a vector in the 'ggroups' argument, all individuals in the pedigree must have a genetic group when a parent is unknown (<NA>, '0' and '*' are considered unknown parents)")
                }
                pedalt <- data.frame(id = c(ggroups, as.character(pedigree[, 1])), dam = c(rep(NA, length(ggroups)), as.character(pedigree[, 2])), sire = c(rep(NA, length(ggroups)), as.character(pedigree[, 3])))
-               numped <- suppressWarnings(numPed(pedalt))
-               nggroups <- numped[which(numped[, 2] == -998), 1]
+               nPed <- suppressWarnings(numPed(pedalt))
+               nggroups <- nPed[which(nPed[, 2] == -998), 1]
             }
 
             if(length(ggroups) == dim(pedigree)[1]){
@@ -47,22 +47,22 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
                uggroups <- as.character(unique(ggroups))
                uggroups <- uggroups[!is.na(uggroups)]
                pedalt <- data.frame(id = c(uggroups, as.character(pedalt[, 1])), dam = c(rep(NA, length(uggroups)), as.character(pedalt[, 2])), sire = c(rep(NA, length(uggroups)), as.character(pedalt[, 3])))
-               numped <- suppressWarnings(numPed(pedalt))
-               nggroups <- numped[which(numped[, 2] == -998), 1]       
+               nPed <- suppressWarnings(numPed(pedalt))
+               nggroups <- nPed[which(nPed[, 2] == -998), 1]       
             }
         }
 
 
-  N <- dim(numped)[1]
-  dnmiss <- which(numped[, 2] != -998)
-  snmiss <- which(numped[, 3] != -998)
+  N <- dim(nPed)[1]
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
   maxcnt <- (length(dnmiss) + length(snmiss) + N)
   Tinv.row <- Tinv.x <- rep(0, maxcnt)
   Tinv.col <- rep(0, N+1)
 
   Cout <- .C("reT",
-		as.integer(numped[, 2] - 1),
-		as.integer(numped[, 3] - 1),
+		as.integer(nPed[, 2] - 1),
+		as.integer(nPed[, 3] - 1),
                 as.integer(Tinv.row),
 		as.integer(Tinv.col),
 		as.double(Tinv.x),

@@ -59,10 +59,10 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
    stop("some individuals appear more than once in the pedigree")
  }
 
- numped_fixed <- numPed(ped_fixed[, 1:3], check = FALSE)
+ nPed_fixed <- numPed(ped_fixed[, 1:3], check = FALSE)
  Cout <- .C("gaUnsort",
-	as.integer(numped_fixed[, 2] - 1),
-	as.integer(numped_fixed[, 3] - 1),
+	as.integer(nPed_fixed[, 2] - 1),
+	as.integer(nPed_fixed[, 3] - 1),
         as.integer(rep(0, npf)),
 	as.integer(rep(0, npf)),
 	as.integer(npf))
@@ -71,7 +71,7 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]), silent = TRUE)
  if(class(itwork) == "try-error"){
    G <- Matrix(FALSE, npf, npf, sparse = TRUE)
-   G[cBind(c(numped_fixed[which(numped_fixed[, 2] != -998), 2], numped_fixed[which(numped_fixed[, 3] != -998), 3]), c(numped_fixed[which(numped_fixed[, 2] != -998), 1], numped_fixed[which(numped_fixed[, 3] != -998), 1]))] <- TRUE
+   G[cBind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
    Gtmp <- G
    gconv <- Matrix(TRUE, nrow = 1, ncol = npf, sparse = TRUE)
    gendepth <- rep(0, npf) + as((gconv %*% Gtmp), "ngCMatrix") 

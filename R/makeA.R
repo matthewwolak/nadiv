@@ -1,12 +1,12 @@
 makeA <- function(pedigree)
 {
-  numped <- numPed(pedigree)
-  N <- dim(numped)[1]
-  dnmiss <- which(numped[, 2] != -998)
-  snmiss <- which(numped[, 3] != -998)
-  bnmiss <- which(numped[, 2] != -998 & numped[, 3] != -998)
-  Tinv.row <- c(numped[, 1][dnmiss], numped[, 1][snmiss], 1:N)
-  Tinv.col <- c(numped[, 2][dnmiss], numped[, 3][snmiss], 1:N)
+  nPed <- numPed(pedigree)
+  N <- dim(nPed)[1]
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  bnmiss <- which(nPed[, 2] != -998 & nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
   Tinv.x <- c(rep(-0.5, length(dnmiss) + length(snmiss)), rep(1, N))
   el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
   Tinv <- Matrix(0, N, N, sparse = TRUE)
@@ -15,12 +15,12 @@ makeA <- function(pedigree)
   Tinv@p <- as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1)
   Tinv@x <- as.double(Tinv.x[el.order])
   nA <- N + length(dnmiss) + length(snmiss)
-  nA <- nA + sum(duplicated(paste(numped[, 2], numped[, 3])[bnmiss]) == FALSE)
+  nA <- nA + sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
-  numped[numped == -998] <- N + 1
+  nPed[nPed == -998] <- N + 1
     Cout <- .C("acinv",
-	    as.integer(numped[, 2] - 1), #dam
-	    as.integer(numped[, 3] - 1),  #sire
+	    as.integer(nPed[, 2] - 1), #dam
+	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f
             as.integer(Tinv@i),  #iTinvP
 	    as.integer(c(Tinv@p, length(Tinv@x))),  #pTinvP

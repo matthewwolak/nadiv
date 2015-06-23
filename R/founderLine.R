@@ -3,11 +3,11 @@ founderLine <- function(pedigree, sex){
    if(!colsel %in% seq(ncol(pedigree))){
       stop("character argument to 'sex' must exactly match a column name in 'pedigree'")
    }
-   numped <- numPed(pedigree[, 1:3])
-   line <- par <- numped[, colsel]
+   nPed <- numPed(pedigree[, 1:3])
+   line <- par <- nPed[, colsel]
    parKnown <- par > 0
    while(any(parKnown)){
-      par[parKnown] <- numped[line[parKnown], colsel]
+      par[parKnown] <- nPed[line[parKnown], colsel]
       parKnown <- par > 0
       line[parKnown] <- par[parKnown]
    }
