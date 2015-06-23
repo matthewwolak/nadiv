@@ -22,12 +22,12 @@ void dij(
     Dp[k] = cnt[0];
     kDam = dam[k];
     kSire = sire[k];
-    if((kDam != -999) & (kSire != -999)){
+    if((kDam != -999) && (kSire != -999)){
       for(j = pAP[k]; j < pAP[k+1]; j++){ //iterate through all rows of k column
          if(k != iAP[j]){ 
            jDam = dam[iAP[j]];
            jSire = sire[iAP[j]];
-           if((jDam != -999) & (jSire != -999)){
+           if((jDam != -999) && (jSire != -999)){
              rmfp = 0.0;
              rmmp = 0.0;
              rfmp = 0.0;
@@ -114,11 +114,11 @@ void dijp(
   for(k = 0; k < lAr[0]; k++){ 
     kDam = dam[indk[k]];
     kSire = sire[indk[k]];
-    if((kDam != -999) & (kSire != -999)){
+    if((kDam != -999) && (kSire != -999)){
        if(indk[k] != indj[k]){ 
          jDam = dam[indj[k]];
          jSire = sire[indj[k]];
-         if((jDam != -999) & (jSire != -999)){
+         if((jDam != -999) && (jSire != -999)){
            rmfp = 0.0;
            rmmp = 0.0;
            rfmp = 0.0;
@@ -204,15 +204,15 @@ void dijjskip(
     Dp[k] = cnt[0];
     kDam = dam[k];
     kSire = sire[k];
-    if((kDam != -999) & (kSire != -999)){
+    if((kDam != -999) && (kSire != -999)){
       jmoDam = -999;
       jmoSire = -999;
       for(j = pAP[k]; j < pAP[k+1]; j++){ //iterate through all rows of k column
          if(k != iAP[j]){ 
            jDam = dam[iAP[j]];
            jSire = sire[iAP[j]];
-           if((jDam != -999) & (jSire != -999)){
-             if((jDam == jmoDam) & (jSire == jmoSire)){
+           if((jDam != -999) && (jSire != -999)){
+             if((jDam == jmoDam) && (jSire == jmoSire)){
                 if(dij_tmp != 0.0){
                    dij[cnt[0]] = dij_tmp;   
                    Di[cnt[0]] = iAP[j];

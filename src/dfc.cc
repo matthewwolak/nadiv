@@ -20,7 +20,7 @@ void dfc(
      isire = sire[i[k]];
      jdam = dam[j[k]];
      jsire = sire[j[k]];
-     if((idam == -999) | (isire == -999) | (jdam == -999) | (jsire == -999) | (idam == jdam) | (isire == jsire)){
+     if((idam == -999) || (isire == -999) || (jdam == -999) || (jsire == -999) || (idam == jdam) || (isire == jsire)){
         i[k] = 0;
      }
         else{
@@ -32,11 +32,11 @@ void dfc(
 	   jdgs = sire[jdam];
 	   jsgd = dam[jsire];
 	   jsgs = sire[jsire];
-           if((idgd == -999) | (idgs == -999) | (isgd == -999) | (isgs == -999) | (jdgd == -999) | (jdgs == -999) | (jsgd == -999) | (jsgs == -999)){
+           if((idgd == -999) || (idgs == -999) || (isgd == -999) || (isgs == -999) || (jdgd == -999) || (jdgs == -999) || (jsgd == -999) || (jsgs == -999)){
               i[k] = 0;
            }
               else{
-                 if((idgd == jdgd) & (idgs == jdgs) & (isgd == jsgd) & (isgs == jsgs)){
+                 if((idgd == jdgd) && (idgs == jdgs) && (isgd == jsgd) && (isgs == jsgs)){
                     dfcfbfs = 1;
                     if(exct[0] == 1){
                        if(dam[idgd] != -999){
@@ -84,7 +84,7 @@ void dfc(
                        }
                     }
                  }
-                 if((idgd == jsgd) & (idgs == jsgs) & (isgd == jdgd) & (isgs == jdgs)){
+                 if((idgd == jsgd) && (idgs == jsgs) && (isgd == jdgd) && (isgs == jdgs)){
                     dfcosfs = 1;
                     if(exct[0] == 1){
                        if(dam[idgd] != -999){
@@ -132,7 +132,7 @@ void dfc(
                        }
                     }  
                  }
-                 if((dfcfbfs == 1) | (dfcosfs == 1)){
+                 if((dfcfbfs == 1) || (dfcosfs == 1)){
                     i[k] = 1;
                  }
                     else{
