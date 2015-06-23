@@ -6,24 +6,24 @@
 
 numPed <- function(pedigree, check = TRUE){
  if(!is.numPed(pedigree) && check){      
-  if(length(which(pedigree[, 2] == 0)) > 0){
+  if(any(pedigree[, 2] == 0)){
     pedigree[which(pedigree[, 2] == 0), 2] <- NA
     warning("Zero in the dam column interpreted as a missing parent")
   }
-  if(length(which(pedigree[, 3] == 0)) > 0){
+  if(any(pedigree[, 3] == 0)){
     pedigree[which(pedigree[, 3] == 0), 3] <- NA
     warning("Zero in the sire column interpreted as a missing parent")
   }
-  if(length(which(pedigree[, 2] == -998)) > 0){
+  if(any(pedigree[, 2] == -998)){
     pedigree[which(pedigree[, 2] == -998), 2] <- NA
     if(!is.numPed(pedigree)) warning("-998 in the dam column interpreted as a missing parent")
   }
-  if(length(which(pedigree[, 3] == -998)) > 0){
+  if(any(pedigree[, 3] == -998)){
     pedigree[which(pedigree[, 3] == -998), 3] <- NA
     if(!is.numPed(pedigree)) warning("-998 in the sire column interpreted as a missing parent")
   }
-  if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
-  if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+  if(any(pedigree[,2] == "*")) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
+  if(any(pedigree[,3] == "*")) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
 
   if(all(is.na(pedigree[, 2])) & all(is.na(pedigree[, 3]))){
      stop("All dams and sires are missing")
@@ -37,7 +37,7 @@ numPed <- function(pedigree, check = TRUE){
   if(sum((na.omit(pedigree[, 3]) %in% pedigree[, 1]) == FALSE) > 0 & any(is.na(pedigree[, 3]) == FALSE)){
      stop("individuals appearing as sires but not in pedigree: first use the 'prepPed' function")
   }
-  if(sum(duplicated(pedigree[, 1])) > 0){
+  if(any(duplicated(pedigree[, 1]))){
      stop("some individuals appear more than once in the pedigree")
   }
  }
@@ -57,6 +57,14 @@ numPed <- function(pedigree, check = TRUE){
   }
   if(any(nPed[, 3][snmiss] > nPed[, 1][snmiss]) & (length(snmiss) > 0)){
      stop("Offspring appearing before their Sires: first use the 'prepPed' function")
+  }
+  if(any((nPed[, 1] - nPed[, 2]) == 0)){
+     cat("Individual(s):", nPed[which((nPed[, 1] - nPed[, 2]) == 0), 1], "\n")
+     stop("Individual appearing as its own Dam")
+  }
+  if(any((nPed[, 1] - nPed[, 3]) == 0)){
+     cat("Individual(s):", nPed[which((nPed[, 1] - nPed[, 3]) == 0), 1], "\n")
+     stop("Individual appearing as its own Sire")
   }
  }
   nPed <- structure(nPed, class = "numPed")
