@@ -1,7 +1,7 @@
 \name{numPed}
-\alias{numPed}
-\alias{is.numPed}
-\alias{ronPed}
+  \alias{numPed}
+  \alias{is.numPed}
+  \alias{ronPed}
 
 \title{Integer Format Pedigree}
 

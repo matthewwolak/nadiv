@@ -1,18 +1,24 @@
 \name{proLik}
-\alias{proLik}
+  \alias{proLik}
+  \alias{is.proLik}
+  \alias{plot.proLik}
 
 \title{
-Estimates the profile likelihood of a random effect
+Profile Likelihoods
 }
 
 \description{
-When a mixed model is run in ASReml-R, this function can estimate the profile likelihood of variance components from the output.  
+Estimation, checking, and plotting of profile likelihoods and objects of class \code{sQuote{proLik}} from a mixed model in ASReml-R.  
 }
 
 \usage{
-proLik(full.model, component, G = TRUE, negative = FALSE, 
+  proLik(full.model, component, G = TRUE, negative = FALSE, 
        nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
        parallel = FALSE, ncores = getOption("mc.cores", 2L))
+
+  is.proLik(x)
+
+  \method{plot}{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", ...)
 }
 
 \arguments{
@@ -26,6 +32,11 @@ proLik(full.model, component, G = TRUE, negative = FALSE,
   \item{tolerance }{Acceptable distance, between actual sample values and interpolated values, for determining the upper and lower limits of the Confidence Interval.  Actual sample points will be no more than this distance from the true value of the estimate.}
   \item{parallel }{A logical indicating whether or not parallel processing will be used.  Note, may only be available for Mac and Linux operating systems.}
   \item{ncores }{Argument indicating number of cpu units to use.  Default is all available.}
+  \item{x }{Object of class \code{proLik}.}
+  \item{CL }{A logical indicating whether a line representing the Confidence Limit is to be drawn when plotting.}
+  \item{type }{The type of plot to be generated, see arguments to \code{link[graphics]{plot}}.}
+  \item{\dots }{other arguments to \code{link[graphics]{plot}}.}
+
 }
 
 
