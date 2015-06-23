@@ -1,33 +1,51 @@
 \name{numPed}
 \alias{numPed}
-\title{Creates an integer format for a pedigree
-}
+\alias{ronPed}
+
+\title{Integer Format Pedigree}
+
 \description{
-Converts a pedigree into a standard integer form used by many functions in the 'nadiv' package.}
+Conversion of a pedigree into a standard integer form used by many functions in the 'nadiv' package and row re-ordering of numeric pedigrees of the class \sQuote{numPed}.}
+
 \usage{
 numPed(pedigree, check = TRUE)
+  \method{is.numPed}{numPed}(x)
+  \method{ronPed}{numPed}(x, i, \dots)
 }
 \arguments{
   \item{pedigree }{
 A three column pedigree object, where the columns correspond to: ID, Dam, & Sire}
   \item{check }{
 A logical argument indicating if checks on the validity of the pedigree structure should be made, but see Details}
+  \item{x }{
+A pedigree of class \sQuote{\code{numPed}}}
+  \item{i, \dots }{
+Index specifying elements to extract or replace: see \code{\link[base]{sQuote{[}}}}
+
 
 }
 \details{
-Missing parents (e.g., base population) should be denoted by either 'NA', '0',, '-998', or '*'.
+Missing parents (e.g., base population) should be denoted by either 'NA', '0', '-998', or '*'.
 
-Individuals must appear in the ID column in rows preceeding where they appear in either the Dam or Sire column.  See the \code{\link[nadiv]{prepPed}} function if this is not the case.
+Individuals must appear in the ID column in rows preceeding where they appear in either the Dam or Sire column. See the \code{\link[nadiv]{prepPed}} function if this is not the case.
 
 If pedigree inherits the class "numPed" (from a previous call to \code{numPed()}) and \code{check = TRUE}, the checks are skipped. If \code{check = FALSE} any pedigree will be transformed into a pedigree consisting of integers and missing values denoted by '-998'.
 
 Based on code from the \code{MCMCglmm} package}
 
-\seealso{\code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}}}
+\seealso{\code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}}}, \code{\link[base]{sQuote{[}}}
 
 
 \value{
 An S3 object of class "numPed" representing the pedigree, where individuals are now numbered from 1 to n and unknown parents are assigned a value of '-998'.
 }
 
+\examples{
+(nPed <- numPed(Mrode2))
+is.numPed(nPed)
+
+# re-order and retain class 'numPed'
+ronPed(nPed, order(nPed[, 2], nPed[, 3]))
+
+}
 

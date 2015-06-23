@@ -72,10 +72,13 @@ Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal 
    AstarD <- makeAinv(typeDped, ggroups = c("g1", "g2"), gOnTop = FALSE)$Ainv
   stopifnot(identical(AstarA, AstarD))
   
-  # augmented A-inverse with genetic groups contains same A-inverse as without genetic groups
+  # Show that the augmented A-inverse with genetic groups
+  # contains the normal A-inverse (i.e., without genetic groups)
    ## Augmented A-inverse with genetic groups
-    ggAinv <- makeAinv(Mrode3[-c(1,2), c("calf", "damGG", "sireGG")], ggroups = c("g1", "g2"), gOnTop = FALSE)$Ainv
-    noggAinv <- makeAinv(Mrode3[-c(1,2), c("calf", "dam", "sire")], ggroups = NULL)$Ainv
+    ggAinv <- makeAinv(Mrode3[-c(1,2), c("calf", "damGG", "sireGG")],
+	ggroups = c("g1", "g2"), gOnTop = FALSE)$Ainv
+    noggAinv <- makeAinv(Mrode3[-c(1,2), c("calf", "dam", "sire")],
+	ggroups = NULL)$Ainv
     # First 8 rows & columns of ggAinv are same as the A-inverse without genetic groups
     ggAinv[1:8, 1:8]
     noggAinv
