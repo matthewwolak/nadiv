@@ -11,7 +11,7 @@
 Package: \tab nadiv\cr
 Type: \tab Package\cr
 Version: \tab 2.14.0\cr
-Date: \tab 2015-06-16\cr
+Date: \tab 2015-06-25\cr
 URL: \tab http://github.com/matthewwolak/nadiv\cr
 BugReports: \tab http://github.com/matthewwolak/nadiv/issues\cr
 License: \tab GPL (>=2)\cr
