@@ -47,12 +47,12 @@ The pedigree object (can have more columns than just ID, Dam, and Sire), where t
 
 # The following will give a pedigree with only individuals that have a 
 # phenotype for "trait1" OR are an ancestor to a phenotyped individual.
-  pruned_warcolak_ped <- prunePed(warcolak_ped, phenotyped = t1phenotyped$ID)
+  pruned_warcolak_ped <- prunePed(warcolak_ped, phenotyped = t1phenotyped$id)
 
 # Now compare the sizes (note, pruned_warcolak_ped retained its column indicating sex.
 # We could have kept all of the data associated with individuals who had phenotypic
 # information on "trait1" by instead specifying 
-#  prunePed(warcolak, phenotyped = t1phenotyped$ID) 
+#  prunePed(warcolak, phenotyped = t1phenotyped$id) 
   dim(warcolak_ped)
   dim(pruned_warcolak_ped)
 

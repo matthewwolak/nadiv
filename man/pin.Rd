@@ -41,7 +41,7 @@ See Also as \code{\link{aiCI}}, \code{\link{aiFun}}
    asrMod <- list(gammas = c(0.6383285, 1.00),
 	gammas.type = c(2, 1),
 	ai = c(0.0044461106, -0.0011754947, 0.0004424668))
-   namevec <- c("ped(ID)!ped", "R!variance")
+   namevec <- c("ped(id)!ped", "R!variance")
    names(asrMod[[1]]) <- names(asrMod[[2]]) <- namevec
 
    nadiv:::pin(asrMod, h2 ~ V1 / (V1 + V2))
