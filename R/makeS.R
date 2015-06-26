@@ -9,8 +9,9 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
        pedigree <- pedigree[, c(1,3,2,4)]
        names(pedigree) <- pedname
        nPed <- numPed(pedigree[, 1:3])
-      warning("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system")
-    }
+      cat("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system")
+    } else cat("Assuming male heterogametic (e.g., XX/XY) sex chromosome system")
+
     sex <- rep(-998, dim(pedigree)[1])
     sex[homs <- which(pedigree[,4] != heterogametic)] <- 1
     sex[hets <- which(pedigree[,4] == heterogametic)] <- 0
