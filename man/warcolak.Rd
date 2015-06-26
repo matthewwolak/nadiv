@@ -10,9 +10,9 @@ A two trait example pedigree from the three generation breeding design of Fairba
 \format{
   A data frame with 5400 observations on the following 13 variables.
   \describe{
-    \item{\code{id }}{a factor specifying 5400 unique individual identities}
-    \item{\code{dam }}{a factor specifying the unique dam for each individual}
-    \item{\code{sire }}{a factor specifying the unique sire for each individual}
+    \item{\code{ID }}{a factor specifying 5400 unique individual identities}
+    \item{\code{Dam }}{a factor specifying the unique Dam for each individual}
+    \item{\code{Sire }}{a factor specifying the unique Sire for each individual}
     \item{\code{sex} }{a factor specifying \dQuote{M} if the individual is a male and \dQuote{F} if it is a female}
     \item{\code{trait1} }{a numeric vector of phenotypic values: see \sQuote{Details}}
     \item{\code{trait2} }{a numeric vector of phenotypic values: see \sQuote{Details}}
@@ -29,7 +29,7 @@ A two trait example pedigree from the three generation breeding design of Fairba
 \details{
 Unique sets of relatives are specified for a three generation breeding design (Fairbairn & Roff, 2006).  Each set contains 72 individuals. This pedigree reflects an experiment which produces 75 of these basic sets from Fairbairn & Roff's design. The pedigree was created using \code{simPedDFC()}.
 
-The dataset was simulated to have two un-correlated traits with different genetic architectures (see \code{examples} below). The trait means are both equal to 1 for males and 2 for females. The additive genetic, dominance genetic, and environmental (or residual) variances for both \code{trait1} and \code{trait2} are specified to be 0.4, 0.3, & 0.3, respectively. However, the additive genetic variance for \code{trait2} can be further decomposed to autosomal additive genetic variance (0.3) and X-linked additive genetic variance (0.1; assuming the \sQuote{no global dosage compensation} mechanism).
+The dataset was simulated to have two un-correlated traits with different genetic architectures (see \code{examples} below). The trait means are both equal to 1 for males and 2 for females. The additive genetic, dominance genetic, and environmental (or residual) variances for both \code{trait1} and \code{trait2} are 0.4, 0.3, & 0.3, respectively. However, the additive genetic variance for \code{trait2} can be further decomposed to autosomal additive genetic variance (0.3) and X-linked additive genetic variance (0.1; assuming the \sQuote{no global dosage compensation} mechanism).
 
 Females and males have equal variances (except for sex-chromosomal additive genetic variance, where by definition, males have half of the additive genetic variance as females; Wolak 2013) and a between-sex correlation of one for all genetic and residual effects (except the cross-sex residual covariance=0). All random effects were drawn from multivariate random normal distributions [e.g., autosomal additive genetic effects: N ~ (0, kronecker(A, G))] with means of zero and (co)variances equal to the product of the expected sex-specific (co)variances (e.g., G) and the relatedness (or incidence) matrix (e.g., A).
 
@@ -37,7 +37,7 @@ The actual variance in random effects will vary slightly from the amount specifi
 }
 
 \note{
-Before nadiv version 2.14.0, the \code{warcolak} dataset had different column names, used a 0/1 coding for \sQuote{sex}, and did not contain the random effects.
+Before nadiv version 2.14.0, the \code{warcolak} dataset used a 0/1 coding for \sQuote{sex} and did not contain the random effects.
 }
 
 \references{
@@ -53,6 +53,7 @@ Wolak, M.E. 2013. The Quantitative Genetics of Sexual Differences: New Methodolo
   library(nadiv)
   # create pedigree
   warcolak <- simPedDFC(F = 75, gpn = 4, fsn = 4, s = 2)
+  names(warcolak)[1:3] <- c("ID", "Dam", "Sire")
   warcolak$trait2 <- warcolak$trait1 <- NA
 
   # Define covariance matrices for random effects:
