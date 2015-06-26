@@ -23,7 +23,6 @@ nPed_subnadiv <- ronPed(nPed, order(nPed[, 2], nPed[, 3]))
 ```
    * Re-made (i.e., re-simulated) the `warcolak` dataset.
      * Codes specifying the `sex` are now `"M"` and `"F"` instead of `0` & `1`.
-     * Column names have been changed to all lowercase (e.g., 'ID' to 'id' and 'Dam' to 'dam').
      * New columns added to the dataset that contain all random effects underlying the phenotype.
      * Entire code used to simulate the dataset is now an example in `warcolak.Rd`. 
    * Added two new datasets/example pedigrees: (1) `Q1988` from Quaas 1988 and (2) `Mrode3` from Mrode (2005) chapter 3. See their descriptions in `Q1988.Rd` and `Mrode3.Rd` or in R type:
