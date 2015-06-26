@@ -8,7 +8,7 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
        pedname <- names(pedigree)
        pedigree <- pedigree[, c(1,3,2,4)]
        names(pedigree) <- pedname
-       nPed <- nPed(pedigree[, 1:3])
+       nPed <- numPed(pedigree[, 1:3])
       warning("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system")
     }
     sex <- rep(-998, dim(pedigree)[1])
