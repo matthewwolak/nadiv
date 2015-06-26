@@ -13,4 +13,4 @@ There were no ERRORs, WARNINGs, or NOTEs.
 # Downstream dependencies
 I have also run R CMD check on the downstream dependency of nadiv: 
   dmm 
-All packages that I could install passed 
+All packages installed and passed 
