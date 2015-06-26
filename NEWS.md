@@ -9,17 +9,17 @@ examples("makeAinv")   # runs the examples in the help documentation
    * Improved algorithm underlying `makeAinv()` - significant speed-up!
    * Created new class `numPed` for pedigrees constructed by `numPed()`.
      * Methods for checking (`is.numPed()`) and re-ordering rows (`ronPed()`) currently available
-     * To re-order the rows of an integer pedigree of class `numPed`, use `ronPed()` instead of typical subsetting operators (e.g., `"["`) to retain the class attribute `numPed`. For example:
+     * To re-order the rows of an integer pedigree of class `numPed`, use `ronPed()` instead of typical subsetting operators (e.g., `'['`) to retain the class attribute `numPed`. For example:
 ```R
 nPed <- numPed(Mrode2)
 is.numPed(nPed) # TRUE
 # re-order using typical R functions
 nPed_sub <- nPed[order(nPed[, 2], nPed[, 3]), ]
   is.numPed(nPed_sub) # FALSE; see help via ?'[' about dropping attributes
-  class(nPed_sub)
+  class(nPed_sub) # matrix
 nPed_subnadiv <- ronPed(nPed, order(nPed[, 2], nPed[, 3]))
   is.numPed(nPed_subnadiv) # TRUE
-  class(nPed_subnadiv)
+  class(nPed_subnadiv) # numPed
 ```
    * Re-made (i.e., re-simulated) the `warcolak` dataset.
      * Codes specifying the `sex` are now `"M"` and `"F"` instead of `0` & `1`.
@@ -34,6 +34,15 @@ nPed_subnadiv <- ronPed(nPed, order(nPed[, 2], nPed[, 3]))
 ## Small changes
    * Removed the default from the `heterogametic` argument in `makeS()`.
      * Now this has to be specified by the user!
+     * For example:
+```R
+makeS(FG90)
+``` 
+won't work! Must now type:
+```R
+makeS(FG90, heterogametic = "0")
+```
+as a minimum
 
 
 # 2.13.3  Released 4 June 2015
