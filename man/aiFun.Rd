@@ -41,9 +41,9 @@ The vector of \code{Dimnames} should match the same order of variance components
     library(asreml)
     ginvA <- asreml.Ainverse(warcolak)$ginv
     ginvD <- makeD(warcolak[,1:3])$listDinv
-    warcolak$idd <- warcolak$id
-    warcolak.mod <- asreml(trait1 ~ sex, random = ~ped(id) + giv(idd), 
-	ginverse = list(id = ginvA, idd = ginvD), data = warcolak) 
+    warcolak$IDD <- warcolak$ID
+    warcolak.mod <- asreml(trait1 ~ sex, random = ~ped(ID) + giv(IDD), 
+	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
     summary(warcolak.mod)$varcomp
     aiFun(model = warcolak.mod, Dimnames = c("Va", "Vd", "Ve"), inverse = TRUE)    
    }

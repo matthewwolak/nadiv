@@ -77,14 +77,14 @@ May be unfeasible to estimate profile likelihoods for complex models with many v
     library(asreml)
     ginvA <- asreml.Ainverse(warcolak[, c(1,3,2)])$ginv
     ginvD <- makeD(warcolak[,1:3])$listDinv
-    warcolak$idd <- warcolak$id
-    warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(id) + giv(idd), 
-	ginverse = list(id = ginvA, idd = ginvD), rcov = ~ idv(units), data = warcolak) 
+    warcolak$IDD <- warcolak$ID
+    warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(ID) + giv(IDD), 
+	ginverse = list(ID = ginvA, IDD = ginvD), rcov = ~ idv(units), data = warcolak) 
     summary(warcolak.mod)$varcomp
-    profileA <- proLik(full.model = warcolak.mod, component = "ped(id)!ped", 
+    profileA <- proLik(full.model = warcolak.mod, component = "ped(ID)!ped", 
         G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
     profileA
-    profileD <- proLik(warcolak.mod, component = "giv(idd).giv", 
+    profileD <- proLik(warcolak.mod, component = "giv(IDD).giv", 
 	G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
     profileE <- proLik(warcolak.mod, component = "R!units.var", G = FALSE, negative = FALSE)
 
