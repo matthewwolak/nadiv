@@ -1,6 +1,6 @@
 # Test environments
 * Ubuntu 14.04
-  * R 3.2.0 (2015-04-16)
+  * R 3.2.1 (2015-06-18) x86_64-pc-linux-gnu (64-bit)
 * win-builder (devel and release): http://win-builder.r-project.org/
   * R Under development (unstable) (2015-06-02 r68457)
   * R version 3.2.0 (2015-04-16)

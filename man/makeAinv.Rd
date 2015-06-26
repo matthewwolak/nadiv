@@ -5,7 +5,7 @@
 \description{This returns the inverse of the additive relationship matrix. It can also be used to obtain coefficients of inbreeding for the pedigreed population.
 }
 \usage{
-makeAinv(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
+makeAinv(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
       gOnTop = FALSE, det = FALSE)
 }
 \arguments{
