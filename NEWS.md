@@ -6,13 +6,34 @@
 ?makeAinv              # launches the help documentation
 examples("makeAinv")   # runs the examples in the help documentation
 ```
-   * improved algorithm underlying `makeAinv()` now - significant speed-up
+   * Improved algorithm underlying `makeAinv()` - significant speed-up!
+   * Created new class `numPed` for pedigrees constructed by `numPed()`.
+     * Methods for checking (`is.numPed()`) and re-ordering rows (`ronPed()`) currently available
+     * To re-order the rows of an integer pedigree of class `numPed`, use `ronPed()` instead of typical subsetting operators (e.g., `"["`) to retain the class attribute `numPed`. For example:
+```R
+nPed <- numPed(Mrode2)
+is.numPed(nPed) # TRUE
+# re-order using typical R functions
+nPed_sub <- nPed[order(nPed[, 2], nPed[, 3]), ]
+  is.numPed(nPed_sub) # FALSE; see help via ?'[' about dropping attributes
+  class(nPed_sub)
+nPed_subnadiv <- ronPed(nPed, order(nPed[, 2], nPed[, 3]))
+  is.numPed(nPed_subnadiv) # TRUE
+  class(nPed_subnadiv)
+```
+   * Re-made (i.e., re-simulated) the `warcolak` dataset.
+     * Codes specifying the `sex` are now `"M"` and `"F"` instead of `0` & `1`.
+     * Column names have been changed to all lowercase (e.g., 'ID' to 'id' and 'Dam' to 'dam').
+     * New columns added to the dataset that contain all random effects underlying the phenotype.
+     * Entire code used to simulate the dataset is now an example in `warcolak.Rd`. 
    * Added two new datasets/example pedigrees: (1) `Q1988` from Quaas 1988 and (2) `Mrode3` from Mrode (2005) chapter 3. See their descriptions in `Q1988.Rd` and `Mrode3.Rd` or in R type:
 ```R
 ?Q1988
 ?Mrode3
 ```
-#TODO: `numPed()` changes
+## Small changes
+   * Removed the default from the `heterogametic` argument in `makeS()`.
+     * Now this has to be specified by the user!
 
 
 # 2.13.3  Released 4 June 2015
