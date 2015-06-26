@@ -11,6 +11,9 @@ makeAinv(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE,
 \arguments{
   \item{pedigree }{
 A pedigree where the columns are ordered ID, Dam, Sire}
+ \item{f }{
+A numeric indicating the level of inbreeding. See Details
+}
  \item{ggroups }{
 Either a vector with the unique name of each genetic group, or a numeric indicating the number of unique genetic groups. See Details for different ways to specify. Note, if NULL then the regular A-inverse will be constructed.
  }
@@ -32,6 +35,8 @@ Logical, indicating if the (log) determinant of the A matrix should be returned
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
 The function implements an adaptation of the Meuwissen and Luo (1992) algorithm with some code borrowed from the \code{inverseA} function by Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm for directly obtaining the augmented A-inverse matrix for genetic groups into Meuwissen and Luo's (1992) algorithm, thereby, considering inbreeding during the construction of the A-inverse.
+
+At the moment, providing the inbreeding level of individuals or the base population has not been implemented. However, this argument has been introduced as a placeholder for future versions to be released (soon hopefully!).
 
 Genetic groups can be incorporated into the A-inverse by providing a value to the \code{ggroups} argument. The value supplied to \code{ggroups} can either be (1) a single integer indicating the number of unique genetic groups or (2) a character vector containing the name for each genetic group. These are referred to as pedigree types "A" and "D", respectively, and further details follow below.
   (Type="A") the pedigree contains unique IDs for the 'g' genetic groups in the first 'g' lines of the pedigree. The dam and sire of the genetic group rows should contain missing values (e.g., NA, "0", or "*"). All individuals in the pedigree should then have one of the 'g' genetic groups instead of an unknown parent.

@@ -1,4 +1,4 @@
-makeAinv <- function(pedigree, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
+makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
   if(is.null(ggroups)){
      ptype <- "O"
      renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
