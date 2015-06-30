@@ -10,6 +10,5 @@ BugReports: http://github.com/matthewwolak/nadiv/issues
 Depends: Matrix
 Suggests: parallel
 Enhances: MCMCglmm, asreml
-SystemRequirements: asreml-R
 License: GPL (>=2)
 LazyData: yes
