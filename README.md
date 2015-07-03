@@ -6,7 +6,7 @@ R package that constructs (non)additive genetic relationship matrices, and their
 
 ## To obtain nadiv:
  * From [R](http://cran.r-project.org/):
-   * see the package page for the latest release of [nadiv on CRAN](http://cran.r-project.org/web/packages/nadiv/index.html) where you can download the source.
+   * see the package page for the latest release of [nadiv on CRAN](http://cran.r-project.org/package=nadiv) where you can download the source.
    * install the latest release of the package directly in R:
    ```R
    install.packages("nadiv")
