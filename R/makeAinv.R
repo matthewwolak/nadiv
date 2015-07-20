@@ -95,6 +95,9 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
- return(list(Ainv = Ainv, listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), f = Cout[[3]][seq(nggroups+1, N, 1)], logDet = logDet))
+ return(list(Ainv = Ainv,
+	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
+	f = t(fsOrd) %*% Cout[[3]][seq(nggroups+1, N, 1)],
+	logDet = logDet))
 }
 
