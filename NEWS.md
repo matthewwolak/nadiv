@@ -1,4 +1,6 @@
-# 2.14.0
+# 2.14.1 
+
+# 2.14.0 Released 3 July 2015
 ## New
    * `makeAinv()` now can construct the augmented A-inverse matrix for genetic groups
      * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse. For more information and examples, read the help documentation `makeAinv.Rd` or in R type:
