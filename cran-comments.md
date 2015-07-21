@@ -2,7 +2,7 @@
 * Ubuntu 14.04
   * R 3.2.1 (2015-06-18) x86_64-pc-linux-gnu (64-bit)
 * win-builder (devel and release): http://win-builder.r-project.org/
-  * R Under development (unstable) (2015-07-02 r68620)
+  * R Under development (unstable) (2015-07-21 r68706)
   * R version 3.2.1 (2015-06-18)
 
 
