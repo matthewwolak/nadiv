@@ -97,7 +97,7 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
 
  return(list(Ainv = Ainv,
 	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
-	f = t(fsOrd) %*% Cout[[3]][seq(nggroups+1, N, 1)],
+	f = t(fsOrd) %*% Cout[[3]][nggroups + fsOrd@perm],
 	logDet = logDet))
 }
 
