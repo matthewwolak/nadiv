@@ -69,10 +69,11 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
   nPed[nPed == -998] <- N + 1
+  f <- c(rep(-1, nggroups), rep(0, eN), -1)
   Cout <- .C("ainvml",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(c(rep(-1, nggroups), rep(0, eN), -1)),	#f
+	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
             as.integer(N),   					#n
             as.integer(nggroups),   				#g
@@ -86,8 +87,10 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
    if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
+      f <- Cout[[3]][fsOrd@perm][-seq(nggroups)]
    } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+      f <- c(rep(0, nggroups), Cout[[3]][fsOrd@perm][-seq(nggroups)])
      }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
@@ -97,7 +100,6 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
 
  return(list(Ainv = Ainv,
 	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
-	f = t(fsOrd) %*% Cout[[3]][nggroups + fsOrd@perm],
+	f = f,
 	logDet = logDet))
 }
-
