@@ -50,7 +50,7 @@ The argument to \code{gOnTop} specifies if the elements in the A-inverse should 
 \value{
   \item{Ainv }{the inverse of the additive genetic relationship matrix in sparse matrix form}
   \item{listAinv }{the three column form of the non-zero elements for the inverse of the additive genetic relationship matrix}
-  \item{f }{the inbreeding coefficients for each individual in the pedigree}
+  \item{f }{the individual coefficients of inbreeding for each individual in the pedigree (matches the order of the first/ID column of the pedigree). If the pedigree contains 'g' genetic groups in the first 'g' rows, then the first 'g' elements of \code{f} are assigned 0}
   \item{logDet }{the log determinant of the A matrix}
 }
 
