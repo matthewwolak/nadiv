@@ -1,4 +1,4 @@
-# 2.14.1 
+# 2.14.1 Released 22 July 2015
 ## Small changes
    * fixed ordering of *f* coefficients returned by `makeAinv()`
 
