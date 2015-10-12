@@ -8,7 +8,7 @@ LRTest <- function(full, reduced, df = 1, boundaryCorrection = FALSE){
     if(sign(full) != sign(reduced)){
        stop("Signs of the log-likelihoods are opposite - or 1 log-likelihood is zero...don't know what to do")
     }
-    if(sign(full) > 0) stop("positive log-likelihoods)
+    if(sign(full) > 0) stop("positive log-likelihoods")
     # negative log-likelihoods: better fit has greater log-likelihood (less negative)
     if(sign(full) < 0){
        lambda <- 2*(full - reduced)
