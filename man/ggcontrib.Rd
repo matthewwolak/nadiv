@@ -30,11 +30,11 @@ Fuzzy classification enables phantom parents to be assigned to (potentially) mor
 
 Non-fuzzy classification can handle the specification of genetic groups in three formats:
 
-(1) similar to ASReml's format for specifying genetic groups, the first 'r' rows of the pedigree contain the label for each genetic group in the ID column and indicate missing values for the Dam and Sire columns (denoted by either 'NA', '0', or '*').  All individuals in the pedigree must then have one of the 'r' genetic groups as parent(s) for each unknown parent.  Note, a warning message indicating \code{In numPed(pedigree) : Dams appearing as Sires} is expected, since the dam and sire can be the same for all individuals in the pedigree composing the base population of a genetic group.
+(1) similar to ASReml's format for specifying genetic groups, the first 'r' rows of the pedigree (given to the \code{pedigree} argument) contain the label for each genetic group in the ID column and indicate missing values for the Dam and Sire columns (denoted by either 'NA', '0', or '*'). No object is supplied to the \code{ggroups} argument. All individuals in the pedigree must then have one of the 'r' genetic groups as parent(s) for each unknown parent. Note, a warning message indicating \code{In numPed(pedigree): Dams appearing as Sires} is expected, since the dam and sire can be the same for all individuals in the pedigree composing the base population of a genetic group.
 
-(2) similar to Jarrod Hadfield's \code{rbv} function arguments in the \code{MCMCglmm} package, for a pedigree of dimension i x 3 (specified by the \code{pedigree} argument), where 'i' is the total number of individuals in the pedigree, a similar vector of length 'i' can be specified by the \code{ggroups} argument.  This vector lists either the genetic group to which each individual belongs or NA if the individual is not to be considered part of one of the base populations (genetic groups).
+(2) similar to Jarrod Hadfield's \code{rbv} function arguments in the \code{MCMCglmm} package, for a pedigree of dimension i x 3 (given to the \code{pedigree} argument), where 'i' is the total number of individuals in the pedigree, a similar vector of length 'i' is given to the \code{ggroups} argument. This vector lists either the genetic group to which each individual's phantom parents belong or NA if the individual is not to be considered part of one of the base populations (genetic groups). NOTE, this approach does not allow phantom dams and phantom sires of a given individual to be from different genetic groups.
 
-(3) similar to DMU's format for specifying genetic groups. For a pedigree of dimension i x 3, where 'i' is the total number of individuals in the pedigree, instead of missing values for the parents the genetic groups are specified.  Note, that all individuals with a missing parent should have a genetic group substituted instead of the missing value symbol (i.e., either 'NA', '0', or '*').
+(3) similar to DMU's format for specifying genetic groups. For a pedigree of dimension i x 3 (given to the \code{pedigree} argument), where 'i' is the total number of individuals in the pedigree, instead of missing values for a parent, one of the 'r' genetic groups is specified. A character vector of length 'r' with unique genetic group labels is given to the \code{ggroups} argument. Note, that all individuals with a missing parent should have a genetic group substituted instead of the missing value symbol (i.e., either 'NA', '0', or '*').
 }
 
 \value{
@@ -43,22 +43,20 @@ Returns i x r genetic group contributions to all 'i' individuals from each of th
 \references{
 Fikse, F. 2009. Fuzzy classification of phantom parent groups in an animal model. Genetics, Selection, Evolution. 41:42.
 
-Mrode, R.A. 2005. Linear Models for the Prediction of Animal Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
-
 Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal of Dairy Science. 71:1338-1345.
 }
 
 \author{\email{matthewwolak@gmail.com}}
 
 \examples{
+# Use the pedigree from Quaas 1988 (See `data(Q1988)`)
 ##########################
 # Fuzzy classification
-  ## Uses the pedigree from Quaas 1988 (See `data(Q1988)`)
   ## Fuzzy classification with complete assignment to one group
     Q1988fuzz <- Q1988[-c(1:2), c("id", "phantomDam", "phantomSire")]
     Qfnull <- matrix(c(1,0,0,1,0, 0,1,1,0,1), nrow = 5, ncol = 2,
 	dimnames = list(letters[1:5], c("g1", "g2")))
-    Qfuzznull <- ggcontrib(Q1988fuzz, fuzz = Qfnull)
+    (Qfuzznull <- ggcontrib(Q1988fuzz, fuzz = Qfnull))
 
     ## Should be identical to the non-fuzzy classification output
     # format (1) from above
@@ -87,34 +85,29 @@ Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal 
 		dimnames = list(LETTERS[1:6], paste0("g", seq(3))))
 
     Ffuzz <- ggcontrib(F2009fuzz, fuzz = Ff)
-    # Encountering some rounding error
-      stopifnot(length((drop0(Ffuzz - Fikse2009Q, tol = 1e-12))@x) == 0)
+      (diffFfuzz <- Ffuzz - Fikse2009Q)
+      # Encountering some rounding error
+      stopifnot(length((drop0(diffFfuzz, tol = 1e-12))@x) == 0)
 
 
 ##########################
 # Non-fuzzy classification
-## Below arbitrarily assigns genetic groups to the pedigree
-## from Mrode (2005), chapter 2 (See `data(Mrode2)`).
-
   # format (1) from above
-    ExPed1.tmp <- Mrode2
-    ExPed1.tmp[c(1,2,4), 2] <- c("a", "b", "b")
-    ExPed1.tmp[1:2, 3] <- c("a", "b")
-    ExPed1 <- data.frame(id = c(letters[1:2], as.character(ExPed1.tmp$id)),
-	dam = c(NA, NA, as.character(ExPed1.tmp$dam)),
-	sire = c(NA, NA, as.character(ExPed1.tmp$sire)))
-    gg1 <- ggcontrib(ExPed1) # note the warning message which is typical
+    Q1 <- Q1988[-c(3:7), c(1,4,5)]
+    gg1 <- ggcontrib(Q1, ggroups = NULL) # note the warning message which is typical
 
   # format (2) from above
-    ExPed2 <- Mrode2
-    ggvec.in <- c("a", "b", NA, "b", NA, NA)
-    (gg2 <- ggcontrib(ExPed2, ggroups = ggvec.in))
-    str(as(gg2, "matrix"))
+    Q2 <- Q1988[-c(1:7), 1:3]
+    # arbitrarily assign individuals genetic groups for unknown parents
+    ## Means gg2 is NOT comparable to gg1 or gg3!
+    ggvec.in <- c("g1", "g2", "g1", NA)
+    (gg2 <- ggcontrib(Q2, ggroups = ggvec.in))
 
   # format (3) from above
-    ExPed3 <- ExPed1.tmp
-    gg3 <- ggcontrib(ExPed3, ggroups = c("a", "b"))
+    Q3 <- Q1988[-c(1:7), c(1,4,5)]
+    gg3 <- ggcontrib(Q3, ggroups = c("g1", "g2"))
 
+  stopifnot(gg1 == gg3)
 }
 
 
