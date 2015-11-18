@@ -94,7 +94,7 @@ Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal 
 # Non-fuzzy classification
   # format (1) from above
     Q1 <- Q1988[-c(3:7), c(1,4,5)]
-    gg1 <- ggcontrib(Q1, ggroups = NULL) # note the warning message which is typical
+    (gg1 <- ggcontrib(Q1, ggroups = NULL)) # note the warning message which is typical
 
   # format (2) from above
     Q2 <- Q1988[-c(1:7), 1:3]
