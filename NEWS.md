@@ -1,4 +1,11 @@
 # 2.14.2
+## New
+   * `ggcontrib()` can now incorporate fuzzy classification of genetic groups
+     * To facilitate this, the examples for `ggcontrib()` have been changed. For more information and examples, read the help documentation `ggcontrib.Rd` or in R type:
+```R
+?ggcontrib		# launches the help documentation
+example(ggcontrib)	# runs the examples in the help documentation
+```
 
 # 2.14.1 Released 22 July 2015
 ## Small changes
@@ -10,7 +17,7 @@
      * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse. For more information and examples, read the help documentation `makeAinv.Rd` or in R type:
 ```R
 ?makeAinv              # launches the help documentation
-examples("makeAinv")   # runs the examples in the help documentation
+example("makeAinv")    # runs the examples in the help documentation
 ```
    * Improved algorithm underlying `makeAinv()` - significant speed-up!
    * Created new class `numPed` for pedigrees constructed by `numPed()`.
