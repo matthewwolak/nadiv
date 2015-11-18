@@ -62,13 +62,13 @@ Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal 
 
     ## Should be identical to the non-fuzzy classification output
     # format (1) from above
-      Q <- ggcontrib(Q1988[-c(3:7), c(1,4,5)])
+      (Q <- ggcontrib(Q1988[-c(3:7), c(1,4,5)]))
     stopifnot(Qfuzznull == Q)
 
   ## Fuzzy classification with arbitrary assignments
     Qf <- matrix(c(1,0,0.5,0.5,0.5, 0,1,0.5,0.5,0.5), nrow = 5, ncol = 2,
 	dimnames = list(letters[1:5], c("g1", "g2")))
-    Qfuzz <- ggcontrib(Q1988fuzz, fuzz = Qf)  
+    (Qfuzz <- ggcontrib(Q1988fuzz, fuzz = Qf))  
 
   ## Using the pedigree and fuzzy classification in Fikse (2009)
     F2009fuzz <- data.frame(id = c(letters[1:7], LETTERS[1:6]),
@@ -108,9 +108,7 @@ Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal 
   # format (2) from above
     ExPed2 <- Mrode2
     ggvec.in <- c("a", "b", NA, "b", NA, NA)
-    gg2 <- ggcontrib(ExPed2, ggroups = ggvec.in)
-    as(gg2, "matrix")  # changes object to a dense matrix 
-       #for easier incorporation into dataframes etc.
+    (gg2 <- ggcontrib(ExPed2, ggroups = ggvec.in))
     str(as(gg2, "matrix"))
 
   # format (3) from above
