@@ -87,10 +87,10 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
    if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
-      f <- Cout[[3]][fsOrd@perm][-seq(nggroups)]
+      f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
    } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-      f <- c(rep(0, nggroups), Cout[[3]][fsOrd@perm][(nggroups+1):(nggroups + eN)])
+      f <- c(rep(0, nggroups), Cout[[3]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
      }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
