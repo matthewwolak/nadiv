@@ -1,4 +1,4 @@
-#include "dsim.h"
+#include "nadivcc.h"
 
 extern "C"{  
 
