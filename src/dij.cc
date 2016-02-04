@@ -1,4 +1,4 @@
-#include "dij.h"
+#include "nadivcc.h"
 
 extern "C"{  
 
