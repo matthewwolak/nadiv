@@ -1,10 +1,17 @@
 #ifndef _CS_H
 #define _CS_H
 #include <R.h>
+/* these or C++ versions are included by R.h
 #include <stdlib.h>
 #include <limits.h>
 #include <math.h>
 #include <stdio.h>
+*/
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 #ifdef MATLAB_MEX_FILE
 #include "mex.h"
 #endif
@@ -142,4 +149,11 @@ csn *cs_ndone (csn *N, cs *C, void *w, void *x, int ok) ;
 #define CS_MARK(w,j) { w [j] = CS_FLIP (w [j]) ; }
 #define CS_CSC(A) (A && (A->nz == -1))
 #define CS_TRIPLET(A) (A && (A->nz >= 0))
+
+#ifdef __cplusplus
+}
 #endif
+
+#endif
+
+
