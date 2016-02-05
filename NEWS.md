@@ -7,9 +7,10 @@
 example(ggcontrib)	# runs the examples in the help documentation
 ```
 
-# 2.14.1 Released 22 July 2015
 ## Small changes
    * fixed ordering of *f* coefficients returned by `makeAinv()`
+
+# 2.14.1 Released 22 July 2015
 
 # 2.14.0 Released 3 July 2015
 ## New
