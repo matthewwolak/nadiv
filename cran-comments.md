@@ -1,9 +1,9 @@
 # Test environments
 * Ubuntu 14.04
-  * R 3.2.1 (2015-06-18) x86_64-pc-linux-gnu (64-bit)
+  * R 3.2.3 (2015-12-10) x86_64-pc-linux-gnu (64-bit)
 * win-builder (devel and release): http://win-builder.r-project.org/
-  * R Under development (unstable) (2015-07-21 r68706)
-  * R version 3.2.1 (2015-06-18)
+  * R Under development (unstable) (2016-02-05 r70092)
+  * R version 3.2.3 Patched (2016-02-04 r70085)
 
 
 # R CMD check results
@@ -16,7 +16,6 @@ There were no ERRORs or WARNINGs.
     asreml
 
   * checking package dependencies ... NOTE
-    No repository set, so cyclic dependency check skipped
     Package which this enhances but not available for checking: 'asreml'
 
 * No public repository is available for package 'asreml', however, availability (with web address) is noted in DESCRIPTION.
