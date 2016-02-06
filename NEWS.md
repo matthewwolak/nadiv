@@ -1,4 +1,6 @@
-# 2.14.2
+# 2.14.3
+
+# 2.14.2 Released 5 Feb 2016
 ## New
    * `ggcontrib()` can now incorporate fuzzy classification of genetic groups
      * To facilitate this, the examples for `ggcontrib()` have been changed. For more information and examples, read the help documentation `ggcontrib.Rd` or in R type:
