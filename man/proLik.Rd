@@ -8,7 +8,7 @@ Profile Likelihoods
 }
 
 \description{
-Estimation, checking, and plotting of profile likelihoods and objects of class \code{sQuote{proLik}} from a mixed model in ASReml-R.  
+Estimation, checking, and plotting of profile likelihoods and objects of class \code{\sQuote{proLik}} from a mixed model in ASReml-R.  
 }
 
 \usage{
@@ -34,8 +34,8 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
   \item{ncores }{Argument indicating number of cpu units to use.  Default is all available.}
   \item{x }{Object of class \code{proLik}.}
   \item{CL }{A logical indicating whether a line representing the Confidence Limit is to be drawn when plotting.}
-  \item{type }{The type of plot to be generated, see arguments to \code{link[graphics]{plot}}.}
-  \item{\dots }{other arguments to \code{link[graphics]{plot}}.}
+  \item{type }{The type of plot to be generated, see arguments to \code{\link[graphics]{plot}}.}
+  \item{\dots }{other arguments to \code{\link[graphics]{plot}}.}
 
 }
 
