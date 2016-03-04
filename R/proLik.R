@@ -1,6 +1,8 @@
-#proLik <- function(full.model, component, G = TRUE, negative = FALSE, nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001, parallel = FALSE, ncores = getOption("mc.cores", 2L)){
-
-
+proLik <- function(full.model, component,
+	G = TRUE, negative = FALSE,
+	nsample.units = 3, nse = 3,
+	alpha = 0.05, tolerance = 0.001,
+	parallel = FALSE, ncores = getOption("mc.cores", 2L)){
   s2 <- full.model$sigma2
   gamma.ind <- which(names(full.model$gammas) == component)
   bound.check <- names(full.model$gammas.con)[gamma.ind]
