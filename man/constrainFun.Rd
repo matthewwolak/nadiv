@@ -11,7 +11,7 @@ constrainFun(parameter.val, full, fm2, comp, G, mit = 600)
 }
 
 \arguments{
-  \item{parameter.val }{a value for which the log Likelihood of a model is to be calculated}
+  \item{parameter.val }{a value for which the log-Likelihood of a model is to be calculated}
   \item{full }{the full model \code{asreml} object}
   \item{fm2 }{starting values for the full model}
   \item{comp }{which variance component to constrain}
@@ -24,4 +24,4 @@ Used internally in the \code{proLik} function}
 
 \author{\email{matthewwolak@gmail.com}}
 
-\seealso{See Also \code{\link{proLik}}}
+\seealso{See also \code{\link{proLik}}}
