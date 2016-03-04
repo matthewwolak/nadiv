@@ -1,4 +1,11 @@
 # 2.14.3
+  * `LRTest()` is now an exported function to do log-likelihood ratio tests
+
+## Small changes
+   * fix issue with `proLik()` and the confidence interval estimation
+     * use `LRTest()` as basis of `constrainFun()` within `proLik()` so consistently define log-likelihood ratio test statistics
+     * close #4 with commit 978ad610198398848d97e90c4eb57f4834a4c278
+  
 
 # 2.14.2 Released 5 Feb 2016
 ## New
