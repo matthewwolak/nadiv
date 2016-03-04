@@ -28,7 +28,7 @@ A logical argument indicating whether a boundary correction under one degree of 
 \details{
 Boundary correction should be applied if the parameter that is dropped from the full model was on the boundary of its parameter space. In this instance, the distribution of the log-likelihood ratio test statistic is approximated by a mix of chi-square distributions (Self and Liang 1987). A \code{TRUE} value will implement the boundary correction for a one degree of freedom test. This is equivalent to halving the p-value from a test using a chi-square distribution with one degree of freedom (Dominicus et al. 2006).
 
-Currently, the test assumes that both log-likelihoods are negative and will stop if they are of opposite sign or are positive. The interpretation is that the model with a greater log-likelihood (closer to zero) provides a better fit to the data.
+Currently, the test assumes that both log-likelihoods are negative or both are positive and will stop if they are of opposite sign. The interpretation is that the model with a greater negative log-likelihood or lesser positive log-likelihood (closer to zero) provides a better fit to the data.
 }
 
 \value{
