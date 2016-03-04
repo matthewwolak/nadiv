@@ -10,14 +10,14 @@ constrainFun <- function(parameter.val, full, fm2, comp, G, mit = 600){
   }
   cnt <- 0
   if(con.mod$converge){
-     pcc.out <- suppressMessages(pcc(con.mod))
+     pcc.out <- pcc(con.mod, silent = TRUE)
      while(!pcc.out & cnt <= 5){
         con.mod <- asreml::update.asreml(con.mod, maxiter = mit)
-        if(con.mod$converge) pcc.out <- suppressMessages(pcc(con.mod))
+        if(con.mod$converge) pcc.out <- pcc(con.mod, silent = TRUE)
         cnt <- cnt + 1
      }
      con.mod$converge <- pcc.out
   }
-  if(con.mod$converge) return((2*(abs(full$loglik) - abs(con.mod$loglik)))) else return(NA)
+  if(con.mod$converge) return(LRTest(full$loglik, con.mod$loglik)$lambda) else return(NA)
 }
 
