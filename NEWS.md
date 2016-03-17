@@ -1,4 +1,11 @@
 # 2.14.3
+## NEW
+  * Added the `ggTutorial` dataset
+    * This is a simulated dataset to be used in analyses with genetic group animal model  methods.
+    * See a description in `ggTutorial.Rd` or in R type:
+```R
+?ggTutorial
+```
   * `LRTest()` is now an exported function to do log-likelihood ratio tests
 
 ## Small changes
