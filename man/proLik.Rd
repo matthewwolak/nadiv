@@ -1,6 +1,7 @@
 \name{proLik}
   \alias{proLik}
   \alias{is.proLik}
+  \alias{plot}
   \alias{plot.proLik}
 
 \title{
@@ -8,7 +9,7 @@ Profile Likelihoods
 }
 
 \description{
-Estimation, checking, and plotting of profile likelihoods and objects of class \code{\sQuote{proLik}} from a mixed model in ASReml-R.  
+Estimation, checking, and plotting of profile likelihoods and objects of class \code{proLik} from a mixed model in ASReml-R.  
 }
 
 \usage{
