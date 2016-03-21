@@ -1,7 +1,6 @@
 \name{proLik}
   \alias{proLik}
   \alias{is.proLik}
-  \alias{plot}
   \alias{plot.proLik}
 
 \title{
