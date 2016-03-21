@@ -1,5 +1,8 @@
 # 2.14.3
 ## NEW
+  * Added the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
+    * Allows fairly fine control over a simulation. For example, the function is flexible in the: population size, number of immigrants per generation, number of generations, and both spatial and temporal trends in both focal and immigrant populations.
+    * This is the function used to simulate the new `ggTutorial` dataset (below)
   * Added the `ggTutorial` dataset
     * This is a simulated dataset to be used in analyses with genetic group animal model  methods.
     * See a description in `ggTutorial.Rd` or in R type:

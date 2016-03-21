@@ -5,7 +5,7 @@
 Simulated dataset used to analyze data with genetic group animal models
 }
 \description{
-The dataset was simulated using the \code{\link{simPedGG}} function so that the pedigree contains a base population comprised of founders and non-founder immigrants. These data are then used in the main manuscript and tutorials accompanying Wolak & Reid (unpublished manuscript).
+The dataset was simulated using the \code{\link{simGG}} function so that the pedigree contains a base population comprised of founders and non-founder immigrants. These data are then used in the main manuscript and tutorials accompanying Wolak & Reid (unpublished manuscript).
 }
 \usage{data("ggTutorial")}
 \format{
@@ -25,7 +25,7 @@ The dataset was simulated using the \code{\link{simPedGG}} function so that the 
 }
 
 \details{
-The dataset was simulated as described in the \sQuote{examples} section using the \code{\link{simPedGG}} function. Full details of the function and dataset can be found in Wolak & Reid (unpublished manuscript). 
+The dataset was simulated as described in the \sQuote{examples} section using the \code{\link{simGG}} function. Full details of the function and dataset can be found in Wolak & Reid (unpublished manuscript). 
 }
 
 \source{
@@ -37,8 +37,8 @@ Wolak, M.E. & J.M. Reid. Unpublished manuscript. Accounting for genetic differen
   rm(list = ls())
   set.seed(102)     #<-- seed value used originally
   library(nadiv)
-  # create data using `simPedGG()`
-  ggTutorial <- simPedGG(K = 400, pairs = 200, noff = 4, g = 15,
+  # create data using `simGG()`
+  ggTutorial <- simGG(K = 400, pairs = 200, noff = 4, g = 15,
     nimm = 40, nimmG = seq(2, g-1, 1),		    # nimmG default value
     VAf = 1, VAi = 1, VRf = 1, VRi = 1,		    # all default values
     mup = 20, muf = 0, mui = 3, murf = 0, muri = 0, # mup and mui non-default values
