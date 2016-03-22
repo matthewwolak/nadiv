@@ -35,7 +35,7 @@ Integer number of immigrants added to the population each generation of migratio
 Sequence of integers for the generations in which immigrants arrive in the focal population
 }
   \item{VAf }{
-Numeric value for the expected additive genetic variance in the first generation of the focal population
+Numeric value for the expected additive genetic variance in the first generation of the focal population - the founders
 }
   \item{VAi }{
 Numeric value for the expected additive genetic variance in each generation of immigrants
@@ -47,16 +47,16 @@ Numeric value for the expected residual variance in the focal population
 Numeric value for the expected residual variance in each generation of the immigrants
 }
   \item{mup }{
-Numeric value for the expected mean phenotypic value in the first generation of the founder population
+Numeric value for the expected mean phenotypic value in the first generation of the focal population - the founders
 }
   \item{muf }{
-Numeric value for the expected mean breeding value in the first generation of the focal population
+Numeric value for the expected mean breeding value in the first generation of the focal population - the founders
 }
   \item{mui }{
 Numeric value for the expected mean breeding value for the immigrants
 }
   \item{murf}{
-Numeric value for the expected mean residual (environmental) deviation in the first generation of the focal population
+Numeric value for the expected mean residual (environmental) deviation in the first generation of the focal population - the founders
 }
   \item{muri}{
 Numeric value for the expected mean residual (environmental) deviation for the immigrants
@@ -77,11 +77,13 @@ Numeric value for the expected change between generations in the mean residual (
 
 
 \details{
-Offspring total additive genetic values \code{u} are the average of their parents \code{u} plus a Mendelian sampling deviation drawn from a normal distribution with mean of 0 and variance equal to \eqn{0.5V_{A} (1 - f_{sd})} where \eqn{V_A} is \code{VAf} and \eqn{f_{sd}} is the average of the parents' coefficient of inbreeding \emph{f} (p. 447 Verrier et al. 1993). Each \sQuote{immigrant} (individual with unknown parents in generations >1) is given a total additive genetic effect that is drawn from a normal distribution with mean of \code{mui} and variance equal to \code{VAi}. Residual deviations are sampled for \sQuote{resident} and \sQuote{immigrant} populations separately, using normal distributions with means of \code{murf} and \code{muri}, respectively, and variances of \code{VRf} and \code{VRi}, respectively. Phenotypes are the sum of total additive genetic effects and residual deviations plus an overall mean \code{mup}.
+Offspring total additive genetic values \code{u} are the average of their parents \code{u} plus a Mendelian sampling deviation drawn from a normal distribution with mean of 0 and variance equal to \eqn{0.5V_{A} (1 - f_{sd})}{0.5V[A] (1 - f[sd])} where \eqn{V_A}{V[A]} is \code{VAf} and \eqn{f_{sd}}{f[sd]} is the average of the parents' coefficient of inbreeding \emph{f} (p. 447 Verrier et al. 1993). Each \sQuote{immigrant} (individual with unknown parents in generations >1) is given a total additive genetic effect that is drawn from a normal distribution with mean of \code{mui} and variance equal to \code{VAi}. Residual deviations are sampled for \sQuote{focal} and \sQuote{immigrant} populations separately, using normal distributions with means of \code{murf} and \code{muri}, respectively, and variances of \code{VRf} and \code{VRi}, respectively. Phenotypes are the sum of total additive genetic effects and residual deviations plus an overall mean \code{mup}.
 
-Trends in total additive genetic effects and/or residual deviations can be specified for both the resident and immigrant populations. Trends in total additive genetic effects occurring in the immigrants, in the residual deviations occurring in the residents, and in the residual deviations occurring in the immigrants are produced by altering the mean each generation for the separate distribution from which these effects are each drawn. The change in mean over a generation is specified in units of standard deviations of the respective distributions (e.g., square roots of \code{VAi}, \code{VRf}, and \code{VRi}) and is set with \code{d_bvi}, \code{d_rf}, or \code{d_ri}, respectively.
+Trends in total additive genetic effects and/or residual deviations can be specified for both the focal and immigrant populations. Trends in total additive genetic effects occurring in the immigrants, in the residual deviations occurring in the focal population, and in the residual deviations occurring in the immigrants are produced by altering the mean each generation for the separate distribution from which these effects are each drawn. The change in mean over a generation is specified in units of standard deviations of the respective distributions (e.g., square roots of \code{VAi}, \code{VRf}, and \code{VRi}) and is set with \code{d_bvi}, \code{d_rf}, or \code{d_ri}, respectively.
 
-Trends in total additive genetic effects for the resident population are produced by selecting individuals to be parents of the next generation according to their total additive genetic effects. Individuals are assigned probabilities of being selected as a parent of the next generation depending on how closely their total additive genetic effect matches an optimum value. The parameter \code{d_bvf} specifies how much the optimal total additive genetic effect changes per generation. \code{d_bvf} is multipled by the square root of \code{VAf} (i.e., the additive genetic standard deviation of the resident population) and the number of generations since selection began, and it is this quantity that is added to the base generation's mean total additive genetic effect (\code{muf}) to determine the optimal total additive genetic effect in a given generation. Individuals with total additive genetic effects closest to this optimum have a higher probability of being randomly sampled to be parents of the next generation. This represents selection directly on total additive genetic effects.
+Trends in total additive genetic effects for the focal population are produced by selecting individuals to be parents of the next generation according to their total additive genetic effects. Individuals are assigned probabilities of being selected as a parent of the next generation depending on how closely their total additive genetic effect matches an optimum value. Probabilities are assigned: \deqn{exp((\frac{-1}{2\sigma_{x}}) (x - \theta)^{2})}{exp((-1/(2 * sd(x))) * (x - theta)^2)} where \code{x} is the vector of total additive genetic effects (\code{u}), \eqn{\sigma_{x}}{sd(x)} is the standard deviation of \code{x}, and \eqn{\theta}{theta} is the optimum value. Sampling is conducted with replacement based on these probabilities.
+
+The parameter \code{d_bvf} specifies how much the optimal total additive genetic effect changes per generation. The optimal total additive genetic effect in a given generation is calculated as: \code{muf + d_bvf *}\code{sqrt(VAf) * (i-2)}. Individuals with total additive genetic effects closest to this optimum have a higher probability of being randomly sampled to be parents of the next generation. This represents selection directly on total additive genetic effects.
 }
 
 
@@ -119,6 +121,31 @@ Verrier, V., J.J. Colleau, and J.L. Foulley. 1993. Long-term effects of selectio
 	nimm = 40,
 	muf = 0, mui = 3)
   }
+
+# Use genetic group methods to approximate the breeding values for ggTutorial
+  ## First, construct a pedigree with genetic groups
+  ggPed <- ggTutorial[, c("id", "dam", "sire", "is", "gen")]
+  naPar <- which(is.na(ggPed[, 2]))
+  ggPed$GG <- rep("NA", nrow(ggPed))
+    # 'focal' population genetic group = "f0" and 'immigrant' = "g1"
+    # obtained by pasting "f" & "g" with immigrant status "0" or "1", respectively
+    ggPed$GG[naPar] <- as.character(ggPed$is[naPar])
+    ggPed$GG[ggPed$GG == "0"] <- paste0("f", ggPed$GG[ggPed$GG == "0"])
+    ggPed$GG[ggPed$GG == "1"] <- paste0("g", ggPed$GG[ggPed$GG == "1"])
+  ggPed[naPar, 2:3] <- ggPed[naPar, "GG"]
+
+  ## Now create the Q matrix
+  Q <- ggcontrib(ggPed[, 1:3], ggroups = c("f0", "g1"))
+
+  ## obtain the true values of the genetic group means
+  f0_mean <- mean(ggTutorial$u[which(ggTutorial$gen == 1 & ggTutorial$is == 0)])
+  g1_mean <- mean(ggTutorial$u[which(ggTutorial$is == 1)])
+  g_exp <- matrix(c(f0_mean, g1_mean), ncol = 1)
+
+  ## breeding values (a) are:
+  ### tot. add. gen. effects (u) minus genetic group effects for each individual (Qg):
+  a <- ggTutorial$u - Q %*% g_exp
+
 }
 
 

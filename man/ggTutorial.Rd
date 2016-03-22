@@ -14,8 +14,8 @@ The dataset was simulated using the \code{\link{simGG}} function so that the ped
     \item{\code{id }}{an integer vector specifying the 6000 unique individual identities}
     \item{\code{dam }}{an integer vector specifying the unique dam for each individual}
     \item{\code{sire }}{an integer vector specifying the unique sire for each individual}
-    \item{\code{parAvgU }}{a numeric vector of each individual's parents' average autosomal additive genetic effects}
-    \item{\code{mendel }}{a numeric vector of each individual's deviation from their \code{parAvgU} autosomal additive genetic effects}
+    \item{\code{parAvgU }}{a numeric vector of the average autosomal total additive genetic effects (\code{u}) of each individual's parents}
+    \item{\code{mendel }}{a numeric vector of the Mendelian sampling deviations from \code{parAvgU} autosomal total additive genetic effects that is unique to each individual}
     \item{\code{u }}{a numeric vector of the total autosomal additive genetic effects underlying \code{p}}
     \item{\code{r }}{a numeric vector of the residual (environmental) effects underlying \code{p}}
     \item{\code{p }}{a numeric vector of phenotypic values}
@@ -26,6 +26,10 @@ The dataset was simulated using the \code{\link{simGG}} function so that the ped
 
 \details{
 The dataset was simulated as described in the \sQuote{examples} section using the \code{\link{simGG}} function. Full details of the function and dataset can be found in Wolak & Reid (unpublished manuscript). 
+
+The \code{data.frame} contains 6000 individuals across 15 generations. In each generation, the carrying capacity is limited to 400 individuals, the number of mating pairs limited to 200 pairs, and 40 immigrants per generation arrive starting in the second generation.
+
+The breeding values of the founders are drawn from a normal distribution with an expected mean of 0 and a variance of 1. The breeding values of all immigrants are drawn from a normal distribution with an expected mean of 3 and variance of 1. Consequently, the expected difference between mean breeding values in the founders and immigrants is 3. All individuals are assigned a residual (environmental) deviation that is drawn from a normal distribution with an expected mean of 0 and variance of 1. 
 }
 
 \source{
