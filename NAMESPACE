@@ -1,7 +1,7 @@
 useDynLib(nadiv)
 import(Matrix)
 importFrom("graphics", "abline", "plot")
-importFrom("methods", "as")
+importFrom("methods", "as", "is")
 importFrom("stats", "as.formula", "deriv", "na.omit", "optimize", "pchisq", "qchisq", "qnorm", "rnorm")
 
 export(aic,
