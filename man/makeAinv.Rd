@@ -34,7 +34,7 @@ Logical, indicating if the (log) determinant of the A matrix should be returned
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA', '0', or '*'.
 
-The function implements an adaptation of the Meuwissen and Luo (1992) algorithm with some code borrowed from the \code{inverseA} function by Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm for directly obtaining the augmented A-inverse matrix for genetic groups into Meuwissen and Luo's (1992) algorithm, thereby, considering inbreeding during the construction of the A-inverse.
+The function implements an adaptation of the Meuwissen and Luo (1992) algorithm with some code borrowed from the \code{inverseA} function by Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm for directly obtaining the augmented A-inverse matrix for genetic groups into Meuwissen and Luo's (1992) algorithm, thereby, considering inbreeding during the construction of the A-inverse. Further calculations needed for the algorithm to incorporate inbreeding and genetic groups follow the theory presented in VanRaden (1992).
 
 At the moment, providing the inbreeding level of individuals or the base population has not been implemented. However, this argument has been introduced as a placeholder for future versions to be released (soon hopefully!).
 
@@ -58,6 +58,8 @@ The argument to \code{gOnTop} specifies if the elements in the A-inverse should 
 Meuwissen, T.H.E & Luo, Z. 1992. Computing inbreeding coefficients in large populations. Genetics, Selection, Evolution. 24:305-313.
 
 Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal of Dairy Science. 71:1338-1345.
+
+VanRaden, P.M. 1992. Accounting for inbreeding and crossbreeding in genetic evaluation of large populations. Journal of Dairy Science. 75:3136-3144.
 }
 
 \author{\email{matthewwolak@gmail.com}}
