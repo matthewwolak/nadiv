@@ -39,3 +39,5 @@ sm2list,
 varTrans)
 
 S3method(plot, proLik)
+S3method(is, proLik)
+

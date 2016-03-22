@@ -16,7 +16,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
        nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
        parallel = FALSE, ncores = getOption("mc.cores", 2L))
 
-  is.proLik(x)
+  \method{is }{proLik}(x)
 
   \method{plot }{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", \dots)
 }
