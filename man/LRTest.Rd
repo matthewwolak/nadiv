@@ -37,9 +37,9 @@ Currently, the test assumes that both log-likelihoods are negative or both are p
   \item{corrected.Pval }{a logical indicating if the p-value was derived using a boundary correction. See \code{Details}}
 }
 \references{
-Self, S. G., and K. Y. Liang. 1987. Asymptotic properties of maximum likelihood estimators and likelihood ratio tests under nonstandard conditions. Journal of the American Statistical Association 82:605–610.
+Self, S. G., and K. Y. Liang. 1987. Asymptotic properties of maximum likelihood estimators and likelihood ratio tests under nonstandard conditions. Journal of the American Statistical Association 82:605-610.
 
-Dominicus, A., A. Skrondal, H. K. Gjessing, N. L. Pedersen, and J. Palmgren. 2006. Likelihood ratio tests in behavioral genetics: problems and solutions. Behavior Genetics 36:331–340.
+Dominicus, A., A. Skrondal, H. K. Gjessing, N. L. Pedersen, and J. Palmgren. 2006. Likelihood ratio tests in behavioral genetics: problems and solutions. Behavior Genetics 36:331-340.
 }
 
 \author{\email{matthewwolak@gmail.com}}
