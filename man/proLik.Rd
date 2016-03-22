@@ -18,7 +18,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
 
   is.proLik(x)
 
-  \method{plot }{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", ...)
+  \method{plot }{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", \dots)
 }
 
 \arguments{
