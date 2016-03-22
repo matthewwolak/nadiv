@@ -9,10 +9,13 @@
 Conversion, checking, and row re-ordering of a pedigree in integer form of class \sQuote{numPed}.}
 
 \usage{
-numPed(pedigree, check = TRUE)
-is.numPed(x)
-ronPed(x, i, \dots)
+  numPed(pedigree, check = TRUE)
+
+  \method{is}{numPed}(x)
+
+  ronPed(x, i, \dots)
 }
+
 \arguments{
   \item{pedigree }{
 A three column pedigree object, where the columns correspond to: ID, Dam, & Sire}
@@ -43,10 +46,10 @@ An S3 object of class "numPed" representing the pedigree, where individuals are 
 
 \examples{
 (nPed <- numPed(Mrode2))
-is.numPed(nPed)
+is(nPed)
 
 # re-order and retain class 'numPed'
 ronPed(nPed, order(nPed[, 2], nPed[, 3]))
-
+is(nPed)
 }
 
