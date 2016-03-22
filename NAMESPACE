@@ -40,4 +40,5 @@ varTrans)
 
 S3method(plot, proLik)
 S3method(is, proLik)
+S3method(is, numPed)
 
