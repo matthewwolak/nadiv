@@ -127,20 +127,20 @@ Verrier, V., J.J. Colleau, and J.L. Foulley. 1993. Long-term effects of selectio
   ggPed <- ggTutorial[, c("id", "dam", "sire", "is", "gen")]
   naPar <- which(is.na(ggPed[, 2]))
   ggPed$GG <- rep("NA", nrow(ggPed))
-    # 'focal' population genetic group = "f0" and 'immigrant' = "g1"
-    # obtained by pasting "f" & "g" with immigrant status "0" or "1", respectively
+    # 'focal' population genetic group = "foc0" and 'immigrant' = "g1"
+    # obtained by pasting "foc" & "g" with immigrant status "0" or "1", respectively
     ggPed$GG[naPar] <- as.character(ggPed$is[naPar])
-    ggPed$GG[ggPed$GG == "0"] <- paste0("f", ggPed$GG[ggPed$GG == "0"])
+    ggPed$GG[ggPed$GG == "0"] <- paste0("foc", ggPed$GG[ggPed$GG == "0"])
     ggPed$GG[ggPed$GG == "1"] <- paste0("g", ggPed$GG[ggPed$GG == "1"])
   ggPed[naPar, 2:3] <- ggPed[naPar, "GG"]
 
   ## Now create the Q matrix
-  Q <- ggcontrib(ggPed[, 1:3], ggroups = c("f0", "g1"))
+  Q <- ggcontrib(ggPed[, 1:3], ggroups = c("foc0", "g1"))
 
   ## obtain the true values of the genetic group means
-  f0_mean <- mean(ggTutorial$u[which(ggTutorial$gen == 1 & ggTutorial$is == 0)])
+  foc0_mean <- mean(ggTutorial$u[which(ggTutorial$gen == 1 & ggTutorial$is == 0)])
   g1_mean <- mean(ggTutorial$u[which(ggTutorial$is == 1)])
-  g_exp <- matrix(c(f0_mean, g1_mean), ncol = 1)
+  g_exp <- matrix(c(foc0_mean, g1_mean), ncol = 1)
 
   ## breeding values (a) are:
   ### tot. add. gen. effects (u) minus genetic group effects for each individual (Qg):
