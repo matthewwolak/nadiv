@@ -1,5 +1,11 @@
 # 2.14.3
 ## NEW
+  * Added the `F2009` dataset
+    * This dataset can be used as an example for fuzzy classification of genetic groups when constructing a numerator relationship matrix with groups (i.e., with `makeAinv()`)
+    * See a description in `F2009.Rd` or in R type:
+```R
+?F2009
+```
   * Added the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
     * Allows fairly fine control over a simulation. For example, the function is flexible in the: population size, number of immigrants per generation, number of generations, and both spatial and temporal trends in both focal and immigrant populations.
     * This is the function used to simulate the new `ggTutorial` dataset (below)

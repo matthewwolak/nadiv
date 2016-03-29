@@ -1,0 +1,17 @@
+"id" "dam" "sire" "damGG" "sireGG" "phantomDam" "phantomSire" "group" "g1" "g2" "g3"
+"g1" NA NA NA NA NA NA NA NA NA NA
+"g2" NA NA NA NA NA NA NA NA NA NA
+"g3" NA NA NA NA NA NA NA NA NA NA
+"a" NA NA "g1" "g1" NA NA "g1" 1 0 0
+"b" NA NA "g2" "g2" NA NA "g2" 0 1 0
+"c" NA NA "g1" "g1" NA NA "g1" 1 0 0
+"d" NA NA "g2" "g2" NA NA "g2" 0 0.6 0.4
+"e" NA NA "g3" "g3" NA NA "g3" 0 0 1
+"f" NA NA "g3" "g3" NA NA "g3" 0 0.3 0.7
+"g" NA NA "g2" "g2" NA NA "g2" 0.2 0.4 0.4
+"A" NA NA "g1" "g2" "a" "b" NA NA NA NA
+"B" NA NA "g1" "g2" "c" "d" NA NA NA NA
+"C" NA NA "g3" "g3" "e" "f" NA NA NA NA
+"D" "A" "B" "A" "B" "A" "B" NA NA NA NA
+"E" "C" NA "C" "g2" "C" "g" NA NA NA NA
+"F" "D" "E" "D" "E" "D" "E" NA NA NA NA
