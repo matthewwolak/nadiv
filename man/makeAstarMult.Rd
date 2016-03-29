@@ -12,7 +12,7 @@ makeAstarMult(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE)
 
 \arguments{
   \item{pedigree }{
-A pedigree where the columns are ordered ID, Dam, Sire}
+A pedigree where the columns are ordered ID, Dam, Sire
 }
   \item{ggroups }{
 Either a vector with the unique name of each genetic group, or a numeric indicating the number of unique genetic groups. See Details for different ways to specify. Note, cannot be NULL.
@@ -41,12 +41,14 @@ The argument to \code{gOnTop} specifies if the elements in the A-inverse should 
 See function \code{\link{makeAinv}} for directly obtaining the inverse of the additive genetic relationship matrix with genetic groups.
 }
 
-\value{Returns A*, or the inverse of the numerator relationship with groups, in sparse matrix form.
+\value{
+Returns A*, or the inverse of the numerator relationship with groups, in sparse matrix form.
 }
 
 \references{
 Quaas, R.L. 1988. Additive genetic model with groups and relationships. Journal of Dairy Science. 71:1338-1345.
 }
+
 \author{\email{matthewwolak@gmail.com}}
 
 \seealso{\code{\link{makeAinv}}, \code{\link{ggcontrib}}}
@@ -75,8 +77,6 @@ Qfuzznull <- matrix(c(1,0,0,1,0, 0,1,1,0,1), nrow = 5, ncol = 2, dimnames = list
 Astar_direct <- makeAinv(Q1988[-c(3:7), c(1,4,5)], ggroups = 2)$Ainv
 
 stopifnot(length(drop0(round(Astar_direct - (Astar_A - Astar_Afuzzy) - (Astar_D - Astar_Dfuzzy) - Astar_direct, 10))@x) == 0)
-
-
 }
 
 
