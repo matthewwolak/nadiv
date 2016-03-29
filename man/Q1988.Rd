@@ -10,8 +10,8 @@ An example pedigree with genetic groups}
   A data frame with 11 observations on the following 8 variables.
   \describe{
     \item{\code{id} }{a factor with levels indicating the unique individuals (including phantom parents) and genetic groups}
-    \item{\code{dam} }{a factor of maternal identities}
-    \item{\code{sire} }{a factor vector of paternal identities}
+    \item{\code{dam} }{a factor of observed maternal identities}
+    \item{\code{sire} }{a factor vector of observed paternal identities}
     \item{\code{damGG} }{a factor of maternal identities with genetic groups inserted instead of \code{NA}}
     \item{\code{sireGG} }{a factor of paternal identities with genetic groups inserted instead of \code{NA}}
     \item{\code{phantomDam} }{a factor of maternal identities with phantom parents inserted instead of \code{NA}}
