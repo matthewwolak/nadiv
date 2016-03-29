@@ -31,6 +31,6 @@ makeAstarMult <- function(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE){
   } else{
       U <- cBind(Diagonal(x = 1, n = nrow(Ainv)), -Q)
     }
- drop0(crossprod(U, Ainv) %*% U)
+ drop0(zapsmall(crossprod(U, Ainv) %*% U, 12))
 }
 
