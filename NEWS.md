@@ -1,12 +1,19 @@
 # 2.14.3
 ## NEW
-  * Added the `F2009` dataset
+  * Add the `makeAstarMult()` function to create the inverse numerator relationship matrix with genetic groups (and possibly also fuzzy classification of genetic groups) through matrix multiplication instead of using direct algorithms to set this up.
+    * Uses `ggcontrib()` and `makeAinv()` to create **Q** and **A^-1** directly, then multiplies these in such a way as to obtain **Astar**.
+    * Examples using the two different types of pedigree formats and either with or without fuzzy classication can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
+```R
+?makeAstarMult		# launches the help documentation
+example(makeAstarMult)	# runs the examples in the help documentation
+```
+  * Add the `F2009` dataset
     * This dataset can be used as an example for fuzzy classification of genetic groups when constructing a numerator relationship matrix with groups (i.e., with `makeAinv()`)
     * See a description in `F2009.Rd` or in R type:
 ```R
 ?F2009
 ```
-  * Added the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
+  * Add the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
     * Allows fairly fine control over a simulation. For example, the function is flexible in the: population size, number of immigrants per generation, number of generations, and both spatial and temporal trends in both focal and immigrant populations.
     * This is the function used to simulate the new `ggTutorial` dataset (below)
   * Added the `ggTutorial` dataset
@@ -26,7 +33,7 @@
 # 2.14.2 Released 5 Feb 2016
 ## New
    * `ggcontrib()` can now incorporate fuzzy classification of genetic groups
-     * To facilitate this, the examples for `ggcontrib()` have been changed. For more information and examples, read the help documentation `ggcontrib.Rd` or in R type:
+     * To facilitate this, the examples for `ggcontrib()` have been changed. For more information and examples, read the help documentation `ggcontrib.Rd` or in `R` type:
 ```R
 ?ggcontrib		# launches the help documentation
 example(ggcontrib)	# runs the examples in the help documentation
