@@ -1,14 +1,14 @@
-makeAinvF <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
-  UseMethod("makeAinvF", fuzz)
+makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+  UseMethod("makeAinv", fuzz)
 }
 
-makeAinvF.matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+makeAinv.matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
   class(fuzz) <- "fuzzy"
-  UseMethod("makeAinvF", fuzz)
+  UseMethod("makeAinv", fuzz)
 }
-makeAinvF.Matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+makeAinv.Matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
   class(fuzz) <- "fuzzy"
-  UseMethod("makeAinvF", fuzz)
+  UseMethod("makeAinv", fuzz)
 }
 
 
@@ -122,7 +122,7 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ke
 
 ###############################################################################
 
-makeAinvF.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE){
+makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE){
 
   if(!is.null(ggroups)){
     stop("when 'fuzz' is non-NULL, 'ggroups' should not have any arguments (i.e., 'ggroups==NULL")
