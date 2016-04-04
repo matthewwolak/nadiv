@@ -1,4 +1,20 @@
-makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
+makeAinvF <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+  UseMethod("makeAinvF", fuzz)
+}
+
+makeAinvF.matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+  class(fuzz) <- "fuzzy"
+  UseMethod("makeAinvF", fuzz)
+}
+makeAinvF.Matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
+  class(fuzz) <- "fuzzy"
+  UseMethod("makeAinvF", fuzz)
+}
+
+
+###############################################################################
+
+makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
   if(is.null(ggroups)){
      ptype <- "O"
      renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
@@ -103,3 +119,158 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhanto
 	f = f,
 	logDet = logDet))
 }
+
+###############################################################################
+
+makeAinvF.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE){
+
+  if(!is.null(ggroups)){
+    stop("when 'fuzz' is non-NULL, 'ggroups' should not have any arguments (i.e., 'ggroups==NULL")
+  }
+
+  naPed2 <- which(pedigree[, 2] == "0")
+  naPed3 <- which(pedigree[, 3] == "0")
+  naPed2 <- union(naPed2, which(pedigree[, 2] == "*"))
+  naPed3 <- union(naPed3, which(pedigree[, 3] == "*"))
+  naPed2 <- union(naPed2, which(is.na(pedigree[, 2])))
+  naPed3 <- union(naPed3, which(is.na(pedigree[, 3])))
+
+  # checks on fuzzy classification matrix and pedigree consistency:
+  ## 'fuzz' is a type of matrix
+  if(!inherits(fuzz, "matrix") && !inherits(fuzz, "Matrix")){
+    cat("'fuzz' of class", class(fuzz), "\n")
+    stop("class of 'fuzz' must be either 'matrix' or 'Matrix'")
+  }
+  ## rows of 'fuzz' add up to 1
+  if(any(rowSums(fuzz) != 1)){
+    cat("rows:", which(rowSums(fuzz) != 1), "\ndo not equal 1\n")
+    stop("all rowSums(fuzz) must equal 1\n(check for possible rounding errors, e.g., 3*0.33333 != 1)")
+  }
+  ## fuzz has dimnames
+  if(is.null(dimnames(fuzz)[[1]]) | is.null(dimnames(fuzz)[[2]])){
+    stop("'fuzz' must have row and column names")
+  } 
+  ## pedigree does not have genetic groups
+  if(any(colnames(fuzz) %in% pedigree[, 1])){
+    cat("colnames:", which(colnames(fuzz) %in% pedigree[, 1]), "\nare in 'pedigree'\n")
+    stop("colnames of 'fuzz' (genetic groups) must NOT be identities in the first column of 'pedigree'")
+  }
+  ## pedigree has phantom parents in 'fuzz'
+  if(!all(rownames(fuzz) %in% pedigree[, 1])){
+    cat("rownames:", which(!rownames(fuzz) %in% pedigree[, 1]), "\nnot in 'pedigree'\n")
+    stop("rownames of 'fuzz' (phantom parents) must all be identities in the first column of 'pedigree'. See the `prepPed()` function to help prepare the pedigree")
+  }
+  ## individuals can only have both parents missing in 'pedigree' or none
+  if(length(naPed2) != length(naPed3) | any(!naPed2 %in% naPed3)){
+    stop("Individuals must have either two or zero missing parents in 'pedigree'")
+  }   
+  ## IDs with missing parents (if passed above check, naPed2==naPed3) in 'pedigree' are phantom parents in 'fuzz'
+  if(!all(pedigree[naPed2, 1] %in% rownames(fuzz))){
+    cat("IDs for 'pedigree' rows:", naPed2[which(!pedigree[naPed2, 1] %in% rownames(fuzz))], "\nare not rownames in 'fuzz'\n")
+    stop("Individuals with missing parents (phantom individuals) must have a rowname in 'fuzz'")
+  }
+
+
+  # order of genetic groups in pedalt/A^-1 is same as column order of 'fuzz'
+  ggroups <- colnames(fuzz)
+  nggroups <- length(ggroups) 			# No. genetic groups
+  p <- nrow(fuzz) 				# No. phantom parents
+  eN <- nrow(pedigree) - p 			# No. observed IDs
+  N <- nggroups + eN 				# No. GGs + observed IDs
+
+  # order of phantom parents in pedalt is same as row order in 'fuzz'
+  phantomPars <- seq(p) + nggroups
+  groupRows <- seq(nggroups)
+  # order pedigree: generations, order phantom parents in fuzz, dam, & sire 
+  ## genetic groups first 
+  renPed <- c(groupRows, nggroups + order(genAssign(pedigree), match(pedigree[, 1], rownames(fuzz), nomatch = p+1), pedigree[, 2], pedigree[, 3]))
+  pedalt <- data.frame(id = c(ggroups, as.character(pedigree[, 1])), dam = c(rep(NA, nggroups), as.character(pedigree[, 2])), sire = c(rep(NA, nggroups), as.character(pedigree[, 3])))[renPed, ]
+  nPed <- numPed(pedalt)
+  phantomless <- cbind(numPed(nPed[-phantomPars, ], check = FALSE), nPed[-phantomPars, -1]) 
+
+  if(!all(which(phantomless[, 4] == -998) == groupRows)){
+    stop("Something wicked happened with the dams in phantomless numeric pedigree:\n  Contact package maintainer: <matthewwolak@gmail.com>\n  or raise an issue on: <https://github.com/matthewwolak/nadiv/issues>")
+  }
+  if(!all(which(phantomless[, 5] == -998) == groupRows)){
+    stop("Something wicked happened with the sires in phantomless numeric pedigree:\n  Contact package maintainer: <matthewwolak@gmail.com>\n  or raise an issue on: <https://github.com/matthewwolak/nadiv/issues>")
+  }
+
+ 
+  groupFuzz <- Diagonal(x = 1, n = nggroups)
+  groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
+  fuzzmat <- rBind(groupFuzz, as(fuzz, "sparseMatrix"))
+  # predict non-zero elements of Astar
+  ## make H from Quaas 1988:
+  ## H = [-Pb Qb : Tinv]
+  ## Astar = H' %*% D^-1 %*% H
+  ### sTinv: n x n observed IDs (i.e., no GGs or phantom parent IDs)
+  dnmiss <- which(phantomless[, 2] != -998)
+  snmiss <- which(phantomless[, 3] != -998)
+  Tinv.row <- c(c(phantomless[, 1][dnmiss], phantomless[, 1][snmiss]) - nggroups, 1:eN)
+  Tinv.col <- c(c(phantomless[, 2][dnmiss], phantomless[, 3][snmiss]) - nggroups, 1:eN)
+  el.order <- order(Tinv.col + Tinv.row/(eN + 1), decreasing = FALSE)
+  sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+	  p = as.integer(c(match(1:eN, Tinv.col[el.order]), length(el.order) + 1) - 1),
+	  index1 = FALSE, dims = c(eN, eN), symmetric = FALSE,
+	  dimnames = list(as.character(phantomless[-groupRows, 1]), NULL))
+  ### Pb: n x p version of sTinv
+  pdnmiss <- which(phantomless[, 4] %in% phantomPars)
+  psnmiss <- which(phantomless[, 5] %in% phantomPars)
+  Pb.row <- c(phantomless[, 1][pdnmiss], phantomless[, 1][psnmiss]) - nggroups
+  Pb.col <- c(phantomless[, 4][pdnmiss], phantomless[, 5][psnmiss]) - nggroups
+  el.order <- order(Pb.col + Pb.row/(p + 1), decreasing = FALSE)
+  sPb <- sparseMatrix(i = as.integer(Pb.row[el.order] - 1),
+	  p = as.integer(c(match(1:p, Pb.col[el.order]), length(el.order) + 1) - 1),
+	  index1 = FALSE, dims = c(eN, p), symmetric = FALSE,
+	  dimnames = list(NULL, as.character(pedalt[phantomPars, 1])))
+  ### Qb is the fuzzy classification matrix ('fuzz')
+  Qb <- as(fuzzmat[-groupRows, ][match(rownames(fuzzmat)[-groupRows], colnames(sPb)), ], "sparseMatrix")
+  sQb <- sparseMatrix(i = Qb@i,
+	  p = Qb@p,
+	  index1 = FALSE, dims = Qb@Dim, symmetric = FALSE,
+	  dimnames = Qb@Dimnames)
+  ## sH = [-(sPb %*% sQb) : sTinv]
+  sH <- cBind((sPb %*% sQb), sTinv)
+  Ainv <- t(crossprod(sH))  # transpose stores lower triangle
+
+  phantomless[phantomless == -998] <- N + 1
+  # for now, phantom parents cannot be inbred (just like genetic groups)
+  f <- c(rep(-1, nggroups), rep(0, eN), -1)
+  Cout <- .C("ainvfuzz",
+	    as.integer(phantomless[, 2] - 1), 			#dam
+	    as.integer(phantomless[, 3] - 1),  			#sire
+	    as.integer(phantomless[, 4] - 1), 			#phantom dam
+	    as.integer(phantomless[, 5] - 1),  			#phantom sire
+	    as.double(f),					#f
+            as.double(rep(0, N)),  				#dii
+            as.integer(N),   					#n
+            as.integer(nggroups),   				#g
+            as.double(fuzzmat@x),                               #xF
+            as.integer(fuzzmat@i),				#iF
+            as.integer(fuzzmat@p),				#pF
+            as.double(rep(0, length(Ainv@i))),  		#xA
+	    as.integer(Ainv@i), 				#iA
+	    as.integer(Ainv@p)) 				#pA
+
+  Ainv <- as(Ainv, "dsCMatrix")
+  Ainv@x <- Cout[[12]]
+  fsOrd1 <- as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "CsparseMatrix")
+  fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "sparseMatrix")@x, "pMatrix")
+  Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
+  Ainv@Dimnames <- list(as.character(pedalt[(t(fsOrd1) %*% matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
+  # return 0 f coefficients for phantom parents
+  ## f is same length as the 'pedigree' supplied
+#TODO Include warning in documentation that f is phantom parents then observed IDs (i.e., corresponds to pedigree[, 1])
+  f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
+  if(!gOnTop){ 
+    permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
+    Ainv <- t(permute) %*% Ainv %*% permute
+  }
+  if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
+
+ return(list(Ainv = Ainv,
+	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
+	f = f,
+	logDet = logDet))
+}
+
