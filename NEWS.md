@@ -4,11 +4,14 @@
     * Allows individuals' phantom parents to be assigned to genetic groups with a probability. Meaning, they can be assigned to more than one genetic group.
     * To implement, the pedigree must have phantom parent identities as unique rows and a matrix of probabilities of group membership for every phantom parent in every genetic group has to be supplied to the `fuzz` argument.
     * Examples can be seen in the `makeAinv.Rd` help file or by running the following commands in `R`:
+
 ```R
 ?makeAinv              # launches the help documentation
 example(makeAinv)      # runs the examples in the help documentation
 ```
+
     * Notably, fuzzy classification can be set to 'null', where each phantom parent is assigned to one genetic group with probability=1. This produces the same **Astar** matrix as regular genetic group methods (without fuzzy classification). See this demonstrated in the examples of the help documentation.
+
   * Add the `makeAstarMult()` function to create the inverse numerator relationship matrix with genetic groups (and possibly also fuzzy classification of genetic groups) through matrix multiplication instead of using direct algorithms to set this up.
     * Uses `ggcontrib()` and `makeAinv()` to create **Q** and **A^-1** directly, then multiplies these in such a way as to obtain **Astar**.
     * Examples using the two different types of pedigree formats and either with or without fuzzy classication can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
@@ -16,21 +19,25 @@ example(makeAinv)      # runs the examples in the help documentation
 ?makeAstarMult		# launches the help documentation
 example(makeAstarMult)	# runs the examples in the help documentation
 ```
+
   * Add the `F2009` dataset
     * This dataset can be used as an example for fuzzy classification of genetic groups when constructing a numerator relationship matrix with groups (i.e., with `makeAinv()`)
     * See a description in `F2009.Rd` or in R type:
 ```R
 ?F2009
 ```
+
   * Add the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
     * Allows fairly fine control over a simulation. For example, the function is flexible in the: population size, number of immigrants per generation, number of generations, and both spatial and temporal trends in both focal and immigrant populations.
     * This is the function used to simulate the new `ggTutorial` dataset (below)
+
   * Added the `ggTutorial` dataset
     * This is a simulated dataset to be used in analyses with genetic group animal model  methods.
     * See a description in `ggTutorial.Rd` or in R type:
 ```R
 ?ggTutorial
 ```
+
   * `LRTest()` is now an exported function to do log-likelihood ratio tests
 
 ## Small changes
@@ -38,6 +45,7 @@ example(makeAstarMult)	# runs the examples in the help documentation
      * method dispatch is based on class of the `fuzz` argument
        * if `fuzz == NULL` then dispatch the method `makeAinv.default()`
        * if `fuzz == "matrix" | fuzz == "Matrix"` then dispatch `makeAinv.fuzzy()`
+
    * fix issue with `proLik()` and the confidence interval estimation
      * use `LRTest()` as basis of `constrainFun()` within `proLik()` so consistently define log-likelihood ratio test statistics
      * close issue #4 with commit [978ad610198398848d97e90c4eb57f4834a4c278](https://github.com/matthewwolak/nadiv/commits/978ad610198398848d97e90c4eb57f4834a4c278)
