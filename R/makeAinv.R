@@ -1,20 +1,14 @@
-makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
-  UseMethod("makeAinv", fuzz)
-}
-
-makeAinv.matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
-  class(fuzz) <- "fuzzy"
-  UseMethod("makeAinv", fuzz)
-}
-makeAinv.Matrix <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ...){
-  class(fuzz) <- "fuzzy"
+# Generic
+makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
+  if(is(fuzz, "matrix") | is(fuzz, "Matrix")) class(fuzz) <- "fuzzy"
   UseMethod("makeAinv", fuzz)
 }
 
 
 ###############################################################################
+# Methods:
 
-makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, keepPhantoms = TRUE, gOnTop = FALSE, det = FALSE){
+makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
   if(is.null(ggroups)){
      ptype <- "O"
      renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
@@ -120,9 +114,18 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, ke
 	logDet = logDet))
 }
 
+
+
+
+
+###############################################################################
 ###############################################################################
 
-makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE){
+
+
+
+
+makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FALSE, det = FALSE, ...){
 
   if(!is.null(ggroups)){
     stop("when 'fuzz' is non-NULL, 'ggroups' should not have any arguments (i.e., 'ggroups==NULL")
@@ -137,7 +140,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnT
 
   # checks on fuzzy classification matrix and pedigree consistency:
   ## 'fuzz' is a type of matrix
-  if(!inherits(fuzz, "matrix") && !inherits(fuzz, "Matrix")){
+  if(!is(fuzz, "matrix") && !is(fuzz, "Matrix")){
     cat("'fuzz' of class", class(fuzz), "\n")
     stop("class of 'fuzz' must be either 'matrix' or 'Matrix'")
   }
@@ -258,9 +261,6 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnT
   fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "sparseMatrix")@x, "pMatrix")
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
   Ainv@Dimnames <- list(as.character(pedalt[(t(fsOrd1) %*% matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
-  # return 0 f coefficients for phantom parents
-  ## f is same length as the 'pedigree' supplied
-#TODO Include warning in documentation that f is phantom parents then observed IDs (i.e., corresponds to pedigree[, 1])
   f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
   if(!gOnTop){ 
     permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")

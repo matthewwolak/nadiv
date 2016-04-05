@@ -19,6 +19,7 @@ is.numPed,
 LRTest,
 makeA,
 makeAA,
+makeAstarMult,
 makeD,
 makeDomEpi,
 makeDsim,
@@ -36,11 +37,9 @@ simPedDFC,
 simPedHS,
 sm2list,
 varTrans)
-export(makeAinv)
-export(makeAinv.default)
+export(makeAinv, makeAinv.default, makeAinv.fuzzy)
 
-S3method(makeAinv, matrix)
-S3method(makeAinv, Matrix)
+S3method(makeAinv, default)
 S3method(makeAinv, fuzzy)
 S3method(plot, proLik)
 S3method(is, proLik)
