@@ -1,5 +1,14 @@
 # 2.14.3
 ## NEW
+  * Fuzzy classification of genetic groups to construct **A^-1**.
+    * Allows individuals' phantom parents to be assigned to genetic groups with a probability. Meaning, they can be assigned to more than one genetic group.
+    * To implement, the pedigree must have phantom parent identities as unique rows and a matrix of probabilities of group membership for every phantom parent in every genetic group has to be supplied to the `fuzz` argument.
+    * Examples can be seen in the `makeAinv.Rd` help file or by running the following commands in `R`:
+```R
+?makeAinv              # launches the help documentation
+example(makeAinv)      # runs the examples in the help documentation
+```
+    * Notably, fuzzy classification can be set to 'null', where each phantom parent is assigned to one genetic group with probability=1. This produces the same **Astar** matrix as regular genetic group methods (without fuzzy classification). See this demonstrated in the examples of the help documentation.
   * Add the `makeAstarMult()` function to create the inverse numerator relationship matrix with genetic groups (and possibly also fuzzy classification of genetic groups) through matrix multiplication instead of using direct algorithms to set this up.
     * Uses `ggcontrib()` and `makeAinv()` to create **Q** and **A^-1** directly, then multiplies these in such a way as to obtain **Astar**.
     * Examples using the two different types of pedigree formats and either with or without fuzzy classication can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
@@ -25,6 +34,10 @@ example(makeAstarMult)	# runs the examples in the help documentation
   * `LRTest()` is now an exported function to do log-likelihood ratio tests
 
 ## Small changes
+   * new S3 generic and methods for `makeAinv()`.
+     * method dispatch is based on class of the `fuzz` argument
+       * if `fuzz == NULL` then dispatch the method `makeAinv.default()`
+       * if `fuzz == "matrix" | fuzz == "Matrix"` then dispatch `makeAinv.fuzzy()`
    * fix issue with `proLik()` and the confidence interval estimation
      * use `LRTest()` as basis of `constrainFun()` within `proLik()` so consistently define log-likelihood ratio test statistics
      * close issue #4 with commit [978ad610198398848d97e90c4eb57f4834a4c278](https://github.com/matthewwolak/nadiv/commits/978ad610198398848d97e90c4eb57f4834a4c278)
