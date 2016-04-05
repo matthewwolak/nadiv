@@ -1,6 +1,6 @@
 TDtT <- function(A, ...){
-    ch <- t(chol(A))
+    ch <- chol(A)
     dd <- diag(ch)
- return(list(T = drop0(zapsmall(ch / dd, ...)), D = Diagonal(nrow(A), dd^2)))
+ return(list(T = t(drop0(zapsmall(ch / dd, ...))), D = Diagonal(nrow(A), dd^2)))
 }
 
