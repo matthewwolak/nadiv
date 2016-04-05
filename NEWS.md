@@ -114,7 +114,7 @@ as a minimum
 # 2.13.3  Released 4 June 2015
 
 ## New
-   * Added `LDtL()`, a function to take the LDL' Cholesky decomposition of a matrix (not currently exported).
+   * Added `TDtT()`, a function to take the **TDT'** Cholesky decomposition of a matrix (not currently exported).
    * Added `founderLine()` which traces all individuals back to either the paternal or maternal founder
    * `grfx()` now has a new argument to allow user to supply the standard normal deviates instead of generating them within the function.
      * extended the warn argument to apply to the warning when `incidence = NULL`

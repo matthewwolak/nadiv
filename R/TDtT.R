@@ -1,6 +1,6 @@
-LDtL <- function(A){
-    ch <- chol(A)
+TDtT <- function(A){
+    ch <- t(chol(A))
     dd <- diag(ch)
- return(list(tL = ch / dd, D = Diagonal(nrow(A), dd^2)))
+ return(list(T = ch / dd, D = Diagonal(nrow(A), dd^2)))
 }
 
