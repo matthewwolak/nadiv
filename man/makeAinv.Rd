@@ -111,7 +111,7 @@ VanRaden, P.M. 1992. Accounting for inbreeding and crossbreeding in genetic eval
     dimnames(Ffuzz)[[1]] <- as.character(F2009[4:10, 1])
   AstarF <- makeAinv(Fped, fuzz = Ffuzz, gOnTop = FALSE)$Ainv
 
-  ## Show that A-inverse with fuzzy classification of genetic gruops
+  ## Show that A-inverse with fuzzy classification of genetic groups
   ### can be the same as genetic group A-inverse without fuzzy classification
   ### Create a 'null' fuzzy classification matrix for Q1988 pedigree
   QfuzzNull <- matrix(c(1,0,0,1,0, 0,1,1,0,1), nrow = 5, ncol = 2,
