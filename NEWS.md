@@ -1,4 +1,4 @@
-# 2.14.3
+# 2.14.3 Released 20 April 2016
 ## NEW
   * Fuzzy classification of genetic groups to construct **A^-1**.
     * Allows individuals' phantom parents to be assigned to genetic groups with a probability. Meaning, they can be assigned to more than one genetic group.
