@@ -1,7 +1,4 @@
 #include "nadivcc.h"
-//////////////////////////////////////
-// since nadiv >v2.14.3 uses lower_bound algorithm for matrix lookup
-//// based on c++ <algorithm>std::lower_bound 
 
 extern "C"{  
 
@@ -18,7 +15,7 @@ void dij(
 	int *cnt
 ){         
 
-  int     lb, step, it, k, j, m, kDam, kSire, jDam, jSire;
+  int     k, j, m, kDam, kSire, jDam, jSire;
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
   for(k = 0; k < nAP[0]; k++){  // iterate through each column of "A"
@@ -36,60 +33,41 @@ void dij(
              rfmp = 0.0;
              rffp = 0.0;
 
-             m = pAP[max(kDam, jSire)];
-             lb = pAP[max(kDam, jSire)+1] - 1 - m;
-             while(lb > 0){
-               step = lb/2;
-               it = m + step;
-               if(iAP[it] < min(kDam, jSire)){
-                 m=++it;
-                 lb-=step+1;
+             for(m = pAP[max(kDam, jSire)]; m < pAP[max(kDam, jSire)+1]; m++){
+                if(iAP[m] == min(kDam, jSire)){
+                  rmfp += xAP[m];
                }
-               else lb = step;
+                if(rmfp != 0.0){
+                  break;
+                }
              }
-             if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];
 
-
-             m = pAP[max(kDam, jDam)];
-             lb = pAP[max(kDam, jDam)+1] - 1 - m;
-             while(lb > 0){
-               step = lb/2;
-               it = m + step;
-               if(iAP[it] < min(kDam, jDam)){
-                 m=++it;
-                 lb-=step+1;
-               }
-               else lb = step;
+             for(m = pAP[max(kDam, jDam)]; m < pAP[max(kDam, jDam)+1]; m++){
+                if(iAP[m] == min(kDam, jDam)){
+                   rmmp += xAP[m];
+                }
+                if(rmmp != 0.0){
+                   break;
+                }
              }
-             if(iAP[m] == min(kDam, jDam)) rmmp += xAP[m];
 
-
-             m = pAP[max(kSire, jDam)];
-             lb = pAP[max(kSire, jDam)+1] - 1 - m;
-             while(lb > 0){
-               step = lb/2;
-               it = m + step;
-               if(iAP[it] < min(kSire, jDam)){
-                 m=++it;
-                 lb-=step+1;
-               }
-               else lb = step;
+             for(m = pAP[max(kSire, jDam)]; m < pAP[max(kSire, jDam)+1]; m++){  
+                if(iAP[m] == min(kSire, jDam)){
+                   rfmp += xAP[m];
+                }
+                if(rfmp != 0.0){
+	           break;
+                }
              }
-             if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];
 
-
-             m = pAP[max(kSire, jSire)];
-             lb = pAP[max(kSire, jSire)+1] - 1 - m;
-             while(lb > 0){
-               step = lb/2;
-               it = m + step;
-               if(iAP[it] < min(kSire, jSire)){
-                 m=++it;
-                 lb-=step+1;
-               }
-               else lb = step;
+             for(m = pAP[max(kSire, jSire)]; m < pAP[max(kSire, jSire)+1]; m++){
+                if(iAP[m] == min(kSire, jSire)){
+                   rffp += xAP[m];
+                }
+                if(rffp != 0.0){
+                   break;
+                }
              }
-             if(iAP[m] == min(kSire, jSire)) rffp += xAP[m];
 
 
              dij_tmp = (rmmp*rffp) + (rmfp*rfmp);
@@ -114,8 +92,7 @@ void dij(
 
 
 /////////////////////////////////////////////
-// since nadiv >v2.14.3 uses lower_bound algorithm for matrix lookup
-//// based on c++ <algorithm>std::lower_bound 
+
 
 extern "C"{  
 
@@ -131,7 +108,7 @@ void dijp(
 	double *dij
 ){         
 
-  int     lb, step, it, k, m, kDam, kSire, jDam, jSire;
+  int     k, m, kDam, kSire, jDam, jSire;
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
   for(k = 0; k < lAr[0]; k++){ 
@@ -146,62 +123,41 @@ void dijp(
            rmmp = 0.0;
            rfmp = 0.0;
            rffp = 0.0;
-
-
-           m = pAP[max(kDam, jSire)];
-           lb = pAP[max(kDam, jSire)+1] - 1 - m;
-           while(lb > 0){
-             step = lb/2;
-             it = m + step;
-             if(iAP[it] < min(kDam, jSire)){
-               m=++it;
-               lb-=step+1;
+           for(m = pAP[max(kDam, jSire)]; m < pAP[max(kDam, jSire)+1]; m++){
+             if(iAP[m] == min(kDam, jSire)){
+               rmfp += xAP[m];
              }
-             else lb = step;
-           }
-           if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];
-
-
-           m = pAP[max(kDam, jDam)];
-           lb = pAP[max(kDam, jDam)+1] - 1 - m;
-           while(lb > 0){
-             step = lb/2;
-             it = m + step;
-             if(iAP[it] < min(kDam, jDam)){
-               m=++it;
-               lb-=step+1;
+             if(rmfp != 0.0){
+                break;
              }
-             else lb = step;
            }
-           if(iAP[m] == min(kDam, jDam)) rmmp += xAP[m];
 
-
-           m = pAP[max(kSire, jDam)];
-           lb = pAP[max(kSire, jDam)+1] - 1 - m;
-           while(lb > 0){
-             step = lb/2;
-             it = m + step;
-             if(iAP[it] < min(kSire, jDam)){
-               m=++it;
-               lb-=step+1;
+           for(m = pAP[max(kDam, jDam)]; m < pAP[max(kDam, jDam)+1]; m++){
+             if(iAP[m] == min(kDam, jDam)){
+               rmmp += xAP[m];
              }
-             else lb = step;
-           }
-           if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];
-
-
-           m = pAP[max(kSire, jSire)];
-           lb = pAP[max(kSire, jSire)+1] - 1 - m;
-           while(lb > 0){
-             step = lb/2;
-             it = m + step;
-             if(iAP[it] < min(kSire, jSire)){
-               m=++it;
-               lb-=step+1;
+             if(rmmp != 0.0){
+                break;
              }
-             else lb = step;
            }
-           if(iAP[m] == min(kSire, jSire)) rffp += xAP[m];
+
+           for(m = pAP[max(kSire, jDam)]; m < pAP[max(kSire, jDam)+1]; m++){  
+             if(iAP[m] == min(kSire, jDam)){
+               rfmp += xAP[m];
+             }
+             if(rfmp != 0.0){
+	        break;
+             }
+           }
+
+           for(m = pAP[max(kSire, jSire)]; m < pAP[max(kSire, jSire)+1]; m++){
+             if(iAP[m] == min(kSire, jSire)){
+               rffp += xAP[m];
+             }
+             if(rffp != 0.0){
+                break;
+             }
+           }
 
 
            dij_tmp = (rmmp*rffp) + (rmfp*rfmp);
@@ -224,8 +180,6 @@ void dijp(
 
 
 //////////////////////////////////////////
-// since nadiv >v2.14.3 uses lower_bound algorithm for matrix lookup
-//// based on c++ <algorithm>std::lower_bound 
 
 extern "C"{  
 
@@ -242,7 +196,7 @@ void dijjskip(
 	int *cnt
 ){         
 
-  int     lb, step, it, k, j, m, kDam, kSire, jDam, jSire, jmoDam, jmoSire;
+  int     k, j, m, kDam, kSire, jDam, jSire, jmoDam, jmoSire;
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
  
   dij_tmp = 0.0;
@@ -271,60 +225,41 @@ void dijjskip(
                   rfmp = 0.0;
                   rffp = 0.0;
 
-                  m = pAP[max(kDam, jSire)];
-                  lb = pAP[max(kDam, jSire)+1] - 1 - m;
-                  while(lb > 0){
-                    step = lb/2;
-                    it = m + step;
-                    if(iAP[it] < min(kDam, jSire)){
-                      m=++it;
-                      lb-=step+1;
+                  for(m = pAP[max(kDam, jSire)]; m < pAP[max(kDam, jSire)+1]; m++){
+                     if(iAP[m] == min(kDam, jSire)){
+                       rmfp += xAP[m];
                     }
-                    else lb = step;
+                     if(rmfp != 0.0){
+                       break;
+                     }
                   }
-                  if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];
 
-
-                  m = pAP[max(kDam, jDam)];
-                  lb = pAP[max(kDam, jDam)+1] - 1 - m;
-                  while(lb > 0){
-                    step = lb/2;
-                    it = m + step;
-                    if(iAP[it] < min(kDam, jDam)){
-                      m=++it;
-                      lb-=step+1;
-                    }
-                    else lb = step;
+                  for(m = pAP[max(kDam, jDam)]; m < pAP[max(kDam, jDam)+1]; m++){
+                     if(iAP[m] == min(kDam, jDam)){
+                        rmmp += xAP[m];
+                     }
+                     if(rmmp != 0.0){
+                        break;
+                     }
                   }
-                  if(iAP[m] == min(kDam, jDam)) rmmp += xAP[m];
 
-
-                  m = pAP[max(kSire, jDam)];
-                  lb = pAP[max(kSire, jDam)+1] - 1 - m;
-                  while(lb > 0){
-                    step = lb/2;
-                    it = m + step;
-                    if(iAP[it] < min(kSire, jDam)){
-                      m=++it;
-                      lb-=step+1;
-                    }
-                    else lb = step;
+                  for(m = pAP[max(kSire, jDam)]; m < pAP[max(kSire, jDam)+1]; m++){  
+                     if(iAP[m] == min(kSire, jDam)){
+                        rfmp += xAP[m];
+                     }
+                     if(rfmp != 0.0){
+	                break;
+                     }
                   }
-                  if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];
 
-
-                  m = pAP[max(kSire, jSire)];
-                  lb = pAP[max(kSire, jSire)+1] - 1 - m;
-                  while(lb > 0){
-                    step = lb/2;
-                    it = m + step;
-                    if(iAP[it] < min(kSire, jSire)){
-                      m=++it;
-                      lb-=step+1;
-                    }
-                    else lb = step;
+                  for(m = pAP[max(kSire, jSire)]; m < pAP[max(kSire, jSire)+1]; m++){
+                     if(iAP[m] == min(kSire, jSire)){
+                        rffp += xAP[m];
+                     }
+                     if(rffp != 0.0){
+                        break;
+                     }
                   }
-                  if(iAP[m] == min(kSire, jSire)) rffp += xAP[m];
 
 
                   jmoDam = jDam;

@@ -1,10 +1,3 @@
-# 2.XX.X
-  ## Small changes
-     * use lower_bound algorithm for matrix lookup within c++ code
-       * based on c++ <algorithm>std::lower_bound 
-       * affect `makeAinv()` and `makeD()`
-       * greater speedup as **A^-1** and **D** become more dense
-
 # 2.14.3 Released 20 April 2016
 ## NEW
   * Fuzzy classification of genetic groups to construct **A^-1**.
