@@ -4,10 +4,10 @@
        * based on c++ <algorithm>std::lower_bound 
        * affect `makeAinv()` and `makeD()`
        * greater speedup as **A^-1** and **D** become more dense
-     * create default and class 'numPed' methods for `genAssign()`
-       * can greatly trim down `genAssign.numPed()` code
+     * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
+       * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
        * this speeds up/uses less memory
-       * since `genAssign()` is frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
+       * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
        * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
 
 # 2.14.3 Released 20 April 2016
