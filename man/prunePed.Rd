@@ -1,19 +1,27 @@
 \name{prunePed}
 \alias{prunePed}
+\alias{prunePed.default}
+\alias{prunePed.numPed}
+
 \title{Prunes a pedigree based on individuals with phenotypes
 }
 \description{
 This function removes individuals who are either not themselves or not ancestors to phenotyped individuals
 }
 \usage{
-prunePed(pedigree, phenotyped)
+prunePed(pedigree, phenotyped, \dots)
+\method{prunePed}{default}(pedigree, phenotyped, \dots)
+\method{prunePed}{numPed}(pedigree, phenotyped, \dots)
 }
 \arguments{
   \item{pedigree }{
 An object, where the first 3 columns correspond to: ID, Dam, & Sire. See details.
 }
   \item{phenotyped }{
-A vector indicating which individuals in the pedigree have phenotypic information available. 
+A vector indicating which individuals in the pedigree have phenotypic information available.
+}
+  \item{\dots }{
+Arguments to be passed to methods
 }
 
 }
