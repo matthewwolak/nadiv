@@ -11,7 +11,6 @@ constrainFun,
 drfx,
 findDFC,
 founderLine,
-genAssign,
 ggcontrib,
 grfx,
 is.proLik,
@@ -37,8 +36,12 @@ simPedDFC,
 simPedHS,
 sm2list,
 varTrans)
+
+export(genAssign, genAssign.default, genAssign.numPed)
 export(makeAinv, makeAinv.default, makeAinv.fuzzy)
 
+S3method(genAssign, default)
+S3method(genAssign, numPed)
 S3method(makeAinv, default)
 S3method(makeAinv, fuzzy)
 S3method(plot, proLik)
