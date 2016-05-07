@@ -29,7 +29,6 @@ pcc,
 plot.proLik,
 prepPed,
 proLik,
-prunePed,
 ronPed,
 simGG,
 simPedDFC,
@@ -39,12 +38,16 @@ varTrans)
 
 export(genAssign, genAssign.default, genAssign.numPed)
 export(makeAinv, makeAinv.default, makeAinv.fuzzy)
+export(prunePed, prunePed.default, prunePed.numPed)
 
 S3method(genAssign, default)
 S3method(genAssign, numPed)
 S3method(makeAinv, default)
 S3method(makeAinv, fuzzy)
+S3method(is, numPed)
 S3method(plot, proLik)
 S3method(is, proLik)
-S3method(is, numPed)
+S3method(prunePed, default)
+S3method(prunePed, numPed)
+
 
