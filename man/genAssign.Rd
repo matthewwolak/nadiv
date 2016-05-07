@@ -10,8 +10,8 @@ Given a pedigree, the function assigns the generation number to which each indiv
 
 \usage{
 genAssign(pedigree, \dots)
-\method{genAssign}{default}(pedigree)
-\method{genAssign}{numPed}(pedigree)
+\method{genAssign}{default}(pedigree, \dots)
+\method{genAssign}{numPed}(pedigree, \dots)
 }
 \arguments{
   \item{pedigree }{A pedigree where the columns are ordered ID, Dam, Sire}

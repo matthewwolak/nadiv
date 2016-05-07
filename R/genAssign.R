@@ -6,7 +6,7 @@ genAssign <- function(pedigree, ...){
 ###############################################################################
 # Methods:
 
-genAssign.default <- function(pedigree)
+genAssign.default <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
    if(any(apply(pedigree[, 1:3], MARGIN = 2, FUN = function(x){min(x, na.rm = TRUE) < 0}))){
@@ -27,7 +27,7 @@ genAssign.default <- function(pedigree)
 
 ######################################
 
-genAssign.numPed <- function(pedigree)
+genAssign.numPed <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
    Cout <- .C("ga",
