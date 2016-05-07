@@ -9,11 +9,10 @@ makeA <- function(pedigree)
   Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
   Tinv.x <- c(rep(-0.5, length(dnmiss) + length(snmiss)), rep(1, N))
   el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
-  Tinv <- Matrix(0, N, N, sparse = TRUE)
-  Tinv[1, 2] <- 1
-  Tinv@i <- as.integer(Tinv.row[el.order] - 1)
-  Tinv@p <- as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1)
-  Tinv@x <- as.double(Tinv.x[el.order])
+  Tinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+	p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+	x = as.double(Tinv.x[el.order]),
+	index1 = FALSE, dims = c(N, N), symmetric = FALSE)
   nA <- N + length(dnmiss) + length(snmiss)
   nA <- nA + sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
@@ -32,11 +31,10 @@ makeA <- function(pedigree)
 	    as.double(rep(0, nA)), #xAP
 	    as.integer(nA)) #nzmaxAP
 
-   Ainv <- Matrix(0, N, N)
-   Ainv[1, 2] <- 1
-   Ainv@i <- Cout[[9]][1:Cout[[12]]]
-   Ainv@p <- Cout[[10]]
-   Ainv@x <- Cout[[11]][1:Cout[[12]]]
+  Ainv <- sparseMatrix(i = Cout[[9]][1:Cout[[12]]],
+	p = Cout[[10]],
+	x = Cout[[11]][1:Cout[[12]]],
+	index1 = FALSE, dims = c(N, N), symmetric = FALSE)
  chol2inv(t(Ainv))
 }
 
