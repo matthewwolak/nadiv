@@ -56,7 +56,7 @@ When genetic groups (including the case of fuzzy classification of genetic group
 
 \value{
   \item{Ainv }{the inverse of the additive genetic relationship matrix in sparse matrix form}
-  \item{listAinv }{the three column list of the non-zero elements for the inverse of the additive genetic relationship matrix}
+  \item{listAinv }{the three column list of the non-zero elements for the inverse of the additive genetic relationship matrix with attributes \code{rowNames} and \code{geneticGroups}. \code{attr(*, "rowNames")} links the integer for rows/columns to the ID column from the pedigree. \code{attr(*, "geneticGroups")} is a two element vector with the first integer indicating how many genetic groups are included in the pedigree. This last attribute is necessary for some software programs to correctly specify the residual degrees of freedom when calculating the log-likelihood in a model that implicitly fits fixed genetic group effects.}
   \item{f }{the individual coefficients of inbreeding for each individual in the pedigree (matches the order of the first/ID column of the pedigree). If the pedigree contains \sQuote{g} genetic groups in the first \sQuote{g} rows, then the first \sQuote{g} elements of \code{f} are assigned 0. If the pedigree contains \sQuote{p} phantom parents in the first \sQuote{p} rows, then the first \sQuote{p} elements of \code{f} are assigned 0.
 }
   \item{logDet }{the log determinant of the A matrix}
