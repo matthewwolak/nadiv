@@ -1,9 +1,9 @@
 # Test environments
 * Ubuntu 14.04
-  * R 3.2.5 (2016-04-14) x86_64-pc-linux-gnu (64-bit)
+  * R 3.3.1 (2016-06-21) x86_64-pc-linux-gnu (64-bit)
 * win-builder (devel and release): http://win-builder.r-project.org/
-  * R version 3.3.0 beta (2016-04-14 r70486), platform: x86_64-w64-mingw32 (64-bit)
-  * R version 3.2.5 (2016-04-14), platform: x86_64-w64-mingw32 (64-bit) 
+  * R  Under development (unstable) (2016-09-22 r71333), platform: x86_64-w64-mingw32 (64-bit)
+  * R version 3.3.1 (2016-06-21), platform: x86_64-w64-mingw32 (64-bit) 
 
 
 # R CMD check results
@@ -23,5 +23,5 @@ There were no ERRORs or WARNINGs.
 
 # Downstream dependencies
 I have also run R CMD check on the downstream dependency of nadiv: 
-  dmm 
+  dmm, optiSel
 All packages installed and passed 
