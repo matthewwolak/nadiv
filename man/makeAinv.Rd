@@ -101,7 +101,7 @@ VanRaden, P.M. 1992. Accounting for inbreeding and crossbreeding in genetic eval
     # First 8 rows & columns of ggAinv are same as the A-inverse without genetic groups
     ggAinv[1:8, 1:8]
     noggAinv
-   stopifnot(identical(ggAinv[1:8, 1:8], noggAinv))
+   stopifnot(all.equal(ggAinv[1:8, 1:8], noggAinv))
    
  ##  With fuzzy classification of genetic groups  ##
   ## example in Fikse (2009)
