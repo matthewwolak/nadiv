@@ -1,6 +1,6 @@
 #include "nadivcc.h"
 //////////////////////////////////////
-// since nadiv >v2.14.3 uses lower_bound algorithm for matrix lookup
+// since nadiv >v2.15.0 uses lower_bound algorithm for matrix lookup
 //// based on c++ <algorithm>std::lower_bound 
 
 extern "C"{  

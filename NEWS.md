@@ -1,4 +1,4 @@
-# 2.XX.X
+# 2.15.0
 ## Small changes
    * use lower_bound algorithm for matrix lookup within c++ code
      * based on c++ <algorithm>std::lower_bound 
