@@ -52,7 +52,7 @@ void ainvml(
           cnt++;
         }
 
-        if((dj >= g[0]) && (dj!= n[0])){ 
+        if((dj >= g[0]) && (dj!= n[0])){
           AN[cnt] = dj;
           li[dj] += 0.5*li[j];
           cnt++;
@@ -68,7 +68,7 @@ void ainvml(
         }
         for(h=0; h<cnt; h++){   // delete duplicates
           if(AN[h]==j){
-            AN[h] -= n[0]; 
+            AN[h] -= n[0];
           }
         }
       }  // end of while
