@@ -95,11 +95,9 @@ void ainvml(
           h=++it;
           lb-=step+1;
         }
-        else lb=step;
+        else lb = step;
       }  // end while
-      if(iA[h] == k){
-        xA[h] += -1.0;      //sire/dam,k
-      }
+      if(iA[h] == k) xA[h] += -1.0;      //sire/dam,k
     }
     // if k doesn't have two phantom parents from same genetic group
     else {
@@ -114,37 +112,33 @@ void ainvml(
          // sire,dam
          if(sj <= dj){
             if(dj != n[0]){
-              h=istart;
+              h = istart;
               lb = pA[sj+1] - 1 - h;
               while(lb > 0){
-                step=lb/2;
-                it=h + step;
+                step = lb/2;
+                it= h + step;
                 if(iA[it] < dj){
                   h=++it;
                   lb-=step+1;
                 }
-                else lb=step;
+                else lb = step;
               }
-              if(iA[h] == dj){
-                xA[h] += alphai;
-              }
+              if(iA[h] == dj) xA[h] += alphai;
             }
          }
          // sire,k
          h = istart;
          lb = pA[sj+1] - 1 - h;
          while(lb > 0){
-           step=lb/2;
+           step = lb/2;
            it = h + step;
            if(iA[it] < k){
              h=++it;
              lb-=step+1;
            }
-           else lb=step;
+           else lb = step;
          }
-         if(iA[h] == k){
-           xA[h] += alphai * -2.0;
-         }
+         if(iA[h] == k) xA[h] += alphai * -2.0;
       }
       if(dj != n[0]){
          istart = pA[dj];
@@ -155,34 +149,30 @@ void ainvml(
          h = istart;
          lb = pA[dj+1] - 1 - h;
          while(lb > 0){
-           step=lb/2;
-           it=h+step;
+           step = lb/2;
+           it = h + step;
            if(iA[it] < k){
              h=++it;
              lb-=step+1;
            }
-           else lb=step;
+           else lb = step;
          }
-         if(iA[h] == k){
-           xA[h] += alphai * -2.0;
-         }
+         if(iA[h] == k) xA[h] += alphai * -2.0;
          // dam,sire
          if(dj <= sj){
             if(sj != n[0]){
-              h=istart;
+              h = istart;
               lb = pA[dj+1] - 1 - h;
               while(lb > 0){
-                step=lb/2;
-                it=h+step;
+                step = lb/2;
+                it = h + step;
                 if(iA[it] < sj){
                   h=++it;
                   lb-=step+1;
                 }
-                else lb=step;
+                else lb = step;
               }
-              if(iA[h] == sj){
-                xA[h] += alphai;
-              }
+              if(iA[h] == sj) xA[h] += alphai;
             }
          }
        }
@@ -319,20 +309,19 @@ void ainvfuzz(
             pij += xF[j];
             // k,sire-group s
             aistart = pA[s];
-            h=aistart;
+            h = aistart;
             lb = pA[s+1] - 1 - h;
             while(lb > 0){
-              step=lb/2;
-              it= h + step;
+              step = lb/2;
+              it = h + step;
               if(iA[it] < k){
                 h=++it;
                 lb-=step+1;
               }
-              else lb=step;
+              else lb = step;
             }
-            if(iA[h] == k){
-              xA[h] += alphai * -2.0 * pij;
-            }
+            if(iA[h] == k) xA[h] += alphai * -2.0 * pij;
+
             for(sp=0; sp<=s; sp++){
               fistart = pF[sp];
               pijp=0.0; 
@@ -341,20 +330,18 @@ void ainvfuzz(
                   pijp += xF[h];
                   // group, k's sire's-group sp
                   aistart = pA[sp];
-                  i=aistart;
+                  i = aistart;
                   lb = pA[sp+1] - 1 - i;
                   while(lb > 0){
-                    step=lb/2;
+                    step = lb/2;
                     it = i + step;
                     if(iA[it] < s){
                       i=++it;
                       lb-=step+1;
                     }
-                    else lb=step;
+                    else lb = step;
                   }
-                  if(iA[i] == s){
-                    xA[i] += alphai * pij * pijp;
-                  }
+                  if(iA[i] == s) xA[i] += alphai * pij * pijp;
                   break;      			// break out of h for loop
                 }  // end if(iF[h] == sj)
               }  // end h for loop
@@ -376,20 +363,19 @@ void ainvfuzz(
             pik += xF[j];
             // k,dam-group d
             aistart = pA[d];
-            h=aistart;
+            h  =aistart;
             lb = pA[d+1] - 1 - h;
             while(lb > 0){
-              step=lb/2;
-              it=h + step;
+              step = lb/2;
+              it = h + step;
               if(iA[it] < k){
                 h=++it;
                 lb-=step+1;
               }
-              else lb=step;
+              else lb  =step;
             }
-            if(iA[h] == k){
-              xA[h] += alphai * -2.0 * pik;
-            }
+            if(iA[h] == k) xA[h] += alphai * -2.0 * pik;
+
             for(dp=0; dp<=d; dp++){
               fistart = pF[dp];
               pikp=0.0; 
@@ -398,20 +384,18 @@ void ainvfuzz(
                   pikp += xF[h];
                   // group, k's dam's-group dp
                   aistart = pA[dp];
-                  i=aistart;
+                  i  =aistart;
                   lb = pA[dp+1] - 1 - i;
                   while(lb > 0){
-                    step=lb/2;
-                    it=i + step;
+                    step = lb/2;
+                    it = i + step;
                     if(iA[it] < d){
                       i=++it;
                       lb-=step+1;
                     }
-                    else lb=step;
+                    else lb = step;
                   }
-                  if(iA[i] == d){
-                    xA[i] += alphai * pik * pikp;
-                  }
+                  if(iA[i] == d) xA[i] += alphai * pik * pikp;
                   break;        		// break out of h for loop
                 }
               }  // end h for loop
@@ -440,20 +424,18 @@ void ainvfuzz(
                   // k's sire's group, k's dam's group 
                   aistart = pA[min(s, d)];   
                   if(s != d){
-                    i=aistart;
+                    i = aistart;
                     lb = pA[min(s, d)+1] - 1 - i;
                     while(lb > 0){
-                      step=lb/2;
+                      step = lb/2;
                       it = i + step;
                       if(iA[it] < max(s, d)){
                         i=++it;
                         lb-=step+1;
                       }
-                      else lb=step;
+                      else lb = step;
                     }
-                    if(iA[i] == max(s, d)){
-                      xA[i] += alphai * pij * pik;
-                    }
+                    if(iA[i] == max(s, d)) xA[i] += alphai * pij * pik;
                   }
                   else {
                     xA[aistart] += alphai * 2.0 * pij * pik;
@@ -506,21 +488,18 @@ void ainvfuzz(
                   pijp += xF[h];
                   // group, k's sire's-group sp
                   aistart = pA[sp];
-                  i=aistart;
+                  i = aistart;
                   lb = pA[sp+1] - 1 - i;
                   while(lb > 0){
-                    step=lb/2;
+                    step = lb/2;
                     it = i + step;
                     if(iA[it] < s){
                       i=++it;
                       lb-=step+1;
                     }
-                    else lb=step;
+                    else lb = step;
                   }
-                  if(iA[i] == s){
-                    xA[i] += alphai * pij * pijp;
-                  }
-
+                  if(iA[i] == s) xA[i] += alphai * pij * pijp;
                   break;  			// break out of h for loop
                 }
               }  // end h for loop
@@ -536,20 +515,18 @@ void ainvfuzz(
       ////// the dam contributions to k
       aistart = pA[dj];
       xA[aistart] += alphai;
-      j=aistart;
+      j = aistart;
       lb = pA[dj+1] - 1 - j;
       while(lb > 0){
-        step=lb/2;
+        step = lb/2;
         it = j + step;
         if(iA[it] < k){
           j=++it;
           lb-=step+1;
         }
-        else lb=step;
+        else lb = step;
       }
-      if(iA[j] == k){
-        xA[j] += alphai * -2.0;
-      }
+      if(iA[j] == k) xA[j] += alphai * -2.0;
     }  // end if phantom sire and known dam
 
 
@@ -567,17 +544,15 @@ void ainvfuzz(
       j = aistart;
       lb = pA[sj+1] - 1 - j;
       while(lb > 0){
-        step=lb/2;
+        step = lb/2;
         it = j + step;
         if(iA[it] < k){
           j=++it;
           lb-=step+1;
         }
-        else lb=step;
+        else lb = step;
       }
-      if(iA[j] == k){
-        xA[j] += alphai * -2.0;
-      }
+      if(iA[j] == k) xA[j] += alphai * -2.0;
       //////////////////////////////////
       ////// the dam contributions to k
       for(d=0; d<g[0]; d++){                   // for each dam genetic group
@@ -606,21 +581,18 @@ void ainvfuzz(
                   pikp += xF[h];
                   // k's dam, k's dam's-group dp
                   aistart = pA[dp];
-                  i=aistart;
+                  i = aistart;
                   lb = pA[dp+1] - 1 - i;
                   while(lb > 0){
-                    step=lb/2;
-                    it=i + step;
+                    step = lb/2;
+                    it= i + step;
                     if(iA[it] < d){
                       i=++it;
                       lb-=step+1;
                     }
-                    else lb=step;
+                    else lb = step;
                   }
-                  if(iA[i] == d){
-                    xA[i] += alphai * pik * pikp;
-                  }
-
+                  if(iA[i] == d) xA[i] += alphai * pik * pikp;
                   break;  			// break out of h for loop
                 }
               }  // end h for loop
@@ -678,5 +650,6 @@ void ainvfuzz(
   delete[] li;
 }
 }
+
 
 
