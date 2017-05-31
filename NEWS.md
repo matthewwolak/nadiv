@@ -1,5 +1,9 @@
 # 2.XX.X
 ## Small changes
+   * use lower_bound algorithm for matrix lookup within c++ code
+     * based on c++ <algorithm>std::lower_bound 
+       * affect `makeAinv()` and `makeD()`
+     * greater speedup as **A^-1** and **D** become more dense
    * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
      * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
      * this speeds up/uses less memory
