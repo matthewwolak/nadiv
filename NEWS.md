@@ -1,3 +1,11 @@
+# 2.XX.X
+## Small changes
+   * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
+     * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
+     * this speeds up/uses less memory
+     * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
+     * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
+
 # 2.14.3 Released 20 April 2016
 ## NEW
   * Fuzzy classification of genetic groups to construct **A^-1**.
