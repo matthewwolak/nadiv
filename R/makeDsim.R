@@ -53,6 +53,7 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
   if(invertD){
     cat("inverting Dsim ...")
     Dsiminv <- solve(Dsim)
+      Dsiminv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     cat(".done", "\n")
     listDsiminv <- sm2list(Dsiminv, rownames = pedigree[,1], colnames = c("row", "column", "simDinverse"))
     Dsim <- as(Dsim, "dgCMatrix")
