@@ -95,21 +95,21 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
   Ainv@x <- Cout[[7]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
-   if(ptype == "D"){
+  if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
       f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
-   } else {
+  } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
       f <- c(rep(0, nggroups), Cout[[3]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
-     }
+    }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
      Ainv <- t(permute) %*% Ainv %*% permute
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
- return(list(Ainv = Ainv,
-	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
+ return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet))
 }
@@ -268,8 +268,8 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
- return(list(Ainv = Ainv,
-	listAinv = sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")),
+ return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet))
 }

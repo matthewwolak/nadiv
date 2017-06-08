@@ -34,7 +34,9 @@ makeA <- function(pedigree)
   Ainv <- sparseMatrix(i = Cout[[9]][1:Cout[[12]]],
 	p = Cout[[10]],
 	x = Cout[[11]][1:Cout[[12]]],
-	index1 = FALSE, dims = c(N, N), symmetric = FALSE)
+	index1 = FALSE,
+	dims = c(N, N), dimnames = list(as.character(pedigree[, 1]), NULL),
+	symmetric = FALSE)
  chol2inv(t(Ainv))
 }
 

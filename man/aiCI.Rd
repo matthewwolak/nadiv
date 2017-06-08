@@ -17,7 +17,7 @@ aiCI(asr.model, Dimnames = NULL, alpha = 0.05)
 Object from a call to \code{asreml}
 }
   \item{Dimnames }{
-A vector of characters if names are desired for the output.  If not specified, the default labels from the \code{asreml} object will be used.
+A vector of characters if names are desired for the output. If not specified, the default labels from the \code{asreml} object will be used.
 }
   \item{alpha }{
 A numeric value indicating the level of Type I error for constructing the Confidence Intervals.
@@ -27,7 +27,7 @@ A numeric value indicating the level of Type I error for constructing the Confid
 Variances from the inverse of the Average Information matrix of an ASReml model are translated according to the \code{\link{varTrans}} function and used in constructing the 1-alpha Confidence Interval.}
 
 \value{
-A matrix is returned with a row for each variance component.  The three columns correspond to the Lower Confidence Limit, estimate from the \code{asreml} model, and Upper Confidence Limit for each variance component.}
+A matrix is returned with a row for each variance component. The three columns correspond to the Lower Confidence Limit, estimate from the \code{asreml} model, and Upper Confidence Limit for each variance component.}
 
 \author{\email{matthewwolak@gmail.com}}
 

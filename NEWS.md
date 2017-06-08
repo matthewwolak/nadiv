@@ -1,14 +1,14 @@
-# 2.XX.X
-  ## Small changes
-     * use lower_bound algorithm for matrix lookup within c++ code
-       * based on c++ <algorithm>std::lower_bound 
+# 2.15.0
+## Small changes
+   * use lower_bound algorithm for matrix lookup within c++ code
+     * based on c++ <algorithm>std::lower_bound 
        * affect `makeAinv()` and `makeD()`
-       * greater speedup as **A^-1** and **D** become more dense
-     * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
-       * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
-       * this speeds up/uses less memory
-       * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
-       * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
+     * greater speedup as **A^-1** and **D** become more dense
+   * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
+     * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
+     * this speeds up/uses less memory
+     * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
+     * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
 
 # 2.14.3 Released 20 April 2016
 ## NEW

@@ -40,7 +40,8 @@ cs *cs_compress (const cs *T) ;
 int cs_dupl (cs *A) ;
 int cs_entry (cs *T, int i, int j, double x) ;
 int cs_gaxpy (const cs *A, const double *x, double *y) ;
-cs *cs_load (FILE *f) ;
+/* MEW 22 Sept 2016 response to failed SOLARIS test: function not used */
+/* cs *cs_load (FILE *f) ; */
 int cs_lusol (int order, const cs *A, double *b, double tol) ;
 cs *cs_multiply (const cs *A, const cs *B) ;
 double cs_norm (const cs *A) ;

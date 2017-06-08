@@ -3,7 +3,7 @@
 //////////////////////////////////////
 //   M&L 1992 algorithm 
 //   as presented in Mrode 2005
-// since nadiv >v2.14.3 uses lower_bound algorithm for matrix lookup
+// since nadiv >v2.15.0 uses lower_bound algorithm for matrix lookup
 //// based on c++ <algorithm>std::lower_bound 
 extern "C"{  
 
@@ -52,7 +52,7 @@ void ainvml(
           cnt++;
         }
 
-        if((dj >= g[0]) && (dj!= n[0])){ 
+        if((dj >= g[0]) && (dj!= n[0])){
           AN[cnt] = dj;
           li[dj] += 0.5*li[j];
           cnt++;
@@ -68,7 +68,7 @@ void ainvml(
         }
         for(h=0; h<cnt; h++){   // delete duplicates
           if(AN[h]==j){
-            AN[h] -= n[0]; 
+            AN[h] -= n[0];
           }
         }
       }  // end of while
@@ -781,4 +781,5 @@ void acinv(
   delete[] li;
 }
 }
+
 

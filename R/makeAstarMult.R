@@ -31,6 +31,8 @@ makeAstarMult <- function(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE){
   } else{
       U <- cBind(Diagonal(x = 1, n = nrow(Ainv)), -Q)
     }
- drop0(zapsmall(crossprod(U, Ainv) %*% U, 12))
+  Astar <- drop0(zapsmall(crossprod(U, Ainv) %*% U, 12))
+    Astar@Dimnames[[1L]] <- if(gOnTop) c(colnames(Q), rownames(Ainv)) else c(rownames(Ainv), colnames(Q))
+ Astar
 }
 

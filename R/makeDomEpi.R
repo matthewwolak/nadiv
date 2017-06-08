@@ -7,6 +7,7 @@ makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALS
     AD <- Dout$A * Dout$D
     if(det) logDetAD <- determinant(AD, logarithm = TRUE)$modulus[1] else logDetAD <- NULL
     ADinv <- as(solve(AD), "dgCMatrix")
+      ADinv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     listADinv <-sm2list(ADinv, rownames=pedigree[,1], colnames=c("row", "column", "ADinverse"))
     DD <- NULL
     logDetDD <- NULL
@@ -18,6 +19,7 @@ makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALS
     DD <- Dout$D * Dout$D
     if(det) logDetDD <- determinant(DD, logarithm = TRUE)$modulus[1] else logDetDD <- NULL
     DDinv <- as(solve(DD), "dgCMatrix")
+      DDinv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     listDDinv<-sm2list(DDinv, rownames=pedigree[,1], colnames=c("row", "column", "DDinverse"))
     AD <- NULL
     logDetAD <- NULL
@@ -30,12 +32,14 @@ makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALS
     ADinv <- Matrix(solve(AD), sparse=TRUE)
     listADinv <-sm2list(ADinv, rownames=pedigree[,1], colnames=c("row", "column", "ADinverse"))
     ADinv <- as(ADinv, "dgCMatrix")
+      ADinv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     DD <- Dout$D * Dout$D
     if(det){
       logDetAD <- determinant(AD, logarithm = TRUE)$modulus[1]
       logDetDD <- determinant(DD, logarithm = TRUE)$modulus[1]
     } else{ logDetAD <- logDetDD <- NULL}
     DDinv <- as(solve(DD), "dgCMatrix")
+      DDinv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     listDDinv<-sm2list(DDinv, rownames=pedigree[,1], colnames=c("row", "column", "DDinverse"))
      }
 return(list(D=Dout$D, logDetD = Dout$logDet, AD=AD, logDetAD = logDetAD, DD=DD, logDetDD = logDetDD, Dinv=Dout$Dinv, ADinv=ADinv, DDinv=DDinv, listDinv=Dout$listDinv, listADinv=listADinv, listDDinv=listDDinv))

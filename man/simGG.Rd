@@ -81,9 +81,11 @@ Offspring total additive genetic values \code{u} are the average of their parent
 
 Trends in total additive genetic effects and/or residual deviations can be specified for both the focal and immigrant populations. Trends in total additive genetic effects occurring in the immigrants, in the residual deviations occurring in the focal population, and in the residual deviations occurring in the immigrants are produced by altering the mean each generation for the separate distribution from which these effects are each drawn. The change in mean over a generation is specified in units of standard deviations of the respective distributions (e.g., square roots of \code{VAi}, \code{VRf}, and \code{VRi}) and is set with \code{d_bvi}, \code{d_rf}, or \code{d_ri}, respectively.
 
-Trends in total additive genetic effects for the focal population are produced by selecting individuals to be parents of the next generation according to their total additive genetic effects. Individuals are assigned probabilities of being selected as a parent of the next generation depending on how closely their total additive genetic effect matches an optimum value. Probabilities are assigned: \deqn{exp((\frac{-1}{2\sigma_{x}}) (x - \theta)^{2})}{exp((-1/(2 * sd(x))) * (x - theta)^2)} where \code{x} is the vector of total additive genetic effects (\code{u}), \eqn{\sigma_{x}}{sd(x)} is the standard deviation of \code{x}, and \eqn{\theta}{theta} is the optimum value. Sampling is conducted with replacement based on these probabilities.
+Trends in total additive genetic effects for the focal population are produced by selecting individuals to be parents of the next generation according to their \emph{predicted} total additive genetic effects. Individuals are assigned probabilities of being selected as a parent of the next generation depending on how closely their predicted total additive genetic effect matches an optimum value. Probabilities are assigned: \deqn{exp((\frac{-1}{2\sigma_{x}}) (x - \theta)^{2})}{exp((-1/(2 * sd(x))) * (x - theta)^2)} where \code{x} is the vector of predicted total additive genetic effects (\code{u}), \eqn{\sigma_{x}}{sd(x)} is the standard deviation of \code{x}, and \eqn{\theta}{theta} is the optimum value. Sampling is conducted with replacement based on these probabilities.
 
-The parameter \code{d_bvf} specifies how much the optimal total additive genetic effect changes per generation. The optimal total additive genetic effect in a given generation is calculated as: \code{muf + d_bvf *}\code{sqrt(VAf) * (i-2)}. Individuals with total additive genetic effects closest to this optimum have a higher probability of being randomly sampled to be parents of the next generation. This represents selection directly on total additive genetic effects.
+The parameter \code{d_bvf} specifies how much the optimal total additive genetic effect changes per generation. The optimal total additive genetic effect in a given generation is calculated as: \code{muf + d_bvf *}\code{sqrt(VAf) * (i-2)}. Individuals with predicted total additive genetic effects closest to this optimum have a higher probability of being randomly sampled to be parents of the next generation. This represents selection directly on predicted total additive genetic effects.
+
+Total additive genetic effects are predicted for the first generation of focal individuals and all immigrants using equation 1.3 in Mrode (2005, p.3): \eqn{h^{2} * (phenotype_{i} - mean population phenotype)}. The heritability is either \code{VAf} / (\code{VAf + VRf}) or \code{VAi} / (\code{VAi + VRi}). Total additive genetic effects are predicted for all other individuals using equation 1.9 in Mrode (2005, p. 10) - or as the average of each individual's parents' predicted total additive genetic effects.
 }
 
 
@@ -97,12 +99,15 @@ A \code{data.frame} with columns corresponding to:
   \item{u }{Numeric value of each individual's total additive genetic effect}
   \item{r }{Numeric value of each individual's residual (environmental) deviation}
   \item{p }{Numeric value of each individual's phenotypic value}
+  \item{pred.u }{Numeric value of each individual's predited total additive genetic effect}
   \item{is }{Integer of either \code{0} if an individual was born in the focal population or \code{1} if they were born in an immigrant population}
   \item{gen }{Integer value of the generation in which each individual was born}
 }
 
 \references{
 Verrier, V., J.J. Colleau, and J.L. Foulley. 1993. Long-term effects of selection based on the animal model BLUP in a finite population. Theoretical and Applied Genetics. 87:446-454.
+
+Mrode, R.A. 2005. Linear Models for the Prediction of Animal Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 }
 
 \author{\email{matthewwolak@gmail.com}}

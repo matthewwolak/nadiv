@@ -74,6 +74,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
   if(invertD){
     cat("starting to invert D...")
     Dinv <- as(solve(D), "dgCMatrix")
+      Dinv@Dimnames <- D@Dimnames
     cat(".done", "\n")
     listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
