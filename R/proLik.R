@@ -4,6 +4,8 @@ proLik <- function(full.model, component,
 	alpha = 0.05, tolerance = 0.001,
 	parallel = FALSE, ncores = getOption("mc.cores", 2L)){
   s2 <- full.model$sigma2
+  #TODO check if `component` is in  `paste0("V", seq(length(full.model$gammas)))`
+  ## then use `V1` to `Vn` notation `else` code below
   gamma.ind <- which(names(full.model$gammas) == component)
   bound.check <- names(full.model$gammas.con)[gamma.ind]
     warned <- FALSE
