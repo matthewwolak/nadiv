@@ -38,7 +38,7 @@ proLik <- function(full.model, component,
 
   Uint <- c(gamma.est, gamma.est + (nse * std.err))
   Lint <- c(gamma.est - (nse*std.err), gamma.est)
-  if(!negative & Lint[1] < 0) Lint[1] <- Lint[2] / 15
+  if(!negative & Lint[1] < 0) Lint[1] <- 1e-8
   if(negative == TRUE & Uint[2] > 1) Uint[2] <- 0.999999
   if(negative == TRUE & Lint[1] < -1) Lint[1] <- -0.999999
   if(parallel){
