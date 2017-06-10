@@ -39,8 +39,9 @@ proLik <- function(full.model, component,
   Uint <- c(gamma.est, gamma.est + (nse * std.err))
   Lint <- c(gamma.est - (nse*std.err), gamma.est)
   if(!negative & Lint[1] < 0) Lint[1] <- 1e-8
-  if(negative == TRUE & Uint[2] > 1) Uint[2] <- 0.999999
-  if(negative == TRUE & Lint[1] < -1) Lint[1] <- -0.999999
+  #FIXME next two lines assume correlations and won't work for covariance
+  if(negative == TRUE & Uint[2] > 1) Uint[2] <- 1.0 - 1e-8
+  if(negative == TRUE & Lint[1] < -1) Lint[1] <- -1.0 + 1e-8
   if(parallel){
      tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = tolerance), proLik_keep_uniQUe_UCL)))
 
