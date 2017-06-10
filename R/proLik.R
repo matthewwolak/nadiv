@@ -55,7 +55,20 @@ proLik <- function(full.model, component,
      proLik_keep_uniQUe_UCL <- list(gam = tmpUCL.out$gam, lambdas = tmpUCL.out$lambdas)
   }
 
-
+  # Check if CI limits have in fact been found
+  #TODO can below be set in `while` and replace above code so no repetition?
+  ## Tolerance set so LRT stat no further away than 1/2 of an alpha percentile
+  chi.tol <- chi.val - 0.5 * qchisq(alpha + 0.005, df = 1, lower.tail = FALSE)
+  if(all((chi.val - proLik_keep_uniQUe_LCL$lambdas) > chi.tol)){
+    Lext <- chi.val / max(proLik_keep_uniQUe_LCL$lambdas)
+    Lint <- c(gamma.est - (Lext*(nse*std.err) + std.err), gamma.est - (nse*std.err))
+    if(!negative & Lint[1] < 0) Lint[1] <- 1e-8
+    #FIXME next line assumes correlations and won't work for covariance
+    #if(negative == TRUE & Lint[1] < -1) Lint[1] <- -1.0 + 1e-8
+    #TODO does this replace previous LCL: these evaluations should be kept
+    LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = tolerance)
+  }
+  #TODO same as above for UCL
 
   gamma.vec <- c(gamma.est, seq(gamma.est - (gamma.est - LCL$minimum)/2, gamma.est + (UCL$minimum - gamma.est)/2, length.out = nsample.units))
 
