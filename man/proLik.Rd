@@ -63,6 +63,7 @@ An S3 object of class proLik
   \item{UCL }{approximate Upper Confidence Limit}
   \item{LCL }{approximate Lower Confidence Limit}
   \item{component }{the component for which the profile likelihood surface has been constructed}
+  \item{alpha }{the alpha level at which the confidence limits have been calculated}
 }
 
 \author{\email{matthewwolak@gmail.com}}

@@ -100,7 +100,8 @@ proLik <- function(full.model, component,
 	var.estimates = profile$var.estimates[ord.index] * s2, 
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
-	component = component), class = "proLik"))
+	component = component,
+	alpha = alpha), class = "proLik"))
 }
 
 
