@@ -36,8 +36,8 @@ proLik <- function(full.model, component,
       abs(chi - lrt)
   }
   UCL <- LCL <- list(minimum = NA, objective = chi.val)
-  cnt <- 0  #TODO determine if maximum of 3 is enough
-  while(((UCL[[2L]] > chi.tol) + (LCL[[2L]] > chi.tol)) > 0 & cnt < 3){
+  cnt <- 0  #TODO determine if maximum of 2 runs through is enough
+  while(((UCL[[2L]] > chi.tol) + (LCL[[2L]] > chi.tol)) > 0 & cnt < 2){
     if(cnt == 0){
       Uint <- c(gamma.est, gamma.est + (nse * std.err))
       Lint <- c(gamma.est - (nse * std.err), gamma.est)
