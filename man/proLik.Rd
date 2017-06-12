@@ -35,7 +35,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
   \item{ncores }{Argument indicating number of cpu units to use. Default is all available.}
 
   \item{x }{Object of class \code{proLik}.}
-  \item{CL }{A logical indicating whether a line representing the Confidence Limit is to be drawn when plotting.}
+  \item{CL }{A logical indicating whether a lines at the confidence limits are to be drawn when plotting.}
   \item{type, main, xlab, ylab }{See arguments to \code{\link[graphics]{plot}}.}
   \item{\dots }{other arguments to \code{\link[graphics]{plot}}.}
 

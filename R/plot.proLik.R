@@ -13,6 +13,7 @@ plot.proLik <- function(x, CL = TRUE, alpha = NULL, type = "l",
      if(CL){  
         chi <- (0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))
         abline(h = chi, lty = "dotted", col = "red", lwd = 2)
+        abline(v = unlist(x[c("LCL", "UCL")]), lty = "dashed", col = "blue", lwd = 2)
     }  
 }
 
