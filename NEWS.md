@@ -1,5 +1,7 @@
 # 2.15.0
 ## Small changes
+   * `proLik()` now returns `NA` if confidence limits are not, in fact, found (e.g., for boundary parameters, variances that are not significantly greater than zero)
+     * `plot.proLik()` now includes vertical lines to better visualize CIs
    * use lower_bound algorithm for matrix lookup within c++ code
      * based on c++ <algorithm>std::lower_bound 
        * affect `makeAinv()` and `makeD()`
