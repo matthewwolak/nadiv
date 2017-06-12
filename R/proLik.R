@@ -1,7 +1,7 @@
 proLik <- function(full.model, component,
 	G = TRUE, negative = FALSE,
 	nsample.units = 3, nse = 3,
-	alpha = 0.05, tolerance = 0.001,
+	alpha = 0.05, tolerance = 1e-6,
 	parallel = FALSE, ncores = getOption("mc.cores", 2L)){
   s2 <- full.model$sigma2
   #TODO check if `component` is in  `paste0("V", seq(length(full.model$gammas)))`

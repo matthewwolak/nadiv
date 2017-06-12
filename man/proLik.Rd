@@ -13,7 +13,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
 
 \usage{
   proLik(full.model, component, G = TRUE, negative = FALSE, 
-       nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
+       nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 1e-6,
        parallel = FALSE, ncores = getOption("mc.cores", 2L))
 
   \method{is}{proLik}(x)
@@ -29,7 +29,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
   \item{nsample.units }{Number of sample units to be used in constructing the area between the confidence limits for the profile likelihood}
   \item{nse }{Number of standard errors on either side of the estimate, over which the confidence limits should be evaluated.}
   \item{alpha }{The critical value for determining the Confidence Interval}
-  \item{tolerance }{Acceptable distance, between actual sample values and interpolated values, for determining the upper and lower limits of the Confidence Interval. Actual sample points will be no more than this distance from the true value of the estimate.}
+  \item{tolerance }{Acceptable distance between actual and desired minimization criteria for determining the upper and lower limits of the Confidence Interval. Actual likelihood ratio test statistic will be no more than this distance from the value calculated at the \code{alpha} level.}
   \item{parallel }{A logical indicating whether or not parallel processing will be used. Note, may only be available for Mac and Linux operating systems.}
   \item{ncores }{Argument indicating number of cpu units to use. Default is all available.}
 
