@@ -1,10 +1,14 @@
-plot.proLik <- function(x, CL = TRUE, alpha = 0.05, type = "l", ...)
+plot.proLik <- function(x, CL = TRUE, alpha = NULL, type = "l",
+	main = NULL, xlab = NULL, ylab = NULL, ...)
 {
-  if(CL == TRUE & is.null(alpha)) stop("'alpha' must be non-null to include CL in the plot")
-  
+  if(is.null(alpha)) alpha <- x$alpha
+  if(is.null(main)) main <- deparse(substitute(x))
+  if(is.null(xlab)) xlab <- x$component
+  if(is.null(ylab)) ylab <- "LRT statistic"
+
   plot(x$lambdas ~ x$var.estimates,
-     main = deparse(substitute(x)), 
-     xlab = x$component, ylab = "LRT statistic", 
+     main = main, 
+     xlab = xlab, ylab = ylab, 
      type = type, ...)
      if(CL){  
         chi <- (0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))

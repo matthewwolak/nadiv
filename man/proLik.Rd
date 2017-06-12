@@ -18,7 +18,8 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
 
   \method{is}{proLik}(x)
 
-  \method{plot}{proLik}(x, CL = TRUE, alpha = 0.05, type = "l", \dots)
+  \method{plot}{proLik}(x, CL = TRUE, alpha = NULL, type = "l",
+	main = NULL, xlab = NULL, ylab = NULL, \dots)
 }
 
 \arguments{
@@ -35,7 +36,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
 
   \item{x }{Object of class \code{proLik}.}
   \item{CL }{A logical indicating whether a line representing the Confidence Limit is to be drawn when plotting.}
-  \item{type }{The type of plot to be generated, see arguments to \code{\link[graphics]{plot}}.}
+  \item{type, main, xlab, ylab }{See arguments to \code{\link[graphics]{plot}}.}
   \item{\dots }{other arguments to \code{\link[graphics]{plot}}.}
 
 }
