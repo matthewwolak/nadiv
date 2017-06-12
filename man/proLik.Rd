@@ -13,7 +13,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
 
 \usage{
   proLik(full.model, component, G = TRUE, negative = FALSE, 
-       nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 1e-6,
+       nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
        parallel = FALSE, ncores = getOption("mc.cores", 2L))
 
   \method{is}{proLik}(x)
@@ -29,7 +29,7 @@ Estimation, checking, and plotting of profile likelihoods and objects of class \
   \item{nsample.units }{Number of sample units to be used in constructing the area between the confidence limits for the profile likelihood}
   \item{nse }{Number of standard errors on either side of the estimate, over which the confidence limits should be evaluated.}
   \item{alpha }{The critical value for determining the Confidence Interval}
-  \item{tolerance }{Acceptable distance between actual and desired minimization criteria for determining the upper and lower limits of the Confidence Interval. Actual likelihood ratio test statistic will be no more than this distance from the value calculated at the \code{alpha} level.}
+  \item{tolerance }{Acceptable distance between actual and desired minimization criteria for determining the upper and lower limits of the confidence interval. See Details for more}
   \item{parallel }{A logical indicating whether or not parallel processing will be used. Note, may only be available for Mac and Linux operating systems.}
   \item{ncores }{Argument indicating number of cpu units to use. Default is all available.}
 
@@ -47,6 +47,8 @@ For the \code{negative} argument, this should be used if the profile likelihood 
 \code{parallel} = TRUE should only be used on Linux or Mac OSes (i.e., not Windows).
 
 The function uses the \code{optimize} function to obtain the approximate confidence limits. Therefore, \code{nse} should be carefully thought about beforehand when running the function. Increasing this value will ensure the confidence limits are contained by the search space, but at a cost to time. 
+
+\code{tolerance} is expressed in terms of the \code{alpha} value desired. Convergence to a confidence limit will only be achieved when the constrained value proposed for the confidence limit yields a likelihood ratio test statistic that is no worse than \code{alpha + tolerance}.
 
 If \code{negative} is FALSE, and the lower bound of the sampling interval extends beyond zero, this will instead be set to effectively zero.
 
