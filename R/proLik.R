@@ -79,14 +79,14 @@ proLik <- function(full.model, component,
     #FIXME next two lines assume correlations and won't work for covariance
     if(negative == TRUE & Uint[2L] > 1) Uint[2L] <- 1.0 - 1e-8
     if(negative == TRUE & Lint[1L] < -1) Lint[1L] <- -1.0 + 1e-8
-#TODO re-arrange so if(parallel) is lower level than if UCL > chi.tol
-    if(parallel & UCL[[2L]] > chi.tol){
-       tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = utol), proLik_keep_uniQUe_UCL)))
-    } else{
-        if(UCL[[2L]] > chi.tol){
+
+    if(UCL[[2L]] > chi.tol){
+      if(parallel){
+        tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = utol), proLik_keep_uniQUe_UCL)))
+      } else{
           UCL <- optimize(f = tmpLRTU, interval = Uint, chi = chi.val, tol = utol)
         }
-      }
+    }
     if(LCL[[2L]] > chi.tol){
       LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = ltol)
     }
