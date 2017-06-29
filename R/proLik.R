@@ -36,19 +36,42 @@ proLik <- function(full.model, component,
       abs(chi - lrt)
   }
   UCL <- LCL <- list(minimum = NA, objective = chi.val)
-  cnt <- 0  #TODO determine if maximum of 2 runs through is enough
-  while(((UCL[[2L]] > chi.tol) + (LCL[[2L]] > chi.tol)) > 0 & cnt < 2){
+  ltol <- utol <- .Machine$double.eps^0.25
+  cnt <- 0
+  # Are 3 iterations of `while()` sufficient?
+  ## with `optim(tol=...)` changed by 2 decimal places each successive try?
+  while(((UCL[[2L]] > chi.tol) + (LCL[[2L]] > chi.tol)) > 0 & cnt < 3){
     if(cnt == 0){
       Uint <- c(gamma.est, gamma.est + (nse * std.err))
       Lint <- c(gamma.est - (nse * std.err), gamma.est)
     } else{
         if(UCL[[2L]] > chi.tol){
-          Uext <- chi.val / max(proLik_keep_uniQUe_UCL$lambdas)
-          Uint <- c(gamma.est + (nse * std.err), gamma.est + (Uext*(nse*std.err) + std.err))
+	  if(with(proLik_keep_uniQUe_UCL, any(lambdas > chi.val) && any(lambdas < chi.val))){
+	    Uint <- with(proLik_keep_uniQUe_UCL, c(gam[which.min(ifelse((chi.val - lambdas) > 0, (chi.val - lambdas), Inf))], gam[which.min(ifelse((lambdas - chi.val) > 0, (lambdas - chi.val), Inf))]))
+	  } else{
+              Uext <- chi.val / max(proLik_keep_uniQUe_UCL$lambdas)
+              Uint <- c(gamma.est + (nse * std.err), gamma.est + (Uext*(nse*std.err) + std.err))
+            }
+          # Adjust `optimize()` tolerance: see details in `?optimize`
+#TODO could make `optimize(tol)` argument correspond more directly with `proLik(tolerance)`
+## Use default `tol` in first pass
+## then see, given approx. quadratic relationship between `gam` and `lambdas`
+## what `optimize(tol)` needed to find `gam` value giving `lambda` within `tolerance`/`chi.tol` of `chi.val`
+          x_0 <- with(proLik_keep_uniQUe_UCL, gam[which.min(abs(chi.val - lambdas))])
+          d <- sqrt(.Machine$double.eps) * abs(x_0) + ((utol)/3)
+          if(d > 1e-6) ltol <- 3*(d*0.01 - sqrt(.Machine$double.eps * x_0^2))
         }
         if(LCL[[2L]] > chi.tol){
-          Lext <- chi.val / max(proLik_keep_uniQUe_LCL$lambdas)
-          Lint <- c(gamma.est - (Lext*(nse*std.err) + std.err), gamma.est - (nse*std.err))
+	  if(with(proLik_keep_uniQUe_LCL, any(lambdas > chi.val) && any(lambdas < chi.val))){
+	    Lint <- with(proLik_keep_uniQUe_LCL, c(gam[which.min(ifelse((lambdas - chi.val) > 0, (lambdas - chi.val), Inf))], gam[which.min(ifelse((chi.val - lambdas) > 0, (chi.val - lambdas), Inf))]))
+	  } else{
+              Lext <- chi.val / max(proLik_keep_uniQUe_LCL$lambdas)
+              Lint <- c(gamma.est - (Lext*(nse*std.err) + std.err), gamma.est - (nse*std.err))
+            }
+          # Adjust `optimize()` tolerance: see details in `?optimize`
+          x_0 <- with(proLik_keep_uniQUe_LCL, gam[which.min(abs(chi.val - lambdas))])
+          d <- sqrt(.Machine$double.eps) * abs(x_0) + ((ltol)/3)
+          if(d > 1e-6) ltol <- 3*(d*0.01 - sqrt(.Machine$double.eps * x_0^2))
         }          
       }
     if(!negative & Lint[1L] < 0) Lint[1L] <- 1e-8
@@ -56,15 +79,16 @@ proLik <- function(full.model, component,
     #FIXME next two lines assume correlations and won't work for covariance
     if(negative == TRUE & Uint[2L] > 1) Uint[2L] <- 1.0 - 1e-8
     if(negative == TRUE & Lint[1L] < -1) Lint[1L] <- -1.0 + 1e-8
+#TODO re-arrange so if(parallel) is lower level than if UCL > chi.tol
     if(parallel & UCL[[2L]] > chi.tol){
-       tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val), proLik_keep_uniQUe_UCL)))
+       tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU, interval = Uint, chi = chi.val, tol = utol), proLik_keep_uniQUe_UCL)))
     } else{
         if(UCL[[2L]] > chi.tol){
-          UCL <- optimize(f = tmpLRTU, interval = Uint, chi = chi.val)
+          UCL <- optimize(f = tmpLRTU, interval = Uint, chi = chi.val, tol = utol)
         }
       }
     if(LCL[[2L]] > chi.tol){
-      LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val)
+      LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = ltol)
     }
     if(parallel & UCL[[2L]] > chi.tol){
       tmpUCL.out <- parallel::mccollect(tmpUCL, wait = TRUE)[[1]]
@@ -103,6 +127,7 @@ proLik <- function(full.model, component,
 	component = component,
 	alpha = alpha), class = "proLik"))
 }
+
 
 
 is.proLik <- function(x) inherits(x, "proLik")
