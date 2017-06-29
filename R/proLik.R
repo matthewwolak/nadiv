@@ -96,7 +96,7 @@ proLik <- function(full.model, component,
       proLik_keep_uniQUe_UCL <- list(gam = tmpUCL.out$gam, lambdas = tmpUCL.out$lambdas)
     }
     cnt <- cnt + 1
-  }
+  }  #<-- end `while()`
 
   gamma.vec <- c(gamma.est, seq(gamma.est - (gamma.est - LCL$minimum)/2, gamma.est + (UCL$minimum - gamma.est)/2, length.out = nsample.units))
 
