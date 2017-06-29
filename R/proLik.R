@@ -102,14 +102,14 @@ proLik <- function(full.model, component,
 
   if(parallel){
     if(length(gamma.vec) < ncores) ncores <- length(gamma.vec)
-    profile <- list(lambdas = parallel::pvec(v = seq(1,length(gamma.vec),1), FUN = parConstrainFun, parameters = gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE), var.estimates = gamma.vec)
+    prof <- list(lambdas = parallel::pvec(v = seq(1,length(gamma.vec),1), FUN = parConstrainFun, parameters = gamma.vec, full = full.model, fm2 = full.mod2, comp = component, G = G, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE), var.estimates = gamma.vec)
     } else{
-    profile <- list(lambdas = vapply(gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G), var.estimates = gamma.vec)
+    prof <- list(lambdas = vapply(gamma.vec, FUN = constrainFun, FUN.VALUE = vector("numeric", length = 1), full = full.model, fm2 = full.mod2, comp = component, G = G), var.estimates = gamma.vec)
       }
 
-  profile$var.estimates <- c(profile$var.estimates, proLik_keep_uniQUe_LCL$gam, proLik_keep_uniQUe_UCL$gam)
-  profile$lambdas <- c(profile$lambdas, proLik_keep_uniQUe_LCL$lambdas, proLik_keep_uniQUe_UCL$lambdas)
-  ord.index <- order(profile$var.estimates)
+  prof$var.estimates <- c(prof$var.estimates, proLik_keep_uniQUe_LCL$gam, proLik_keep_uniQUe_UCL$gam)
+  prof$lambdas <- c(prof$lambdas, proLik_keep_uniQUe_LCL$lambdas, proLik_keep_uniQUe_UCL$lambdas)
+  ord.index <- order(prof$var.estimates)
 
     if(!negative & LCL$minimum < 0.01 & !warned){
       warning("Boundary parameter: confidence interval estimation may produce strange behavior - proceed with caution)")
@@ -120,8 +120,8 @@ proLik <- function(full.model, component,
   if(LCL[[2L]] > chi.tol) LCL[[1L]] <- NA
 
 
- return(structure(list(lambdas = profile$lambdas[ord.index], 
-	var.estimates = profile$var.estimates[ord.index] * s2, 
+ return(structure(list(lambdas = prof$lambdas[ord.index], 
+	var.estimates = prof$var.estimates[ord.index] * s2, 
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
 	component = component,
