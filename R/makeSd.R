@@ -77,7 +77,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
      Sd@i <- Cout[[8]][1:Cout[[10]]]
      Sd@p <- c(Cout[[9]], Cout[[10]])
      Sd@x <- Cout[[7]][1:Cout[[10]]]
-     diag(Sd) <- 1 - Sout$inbreeding
+     diag(Sd) <- sex - Sout$inbreeding
 
      if(!returnS) S <- NULL
      rm("Cout")
