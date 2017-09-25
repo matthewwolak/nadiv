@@ -57,7 +57,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 
   if(!parallel){
      cat("starting to make Sd...")
-browser()
+
      Cout <- .C("sdij",
                 as.integer(nPed[, 2] - 1), 
 		as.integer(nPed[, 3] - 1), 
