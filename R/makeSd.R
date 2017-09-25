@@ -1,5 +1,5 @@
-rm(list = ls())
-library(nadiv)
+#rm(list = ls())
+#library(nadiv)
 
 
 makeSdR <- function(pedigree, heterogametic,
@@ -56,75 +56,79 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
      cat("starting to make Sd...")
 
      Cout <- .C("sdij",
-                as.integer(numeric.pedigree[, 2] - 1), 
-		as.integer(numeric.pedigree[, 3] - 1), 
-		as.integer(A@i), 			
-		as.integer(A@p),                        
-		as.double(A@x/2),                       
+                as.integer(nPed[, 2] - 1), 
+		as.integer(nPed[, 3] - 1), 
+		as.integer(Sout$S@i), 			
+		as.integer(Sout$S@p),                        
+		as.double(Sout$S@x/2),                       
 		as.integer(N),                           
-		as.double(rep(0, length(A@x))),         
-		as.integer(rep(0, length(A@i))),        
+		as.double(rep(0, length(Sout$S@x))),         
+		as.integer(rep(0, length(Sout$S@i))),        
                 as.integer(rep(0, N)),                  
-		as.integer(0))	                        
+		as.integer(0),
+		as.integer(sex))	                        
 
-     D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
-     D@uplo <- "U"
-     D@i <- Cout[[8]][1:Cout[[10]]]
-     D@p <- c(Cout[[9]], Cout[[10]])
-     D@x <- Cout[[7]][1:Cout[[10]]]
-     diag(D) <- 2 - dA
+     Sd <- Matrix(0, N, N,
+	sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
+     Sd@uplo <- "U"
+     Sd@i <- Cout[[8]][1:Cout[[10]]]
+     Sd@p <- c(Cout[[9]], Cout[[10]])
+     Sd@x <- Cout[[7]][1:Cout[[10]]]
+     diag(Sd) <- 1 - Sout$inbreeding
 
-     if(!returnA) A <- NULL
+     if(!returnS) Sout$S <- NULL
      rm("Cout")
 
    } else{
-        listA <- data.frame(Row = as.integer(rep(1:length(A@p[-1]), diff(A@p))), Column = as.integer(A@i + 1))
-        wrap_dij <- function(x){
-           sub_lA <- listA[min(x):max(x), 1:2]
-           lA_r <- dim(sub_lA)[1]
-           Cout <- .C("dijp",
-		as.integer(numeric.pedigree[, 2] - 1),
-		as.integer(numeric.pedigree[, 3] - 1), 
-                as.integer(lA_r),  
-		as.integer(sub_lA[, 1] - 1),  
-		as.integer(sub_lA[, 2] - 1),  
-		as.integer(A@i),  
-		as.integer(A@p), 
-		as.double(A@x/2),  
-		as.double(rep(0, lA_r)))
-         Cout[[9]]
-        }
+stop("code not written to parallelize function") #FIXME
+#        listA <- data.frame(Row = as.integer(rep(1:length(A@p[-1]), diff(A@p))), Column = as.integer(A@i + 1))
+#        wrap_dij <- function(x){
+#           sub_lA <- listA[min(x):max(x), 1:2]
+#           lA_r <- dim(sub_lA)[1]
+#           Cout <- .C("dijp",
+#		as.integer(numeric.pedigree[, 2] - 1),
+#		as.integer(numeric.pedigree[, 3] - 1), 
+#                as.integer(lA_r),  
+#		as.integer(sub_lA[, 1] - 1),  
+#		as.integer(sub_lA[, 2] - 1),  
+#		as.integer(A@i),  
+#		as.integer(A@p), 
+#		as.double(A@x/2),  
+#		as.double(rep(0, lA_r)))
+#         Cout[[9]]
+#        }
 
-        cat("starting to make D...")
-        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
+#        cat("starting to make D...")
+#        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
-        D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
-        D@uplo <- "U"
-        D@i <- A@i
-        D@p <- A@p
-        if(!returnA) A <- NULL
-        D@x <- Dijs
-        D <- drop0(D)
-        diag(D) <- 2 - dA
+#        D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
+#        D@uplo <- "U"
+#        D@i <- A@i
+#        D@p <- A@p
+#        if(!returnA) A <- NULL
+#        D@x <- Dijs
+#        D <- drop0(D)
+#        diag(D) <- 2 - dA
 
      }
 
   cat(".done", "\n")
   
-  if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
-  if(invertD){
-    cat("starting to invert D...")
-    Dinv <- as(solve(D), "dgCMatrix")
-      Dinv@Dimnames <- D@Dimnames
+  if(det) logDet <- determinant(Sd, logarithm = TRUE)$modulus[1] else logDet <- NULL
+  if(invertSd){
+    cat("starting to invert Sd...")
+    Sdinv <- as(solve(Sd), "dgCMatrix")
+      Sdinv@Dimnames <- Sd@Dimnames
     cat(".done", "\n")
-    listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
- return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
+    listSdinv <- sm2list(Sdinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
+ return(list(S = Sout$S, Sd = Sd, logDet = logDet, Sdinv=Sdinv, listSdinv=listSdinv))
   } else{
-    return(list(A = A, D = D, logDet = logDet))
+    return(list(S = Sout$S, Sd = Sd, logDet = logDet))
     } 
 
 #What is diagonal for heterogameitc sex?
 ## Should the matrix just be for those of 1 sex? Or can I automatically prune to 1 sex
+### Model should probably just be for the 1 sex
 ## What about all forms of dosage compensation?
 
 
@@ -132,7 +136,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 
 
 ################################################################################
-makeSdR(FG90, heterogametic = "0", returnS = TRUE)
+#makeSdR(FG90, heterogametic = "0", returnS = TRUE)
 
 
 
