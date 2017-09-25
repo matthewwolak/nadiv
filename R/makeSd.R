@@ -30,6 +30,9 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 
   Sout <- makeS(cbind(nPed, pedigree[, 4]), heterogametic = heterogametic,
 	DosageComp = dc.model, returnS = returnS)
+  # makeA() returns `dsCMatrix`, but S is `dgCMatrix`
+  ## makeD()-like code expects symmetric matrix
+  S <- forceSymmetric(Sout$S)
 
   damsex <- pedigree[unique(nPed[, 2])[-1], 4]
   if(any(damsex == heterogametic)){
@@ -46,7 +49,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
   N2 <- N + 1 #TODO necessary?
 #FIXME turned off next check so can test parallel=TRUE on small pedigrees
 #  if(parallel){
-#    if(length(Sout$S@x)/ncores < 10){
+#    if(length(S@x)/ncores < 10){
 #      warning("pedigree too small - 'parallel' set to FALSE instead")
 #      parallel <- FALSE
 #    }
@@ -54,16 +57,16 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 
   if(!parallel){
      cat("starting to make Sd...")
-
+browser()
      Cout <- .C("sdij",
                 as.integer(nPed[, 2] - 1), 
 		as.integer(nPed[, 3] - 1), 
-		as.integer(Sout$S@i), 			
-		as.integer(Sout$S@p),                        
-		as.double(Sout$S@x/2),                       
+		as.integer(S@i), 			
+		as.integer(S@p),                        
+		as.double(S@x/2),                       
 		as.integer(N),                           
-		as.double(rep(0, length(Sout$S@x))),         
-		as.integer(rep(0, length(Sout$S@i))),        
+		as.double(rep(0, length(S@x))),         
+		as.integer(rep(0, length(S@i))),        
                 as.integer(rep(0, N)),                  
 		as.integer(0),
 		as.integer(sex))	                        
@@ -76,7 +79,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
      Sd@x <- Cout[[7]][1:Cout[[10]]]
      diag(Sd) <- 1 - Sout$inbreeding
 
-     if(!returnS) Sout$S <- NULL
+     if(!returnS) S <- NULL
      rm("Cout")
 
    } else{
@@ -121,9 +124,9 @@ stop("code not written to parallelize function") #FIXME
       Sdinv@Dimnames <- Sd@Dimnames
     cat(".done", "\n")
     listSdinv <- sm2list(Sdinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
- return(list(S = Sout$S, Sd = Sd, logDet = logDet, Sdinv=Sdinv, listSdinv=listSdinv))
+ return(list(S = S, Sd = Sd, logDet = logDet, Sdinv=Sdinv, listSdinv=listSdinv))
   } else{
-    return(list(S = Sout$S, Sd = Sd, logDet = logDet))
+    return(list(S = S, Sd = Sd, logDet = logDet))
     } 
 
 #What is diagonal for heterogameitc sex?
