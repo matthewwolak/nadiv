@@ -8,7 +8,6 @@ makeSd <- function(pedigree, heterogametic,
 
 
   if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
-  nPed <- numPed(pedigree[, 1:3])
 
   dc.model <- match.arg(DosageComp)
   if(is.null(dc.model)){
@@ -27,12 +26,13 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
   stop("Currently only supporting 'ngdc' model")
 }
 
-  Sout <- makeS(cbind(nPed, pedigree[, 4]), heterogametic = heterogametic,
+  Sout <- makeS(pedigree, heterogametic = heterogametic,
 	DosageComp = dc.model, returnS = returnS)
   # makeA() returns `dsCMatrix`, but S is `dgCMatrix`
   ## makeD()-like code expects symmetric matrix
   S <- forceSymmetric(Sout$S)
 
+  nPed <- numPed(pedigree[, 1:3])
   damsex <- pedigree[unique(nPed[, 2])[-1], 4]
   if(any(damsex == heterogametic)){
     pedname <- names(pedigree)
