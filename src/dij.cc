@@ -252,9 +252,8 @@ void sdij(
 ){         
 
   int     lb, step, it, k, j, m, kDam, kSire, jDam, jSire;
-  double rmmp, rffp, rmfp, rfmp, dij_tmp, one_sqrt_two;
+  double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
-  one_sqrt_two = 1.0 / sqrt(2.0);
   for(k = 0; k < nAP[0]; k++){  // iterate through each column of "S" called "A"
     Dp[k] = cnt[0];
     if(sex[k] == 1){
@@ -282,7 +281,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m] * one_sqrt_two;
+               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];
 
 
                m = pAP[max(kDam, jDam)];
@@ -310,7 +309,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m] * one_sqrt_two;
+               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];
 
 
                m = pAP[max(kSire, jSire)];
@@ -327,7 +326,7 @@ void sdij(
                if(iAP[m] == min(kSire, jSire)) rffp += xAP[m];
 
 
-               dij_tmp = (rmmp*rffp) + (rmfp*rfmp);
+               dij_tmp = (rmmp*rffp) + (0.5*rmfp*rfmp);
                if(dij_tmp != 0.0){
                   dij[cnt[0]] = dij_tmp;   
                   Di[cnt[0]] = iAP[j];
