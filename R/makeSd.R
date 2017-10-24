@@ -127,10 +127,9 @@ stop("code not written to parallelize function") #FIXME
     return(list(S = S, Sd = Sd, logDet = logDet))
     } 
 
-#What is diagonal for heterogameitc sex?
-## Should the matrix just be for those of 1 sex? Or can I automatically prune to 1 sex
-### Model should probably just be for the 1 sex
-## What about all forms of dosage compensation?
+# Matrix/model should just be for the 1 homogametic sex
+## Make sure rownames are attached for both matrices (e.g., Sd and Sdinv) and list (e.g., listSdinv)
+# What about all forms of dosage compensation?
 
 
 }
