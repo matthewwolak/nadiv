@@ -1,5 +1,4 @@
-#rm(list = ls())
-#library(nadiv)
+#rm(list = ls()); library(nadiv)
 
 
 makeSd <- function(pedigree, heterogametic,
@@ -33,7 +32,6 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
   # makeA() returns `dsCMatrix`, but S is `dgCMatrix`
   ## makeD()-like code expects symmetric matrix
   S <- forceSymmetric(Sout$S)
-browser() #TODO check why S from Sout differs from the above S (after forceSymmetric)
 
   damsex <- pedigree[unique(nPed[, 2])[-1], 4]
   if(any(damsex == heterogametic)){
