@@ -61,7 +61,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 		as.integer(nPed[, 3] - 1), 		# [[2]] sire ID/No.
 		as.integer(S@i), 			# [[3]] S@i
 		as.integer(S@p),                        # [[4]] S@p
-		as.double(S@x/2),                       # [[5]] S@x
+		as.double(S@x),                       # [[5]] S@x
 		as.integer(N),                          # [[6]] No. in pedigree
 		as.double(rep(0, length(S@x))),         # [[7]] Sd@x
 		as.integer(rep(0, length(S@i))),        # [[8]] Sd@i
