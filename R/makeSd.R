@@ -2,7 +2,7 @@
 #library(nadiv)
 
 
-makeSdR <- function(pedigree, heterogametic,
+makeSd <- function(pedigree, heterogametic,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
 	invertSd = TRUE, returnS = FALSE, det = TRUE){
@@ -33,6 +33,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
   # makeA() returns `dsCMatrix`, but S is `dgCMatrix`
   ## makeD()-like code expects symmetric matrix
   S <- forceSymmetric(Sout$S)
+browser() #TODO check why S from Sout differs from the above S (after forceSymmetric)
 
   damsex <- pedigree[unique(nPed[, 2])[-1], 4]
   if(any(damsex == heterogametic)){
@@ -46,7 +47,6 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
   sex[homs <- which(pedigree[,4] != heterogametic)] <- 1
   sex[hets <- which(pedigree[,4] == heterogametic)] <- 0
   N <- dim(nPed)[1L]
-  N2 <- N + 1 #TODO necessary?
 #FIXME turned off next check so can test parallel=TRUE on small pedigrees
 #  if(parallel){
 #    if(length(S@x)/ncores < 10){
@@ -77,7 +77,7 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
      Sd@i <- Cout[[8]][1:Cout[[10]]]
      Sd@p <- c(Cout[[9]], Cout[[10]])
      Sd@x <- Cout[[7]][1:Cout[[10]]]
-     diag(Sd) <- sex - Sout$inbreeding
+     diag(Sd) <- 1 - Sout$inbreeding
 
      if(!returnS) S <- NULL
      rm("Cout")
@@ -139,7 +139,11 @@ stop("code not written to parallelize function") #FIXME
 
 
 ################################################################################
-#makeSdR(FG90, heterogametic = "0", returnS = TRUE)
+makeSd(FG90, heterogametic = "0", returnS = TRUE)
+
+pedFS <- simPedHS(1, 1, 4)
+makeSd(pedFS, heterogametic = "M", returnS = TRUE)
+
 
 
 
