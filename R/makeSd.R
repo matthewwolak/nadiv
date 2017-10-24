@@ -28,8 +28,8 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
 
   Sout <- makeS(pedigree, heterogametic = heterogametic,
 	DosageComp = dc.model, returnS = returnS)
-  # makeA() returns `dsCMatrix`, but S is `dgCMatrix`
-  ## makeD()-like code expects symmetric matrix
+  # makeA() returns `dsCMatrix`, but S is `dgCMatrix` from above
+  ## makeD()-like code below expects symmetric matrix ('dsCMatrix')
   S <- forceSymmetric(Sout$S)
 
   nPed <- numPed(pedigree[, 1:3])
@@ -57,17 +57,17 @@ if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
      cat("starting to make Sd...")
 
      Cout <- .C("sdij",
-                as.integer(nPed[, 2] - 1), 
-		as.integer(nPed[, 3] - 1), 
-		as.integer(S@i), 			
-		as.integer(S@p),                        
-		as.double(S@x/2),                       
-		as.integer(N),                           
-		as.double(rep(0, length(S@x))),         
-		as.integer(rep(0, length(S@i))),        
-                as.integer(rep(0, N)),                  
-		as.integer(0),
-		as.integer(sex))	                        
+                as.integer(nPed[, 2] - 1), 		# [[1]] dam ID/No.
+		as.integer(nPed[, 3] - 1), 		# [[2]] sire ID/No.
+		as.integer(S@i), 			# [[3]] S@i
+		as.integer(S@p),                        # [[4]] S@p
+		as.double(S@x/2),                       # [[5]] S@x
+		as.integer(N),                          # [[6]] No. in pedigree
+		as.double(rep(0, length(S@x))),         # [[7]] Sd@x
+		as.integer(rep(0, length(S@i))),        # [[8]] Sd@i
+                as.integer(rep(0, N)),                  # [[9]] Sd@p
+		as.integer(0),				# [[10]] cnt/count
+		as.integer(sex))	      		# [[11]] sex                  
 
      Sd <- Matrix(0, N, N,
 	sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
@@ -137,10 +137,10 @@ stop("code not written to parallelize function") #FIXME
 
 
 ################################################################################
-makeSd(FG90, heterogametic = "0", returnS = TRUE)
+#makeSd(FG90, heterogametic = "0", returnS = TRUE)
 
-pedFS <- simPedHS(1, 1, 4)
-makeSd(pedFS, heterogametic = "M", returnS = TRUE)
+#pedFS <- simPedHS(1, 1, 4)
+#makeSd(pedFS, heterogametic = "M", returnS = TRUE)
 
 
 
