@@ -15,11 +15,10 @@ makeSd <- function(pedigree, heterogametic,
     dc.model <- "ngdc"
   }
   #TODO check if can have dominance under hori
-  #TODO check if any inbreeding effects in hets for hedo (don't think so)
-  #TODO check if any inbreeding effects in hoha
+  #TODO NO inbreeding effects in hets for hedo
+  #TODO NO inbreeding effects in hoha
   if(dc.model == "hopi"){
-    #TODO check this is right
-    cat("Assume that dominance allelic interactions cannot occur under 'hopi'\n")
+    cat("Assume that sex chromosomal dominance allelic interactions do not occur under 'hopi'\n")
     return(NULL)
   }
 if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
