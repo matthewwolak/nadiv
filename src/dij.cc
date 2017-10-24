@@ -281,7 +281,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];
+               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];// TODO add L_ij adjustment
 
 
                m = pAP[max(kDam, jDam)];
@@ -309,7 +309,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];
+               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];// TODO add L_ij adjustment
 
 
                m = pAP[max(kSire, jSire)];
@@ -323,7 +323,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kSire, jSire)) rffp += xAP[m];
+               if(iAP[m] == min(kSire, jSire)) rffp += xAP[m] * 2.0;
 
 
                dij_tmp = (rmmp*rffp) + (0.5*rmfp*rfmp);
