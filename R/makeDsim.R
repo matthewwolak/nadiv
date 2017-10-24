@@ -8,7 +8,6 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
   alleles <- matrix(as.integer(-998), nrow = n, ncol=2) 
   dfounders <- which(nPed[, 2] == -998)
   sfounders <- which(nPed[, 3] == -998)
-  uniqp <- c(unique(nPed[, 2])[-1], unique(nPed[, 3])[-1])
   ndfounders <- length(dfounders)
   
   alleles[dfounders, 1] <- as.integer(seq(1, ndfounders, 1)) 
