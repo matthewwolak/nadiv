@@ -2,7 +2,7 @@
 
 extern "C"{  
 
-void dsim(int *da,
+void sdsim(int *da,
 	int *sa,
         int *eN,
 	int *en,

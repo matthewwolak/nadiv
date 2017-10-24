@@ -2,25 +2,62 @@ makeDsim <- function(pedigree, heterogametic, N,
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
 	invertSd = TRUE, calcSE = FALSE, returnS = FALSE){
 
-  approxSd <- makeSd(pedigree, heterogametic = heterogametic, DosageComp = DosageComp,
-	parallel = parallel, ncores = ncores,
-	invertSd = invertSd, returnS = returnS, det = TRUE)
-  lapproxSd <- summary(approxSd$Sd)
+  if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
 
+  dc.model <- match.arg(DosageComp)
+  if(is.null(dc.model)){
+    warning("Assuming 'ngdc' dosage compensation model")
+    dc.model <- "ngdc"
+  }
+  #TODO check if can have dominance under hori
+  #TODO NO inbreeding effects in hets for hedo
+  #TODO NO inbreeding effects in hoha
+  if(dc.model == "hopi"){
+    cat("Assume that sex chromosomal dominance allelic interactions do not occur under 'hopi'\n")
+    return(NULL)
+  }
+if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
+  stop("Currently only supporting 'ngdc' model")
+}
+
+  n <- dim(pedigree)[1L]
   nPed <- numPed(pedigree)
-  n <- dim(pedigree)[1]
-  alleles <- matrix(as.integer(-998), nrow = n, ncol=2) 
+  damsex <- pedigree[unique(nPed[, 2])[-1], 4]
+  if(any(damsex == heterogametic)){
+    pedname <- names(pedigree)
+    pedigree <- pedigree[, c(1,3,2,4)]
+    names(pedigree) <- pedname
+    nPed <- numPed(pedigree[, 1:3])
+   cat("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system\n")
+  } else cat("Assuming male heterogametic (e.g., XX/XY) sex chromosome system\n")
+  sex <- rep(-998, n)
+  sex[homs <- which(pedigree[,4] != heterogametic)] <- 1
+  sex[hets <- which(pedigree[,4] == heterogametic)] <- 0
+
+  # diverges from `makeDsim()` and follows simplifications in `geneDrop()`
   dfounders <- which(nPed[, 2] == -998)
   sfounders <- which(nPed[, 3] == -998)
-  uniqp <- c(unique(nPed[, 2])[-1], unique(nPed[, 3])[-1])
-  ndfounders <- length(dfounders)
-  
-  alleles[dfounders, 1] <- as.integer(seq(1, ndfounders, 1)) 
-  alleles[sfounders, 2] <- as.integer(seq(ndfounders+1, (ndfounders + length(sfounders)), 1))
-  dalleles <- rep(alleles[, 1], each = N)
-  salleles <- rep(alleles[, 2], each = N)
+  dalleles <- salleles <- vector("integer", length = n)
+
+  dalleles[dfounders] <- as.integer(dfounders)
+  salleles[sfounders] <- as.integer(sfounders)
+  Ndalleles <- rep(dalleles, each = N)
+  Nsalleles <- rep(salleles, each = N)
   
   cat("making Sdsim ...")
+
+  # diversion to calculate maximum expected entries in sex-chromosome D matrix
+  ## based on calculation for sex-chromosome S matrix (additive)
+  dnmiss <- which(nPed[, 2] != -998 & sex == 1)
+  snmiss <- which(nPed[, 3] != -998 & sex == 1)
+  bnmiss <- which(nPed[, 2] != -998 & nPed[, 3] != -998 & sex == 1)
+  nSd <- sum(sex) + 2 * length(dnmiss) + 2 * length(snmiss)
+  nSd <- nSd + 2 * sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
+
+
+#TODO LEFT OFF HERE 2017-10-24
+
+
 
   Cout <- .C("sdsim",
 	as.integer(dalleles),
