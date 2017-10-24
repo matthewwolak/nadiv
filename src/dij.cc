@@ -255,8 +255,8 @@ void sdij(
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
   for(k = 0; k < nAP[0]; k++){  // iterate through each column of "S" called "A"
+    Dp[k] = cnt[0];
     if(sex[k] == 1){
-      Dp[k] = cnt[0];
       kDam = dam[k];
       kSire = sire[k];
       if((kDam != -999) && (kSire != -999)){
