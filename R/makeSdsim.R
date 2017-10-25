@@ -90,12 +90,6 @@ makeSdsim <- function(pedigree, heterogametic, N,
   cat(".done", "\n")
   logDetSdsim <- determinant(Sdsim, logarithm = TRUE)$modulus[1]
 
-
-
-#XXX LEFT OFF HERE!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!11  
-
-
-
   if(invertSd){
     cat("inverting Sdsim ...")
     Sdsiminv <- solve(Sdsim)
@@ -104,14 +98,16 @@ makeSdsim <- function(pedigree, heterogametic, N,
     listSdsiminv <- sm2list(Sdsiminv, rownames = Sdsim@Dimnames[[1L]],
 	colnames = c("row", "column", "simSdinverse"))
     Sdsim <- as(Sdsim, "dgCMatrix")
-#FIXME decide what to do with approximate objects
-#    return(list(S = approxSd$S, Sd = approxSd$Sd, logDetSd = approxSd$logDet, Sdinv = approxSd$Sdinv, listSdinv = approxSd$listSdinv, Sdsim = Sdsim, logDetSdsim = logDetSdsim, Sdsiminv = Sdsiminv, listSdsim = listSdsim, listSdsiminv = listSdsiminv))
-#  } else{
-#      return(list(S = approxSd$S, Sd = approxSd$Sd, logDetSd = approxSd$logDet, Sdsim = Sdsim, logDetSdsim = logDetSdsim, listSdsim = listSdsim))
-#    } 
-    return(list(Sdsim = Sdsim, logDetSdsim = logDetSdsim, Sdsiminv = Sdsiminv, listSdsim = listSdsim, listSdsiminv = listSdsiminv))
+
+    return(list(S = approxSd$S,
+	Sd = approxSd$Sd, logDetSd = approxSd$logDet,
+	Sdinv = approxSd$Sdinv, listSdinv = approxSd$listSdinv,
+	Sdsim = Sdsim, logDetSdsim = logDetSdsim,
+	Sdsiminv = Sdsiminv, listSdsim = listSdsim, listSdsiminv = listSdsiminv))
   } else{
-      return(list(Sdsim = Sdsim, logDetSdsim = logDetSdsim, listSdsim = listSdsim))
+      return(list(S = approxSd$S,
+		Sd = approxSd$Sd, logDetSd = approxSd$logDet,
+		Sdsim = Sdsim, logDetSdsim = logDetSdsim, listSdsim = listSdsim))
     } 
 
 
