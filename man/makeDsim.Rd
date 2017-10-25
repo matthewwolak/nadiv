@@ -77,6 +77,7 @@ This simulation can take a long time for large pedigrees (a few thousand and hig
 \examples{
   simD <- makeDsim(Mrode9, N = 1000, parallel = FALSE,
 		invertD = TRUE, calcSE = TRUE)$listDsim
+
   simSd <- makeSdsim(FG90, heterogametic = "0", N = 1000, parallel = FALSE,
 		invertSd = TRUE, calcSE = TRUE)$listSdsim
 }
