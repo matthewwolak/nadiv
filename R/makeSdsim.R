@@ -30,6 +30,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
   sex[hets <- which(pedigree[,4] == heterogametic)] <- 0
   nhom <- sum(sex)  # Number of individuals with homogametic sex chromosomes
 
+  #TODO delete next note once consolidated 'gene dropping' functions/code
   # diverges from `makeDsim()` and follows simplifications in `geneDrop()`
   dfounders <- which(nPed[, 2] == -998)
   sfounders <- which(nPed[, 3] == -998 & sex == 1)
@@ -62,7 +63,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
 	as.integer(rep(0, n+1)),      # [[9]] p slot of matrix
 	as.integer(rep(0, nSd)))      # [[10]] x slot of matrix
 
-  nSd <- Cout[[9]][nhom+1]  # make new to reflect actual number of values calculated
+  nSd <- Cout[[9]][nhom+1]  # change to reflect actual number of non-zeroes
   Sdsim <- Matrix(0, nhom, nhom, sparse = TRUE, dimnames = list(as.character(pedigree[homs, 1]), NULL))
   Sdsim@uplo <- "U"
   Sdsim@i <- Cout[[8]][1:nSd]
@@ -82,7 +83,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
   if(calcSE) {
 #TODO check that this is the same for sex-chromosomal case as it is for autosomes
 ## Could see how it would differ, because difference chances of inheriting certain alleles
-## Not strictly binomial samplings
+## Not strictly binomial sampling
      lapproxSd$Sdse <- vapply(lapproxSd$simSd, FUN = function(x, N){(sqrt(x * (1 - x))) / sqrt(N)}, FUN.VALUE = vector("numeric", 1), N)
      listSdsim <- lapproxSd
   } 
