@@ -1,4 +1,12 @@
 # 2.15.0
+## NEW
+  * Functions to construct sex-chromosomal dominance relatedness matrices
+    * `makeSd()` and `makeSdsim()` 
+        * These are similar to what `makeD()` and `makeDsim()` accomplish for autosomes
+        * The ouptut contains the **Sd** and **Sdsim** dominance relatedness matrices
+        * The inverses of these can be obtained from **Sdinv** and **Sdsiminv** and used in a mixed model
+
+
 ## Small changes
    * `proLik()` improved/bug fixed to find confidence limits
      * previously would declare confidence limits found when they hadn't been
