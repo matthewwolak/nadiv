@@ -14,16 +14,11 @@ makeSd <- function(pedigree, heterogametic,
     warning("Assuming 'ngdc' dosage compensation model")
     dc.model <- "ngdc"
   }
-  #TODO check if can have dominance under hori
-  #TODO NO inbreeding effects in hets for hedo
-  #TODO NO inbreeding effects in hoha
-  if(dc.model == "hopi"){
-    cat("Assume that sex chromosomal dominance allelic interactions do not occur under 'hopi'\n")
+  if(dc.model == "hopi" | dc.model == "hori"){
+    cat("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
     return(NULL)
   }
-if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
-  stop("Currently only supporting 'ngdc' model")
-}
+
 
   Sout <- makeS(pedigree, heterogametic = heterogametic,
 	DosageComp = dc.model, returnS = returnS)
@@ -128,7 +123,6 @@ stop("code not written to parallelize function") #FIXME
 
 # Matrix/model should just be for the 1 homogametic sex
 ## Make sure rownames are attached for both matrices (e.g., Sd and Sdinv) and list (e.g., listSdinv)
-# What about all forms of dosage compensation?
 
 
 }

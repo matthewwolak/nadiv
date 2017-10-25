@@ -1,25 +1,19 @@
 makeSdsim <- function(pedigree, heterogametic, N,
+	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
 	invertSd = TRUE, calcSE = FALSE, returnS = FALSE){
 
   if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
 
-# FIXME: is below necessary?
-#  dc.model <- match.arg(DosageComp)
-#  if(is.null(dc.model)){
-#    warning("Assuming 'ngdc' dosage compensation model")
-#    dc.model <- "ngdc"
-#  }
-  #TODO check if can have dominance under hori
-  #TODO NO inbreeding effects in hets for hedo
-  #TODO NO inbreeding effects in hoha
-#  if(dc.model == "hopi"){
-#    cat("Assume that sex chromosomal dominance allelic interactions do not occur under 'hopi'\n")
-#    return(NULL)
-#  }
-#if(dc.model != "ngdc"){ #FIXME temporarily only allow ngdc for now
-#  stop("Currently only supporting 'ngdc' model")
-#}
+  dc.model <- match.arg(DosageComp)
+  if(is.null(dc.model)){
+    warning("Assuming 'ngdc' dosage compensation model")
+    dc.model <- "ngdc"
+  }
+  if(dc.model == "hopi" | dc.model == "hori"){
+    cat("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
+    return(NULL)
+  }
 
   n <- dim(pedigree)[1L]
   nPed <- numPed(pedigree[, 1:3])
