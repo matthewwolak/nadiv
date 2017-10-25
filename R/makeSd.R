@@ -18,7 +18,7 @@ makeSd <- function(pedigree, heterogametic,
 
 
   Sout <- makeS(pedigree, heterogametic = heterogametic,
-	DosageComp = dc.model, returnS = returnS)
+	DosageComp = dc.model, returnS = TRUE)
   # makeA() returns `dsCMatrix`, but S is `dgCMatrix` from above
   ## makeD()-like code below expects symmetric matrix ('dsCMatrix')
   S <- forceSymmetric(Sout$S)
