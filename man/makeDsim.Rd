@@ -1,29 +1,40 @@
-\name{makeDsim}
+\name{Dsim}
 \alias{makeDsim}
+\alias{makeSdsim}
 \title{
-Creates the dominance genetic relationship matrix through an iterative (simulation) process}
+Create the dominance genetic relationship matrix through an iterative (simulation) process}
 \description{
-Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008).}
+Alleles are explicitly traced through a pedigree to obtain coefficients of fraternity between pairs of individuals (the probability of sharing both alleles identical by descent).  This is accomplished in an iterative process to account for the various routes by which an allele will progress through a pedigree due to Mendelian sampling.  This is an implementation of the simulation approach of Ovaskainen et al. (2008) as well as an extension for the sex chromosome.}
+
 \usage{
 makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L),
          invertD = TRUE, calcSE = FALSE, returnA = FALSE)
+
+makeDsim(pedigree, heterogametic, N, 
+	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
+	parallel = FALSE, ncores = getOption("mc.cores", 2L),
+        invertSd = TRUE, calcSE = FALSE, returnS = FALSE)
 }
 
 \arguments{
   \item{pedigree }{
-A pedigree with columns organized: ID, Dam, Sire}
+A pedigree with columns organized: ID, Dam, Sire. For use with \code{makeSdsim}, a fourth column indicates the sex of each individual in the pedigree.}
   \item{N }{
 The number of times to iteratively trace alleles through the pedigree}
+  \item{heterogametic }{
+Character indicating the label corresponding to the heterogametic sex used in the "Sex" column of the pedigree}
+  \item{DosageComp }{
+A character indicating which model of dosage compensation.  If "NULL" then the "ngdc" model is assumed.} 
   \item{parallel }{
 A logical indicating whether or not to use parallel processing.  Note, this may only be available for Mac and Linux operating systems.}
   \item{ncores }{
 The number of cpus to use when constructing the dominance relatedness matrix.  Default is all available.}
-  \item{invertD }{
-A logical indicating whether or not to invert the D matrix}
+  \item{invertD,invertSd }{
+A logical indicating whether or not to invert the D or Sd matrix}
   \item{calcSE }{
 A logical indicating whether or not the standard errors for each coefficient of fraternity should be calculated}
-  \item{returnA }{
-Logical, indicating if the numerator relationship matrix (A) should be stored and returned.}
+  \item{returnA,returnS }{
+Logical, indicating if the numerator relationship matrix (A or S) should be stored and returned.}
 }
 
 \details{
@@ -33,20 +44,20 @@ Missing parents (e.g., base population) should be denoted by either 'NA', '0', o
 
 Ovaskainen et al. (2008) indicated that the method of calculating the D matrix (see \code{\link{makeD}}) is only an approximation.  They proposed a simulation method that is implemented here.  This should be more appropriate, especially when inbreeding occurs in the pedigree. 
 
-The value, \code{listDsim} will list both the approximate values (returned from \code{\link{makeD}}) as well as the simulated values.  If \code{calcSE} is TRUE, these values will be listed in \code{listDsim}.
+The objects \code{listDsim} and \code{listSdsim} will list both the approximate values (returned from \code{\link{makeD}} or \code{\link{makeSd}}) as well as the simulated values.  If \code{calcSE} is TRUE, these values will be listed in \code{listDsim} or \code{listSdsim}.
 }
 
 \value{
-  \item{A }{the A matrix in sparse matrix form}
-  \item{D }{the approximate D matrix in sparse matrix form}
-  \item{logDetD }{the log determinant of the approximate D matrix}
-  \item{Dinv }{the inverse of the approximate D matrix in sparse matrix form}
-  \item{listDinv }{the three column form of the non-zero elements for the inverse of the approximate D matrix}
-  \item{Dsim }{the simulated D matrix in sparse matrix form}
-  \item{logDetDsim }{the log determinant of the simulated D matrix}
-  \item{Dsiminv }{the inverse of the simulated D matrix in sparse matrix form}
-  \item{listDsim }{the three column form of the non-zero and non-self elements for the simulated D matrix}
-  \item{listDsiminv }{the three column form of the non-zero elements for the inverse of the simulated D matrix}
+  \item{A,S }{the A or S matrix in sparse matrix form}
+  \item{D,Sd }{the approximate D or Sd matrix in sparse matrix form}
+  \item{logDetD,logDetSd }{the log determinant of the approximate D or approximate Sd matrix}
+  \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd matrix in sparse matrix form}
+  \item{listDinv,listSdinv }{the three column form of the non-zero elements for the inverse of the approximate D matrix or the inverse of the approximate Sd matrix}
+  \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
+  \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or simulated Sd matrix}
+  \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd matrix in sparse matrix form}
+  \item{listDsim,listSdsim }{the three column form of the non-zero and non-self elements for the simulated D or simulated Sd matrix}
+  \item{listDsiminv,listSdsiminv }{the three column form of the non-zero elements for the inverse of the simulated D or the inverse of the simulated Sd matrix}
 
 }
 \references{
@@ -56,15 +67,17 @@ Ovaskainen, O., Cano, J.M., & Merila, J. 2008. A Bayesian framework for comparat
 }
 
 \note{
-This simulation can take a long time for large values of \code{N}.  If unsure, it is advisable to start with a lower N and gradually increase to gain a sense of the time required to execute a desired \code{N}.}
+This simulation can take a long time for large pedigrees (a few thousand and higher) and large values of \code{N} (one thousand and higher).  If unsure, it is advisable to start with a lower N and gradually increase to gain a sense of the time required to execute a desired \code{N}.}
 
 \seealso{
- \code{\link{makeD}} 
+ \code{\link{makeD}}, \code{\link{makeSd}} 
 }
 
 
 \examples{
-  simDinv <- makeDsim(Mrode9, N = 1000, parallel = FALSE, invertD = TRUE,
-		calcSE = TRUE)$listDsim
+  simD <- makeDsim(Mrode9, N = 1000, parallel = FALSE,
+		invertD = TRUE, calcSE = TRUE)$listDsim
+  simSd <- makeSdsim(FG90, heterogametic = "0", N = 1000, parallel = FALSE,
+		invertSd = TRUE, calcSE = TRUE)$listSdsim
 }
 
