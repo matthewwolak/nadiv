@@ -1,4 +1,5 @@
-makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
+makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
+	invertD = TRUE, returnA = FALSE, det = TRUE){
 
   numeric.pedigree <- numPed(pedigree) 
   N <- dim(pedigree)[1]

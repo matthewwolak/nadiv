@@ -7,7 +7,7 @@
 }
 \usage{
 makeD(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
-      invertD = TRUE, returnA = FALSE, det = FALSE)
+      invertD = TRUE, returnA = FALSE, det = TRUE)
 makeD(pedigree, heterogametic,
       DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
       parallel = FALSE, ncores = getOption("mc.cores", 2L),

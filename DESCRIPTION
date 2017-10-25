@@ -17,3 +17,4 @@ NeedsCompilation: yes
 Packaged: 2016-09-22 11:31:16 UTC; matthew
 Author: Matthew Wolak [cre, aut]
 Maintainer: Matthew Wolak <matthewwolak@gmail.com>
+RoxygenNote: 6.0.1
