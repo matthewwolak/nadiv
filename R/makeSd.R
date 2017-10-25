@@ -125,10 +125,17 @@ stop("code not yet written to parallelize function") #FIXME
 
 
 ################################################################################
-#makeSd(FG90, heterogametic = "0", returnS = TRUE)
-
 #pedFS <- simPedHS(1, 1, 4)
-#makeSd(pedFS, heterogametic = "M", returnS = TRUE)
+#makeSd(pedFS, heterogametic = "M", returnS = TRUE)$Sd
+
+#FIXME: currently divide by (L_ij*I_ij): correct FS and both types of DFCs
+# divide by I_ij: female FS=0.25
+# mulitply by L_ij and divide by I_ij
+
+#pedDFC <- simPedDFC(1)
+#unique(sm2list(makeSd(pedDFC, heterogametic = "M", returnS = TRUE)$Sd)$A)
+
+#makeSd(FG90, heterogametic = "0", returnS = TRUE)
 
 
 

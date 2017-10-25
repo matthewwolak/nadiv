@@ -285,7 +285,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];// TODO add L_ij adjustment
+               if(iAP[m] == min(kDam, jSire)) rmfp += xAP[m];// L_ij * I_ij adjustment=1
 
 
                m = pAP[max(kDam, jDam)];
@@ -299,7 +299,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kDam, jDam)) rmmp += xAP[m] * 0.5;
+               if(iAP[m] == min(kDam, jDam)) rmmp += xAP[m] * 0.5;// L_ij * I_ij adjustment
 
 
                m = pAP[max(kSire, jDam)];
@@ -313,7 +313,7 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];// TODO add L_ij adjustment
+               if(iAP[m] == min(kSire, jDam)) rfmp += xAP[m];// L_ij * I_ij adjustment=1
 
 
                m = pAP[max(kSire, jSire)];
@@ -327,10 +327,10 @@ void sdij(
                  }
                  else lb = step;
                }
-               if(iAP[m] == min(kSire, jSire)) rffp += xAP[m] * 2.0;
+               if(iAP[m] == min(kSire, jSire)) rffp += xAP[m] * 2.0;// L_ij * I_ij adjustment
 
 
-               dij_tmp = (rmmp*rffp) + (0.5*rmfp*rfmp);
+               dij_tmp = (rmmp*rffp) + (rmfp*rfmp);
                if(dij_tmp != 0.0){
                  // new row number for jth individual (only sex==1 in new matrix)
                  r = 0;
