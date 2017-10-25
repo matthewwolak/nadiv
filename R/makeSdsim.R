@@ -96,7 +96,8 @@ makeSdsim <- function(pedigree, heterogametic, N,
     Sdsiminv <- solve(Sdsim)
       Sdsiminv@Dimnames <- Sdsim@Dimnames
     cat(".done", "\n")
-    listSdsiminv <- sm2list(Sdsiminv, rownames = Sdsim@Dimnames[[1L]], colnames = c("row", "column", "simSdinverse"))
+    listSdsiminv <- sm2list(Sdsiminv, rownames = Sdsim@Dimnames[[1L]],
+	colnames = c("row", "column", "simSdinverse"))
     Sdsim <- as(Sdsim, "dgCMatrix")
 #FIXME decide what to do with approximate objects
 #    return(list(S = approxSd$S, Sd = approxSd$Sd, logDetSd = approxSd$logDet, Sdinv = approxSd$Sdinv, listSdinv = approxSd$listSdinv, Sdsim = Sdsim, logDetSdsim = logDetSdsim, Sdsiminv = Sdsiminv, listSdsim = listSdsim, listSdsiminv = listSdsiminv))

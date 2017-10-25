@@ -232,31 +232,35 @@ void dijp(
 
 //////////////////////////////////////
 //    SEX-LINKED DOMINANCE
+
+
 // since nadiv >v2.15.0 uses lower_bound algorithm for matrix lookup
 //// based on c++ <algorithm>std::lower_bound 
 
 extern "C"{  
 
 void sdij(
-	int *dam,
-	int *sire,
-        int *iAP,     
-	int *pAP,	         
-	double *xAP,
-	int *nAP,
-	double *dij,
-	int *Di,
-        int *Dp,
-	int *cnt,
-	int *sex
+	int *dam,     // dam number IDs
+	int *sire,    // sire number IDs
+        int *iAP,     // i slot S (additive) matrix
+	int *pAP,     // p slot S (additive) matrix     
+	double *xAP,  // x slot S (additive) matrix
+	int *nAP,     // N or No. in pedigree
+	double *dij,  // Sd@x out
+	int *Di,      // Sd@i out
+        int *Dp,      // Sd@p out
+	int *cnt,     // cnt/count of total elements in Sd matrix
+	int *sex      // sex or number of homogametic sex chromosomes
 ){         
 
-  int     lb, step, it, k, j, m, kDam, kSire, jDam, jSire;
+  int     lb, step, it, k, j, m, r, kDam, kSire, jDam, jSire;
+  int     c = 0;   // this will keep track of number of females/columns in S
   double rmmp, rffp, rmfp, rfmp, dij_tmp;
 
   for(k = 0; k < nAP[0]; k++){  // iterate through each column of "S" called "A"
-    Dp[k] = cnt[0];
     if(sex[k] == 1){
+      Dp[c] += cnt[0];
+      c++;
       kDam = dam[k];
       kSire = sire[k];
       if((kDam != -999) && (kSire != -999)){
@@ -328,17 +332,23 @@ void sdij(
 
                dij_tmp = (rmmp*rffp) + (0.5*rmfp*rfmp);
                if(dij_tmp != 0.0){
-                  dij[cnt[0]] = dij_tmp;   
-                  Di[cnt[0]] = iAP[j];
-                  cnt[0]++;
+                 // new row number for jth individual (only sex==1 in new matrix)
+                 r = 0;
+                 for(m = 0; m < iAP[j]; m++){
+                   r += sex[m];
+                 }
+                 dij[cnt[0]] = dij_tmp;   
+                 Di[cnt[0]] = r;
+                 cnt[0]++;
                }
-             }   
-           }
+             }  // if jDam and jSire both known  
+           }  // if the jth row of the k column != k AND j is a sex==1
   
-        }   
-      } 
+        }  // end for j looping through all rows of kth column   
+      }  // if k has both parents known (kDam and kSire) 
     }  // if k has homogametic sex chromosomes
   }  // end for k loop   
+  Dp[c] += cnt[0];
          
 
             

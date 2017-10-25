@@ -1,6 +1,3 @@
-#rm(list = ls()); library(nadiv)
-
-
 makeSd <- function(pedigree, heterogametic,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
@@ -38,7 +35,9 @@ makeSd <- function(pedigree, heterogametic,
   sex <- rep(-998, dim(pedigree)[1L])
   sex[homs <- which(pedigree[,4] != heterogametic)] <- 1
   sex[hets <- which(pedigree[,4] == heterogametic)] <- 0
+  nhom <- sum(sex)  # Number of individuals with homogametic sex chromosomes
   N <- dim(nPed)[1L]
+
 #FIXME turned off next check so can test parallel=TRUE on small pedigrees
 #  if(parallel){
 #    if(length(S@x)/ncores < 10){
@@ -63,19 +62,20 @@ makeSd <- function(pedigree, heterogametic,
 		as.integer(0),				# [[10]] cnt/count
 		as.integer(sex))	      		# [[11]] sex                  
 
-     Sd <- Matrix(0, N, N,
-	sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
+     Sd <- Matrix(0, nhom, nhom,
+	sparse = TRUE, dimnames = list(as.character(pedigree[homs, 1]), NULL))
      Sd@uplo <- "U"
      Sd@i <- Cout[[8]][1:Cout[[10]]]
-     Sd@p <- c(Cout[[9]], Cout[[10]])
+     Sd@p <- Cout[[9]][1:(nhom+1)]
      Sd@x <- Cout[[7]][1:Cout[[10]]]
-     diag(Sd) <- 1 - Sout$inbreeding
+     diag(Sd) <- 1 - Sout$inbreeding[homs]
 
      if(!returnS) S <- NULL
      rm("Cout")
 
    } else{
-stop("code not written to parallelize function") #FIXME
+#TODO
+stop("code not yet written to parallelize function") #FIXME
 #        listA <- data.frame(Row = as.integer(rep(1:length(A@p[-1]), diff(A@p))), Column = as.integer(A@i + 1))
 #        wrap_dij <- function(x){
 #           sub_lA <- listA[min(x):max(x), 1:2]
@@ -115,16 +115,12 @@ stop("code not written to parallelize function") #FIXME
     Sdinv <- as(solve(Sd), "dgCMatrix")
       Sdinv@Dimnames <- Sd@Dimnames
     cat(".done", "\n")
-    listSdinv <- sm2list(Sdinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
- return(list(S = S, Sd = Sd, logDet = logDet, Sdinv=Sdinv, listSdinv=listSdinv))
+    listSdinv <- sm2list(Sdinv, rownames = Sd@Dimnames[[1L]],
+	colnames = c("row", "column", "Sdinverse"))
+ return(list(S = S, Sd = Sd, logDet = logDet, Sdinv = Sdinv, listSdinv = listSdinv))
   } else{
     return(list(S = S, Sd = Sd, logDet = logDet))
     } 
-
-# Matrix/model should just be for the 1 homogametic sex
-## Make sure rownames are attached for both matrices (e.g., Sd and Sdinv) and list (e.g., listSdinv)
-
-
 }
 
 
