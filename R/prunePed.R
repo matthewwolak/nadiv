@@ -13,7 +13,7 @@ prunePed <- function(pedigree, phenotyped, ...){
 ################################################
 prunePed.default <- function (pedigree, phenotyped, ...) {
    nPed <- numPed(pedigree[, 1:3])
-   ikeep <- keep <- match(phenotyped, pedigree[, 1])
+   ikeep <- match(phenotyped, pedigree[, 1])
    nind <- length(ikeep) + 1
    while(length(ikeep) != nind){
       nind <- length(ikeep)
@@ -32,7 +32,7 @@ prunePed.default <- function (pedigree, phenotyped, ...) {
 ######################################
 
 prunePed.numPed <- function (pedigree, phenotyped, ...) {
-   ikeep <- keep <- match(phenotyped, pedigree[, 1])
+   ikeep <- match(phenotyped, pedigree[, 1])
    nind <- length(ikeep) + 1
    while(length(ikeep) != nind){
       nind <- length(ikeep)
