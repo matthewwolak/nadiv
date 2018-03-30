@@ -1,4 +1,28 @@
 # Generic
+
+
+#' Generation assignment
+#' 
+#' Given a pedigree, the function assigns the generation number to which each
+#' individual belongs.
+#' 
+#' 0 is the base population.
+#' 
+#' Migrants, or any individuals where both parens are unknown, are assigned to
+#' generation zero.  If parents of an individual are from two different
+#' generations (e.g., dam = 0 and sire = 1), the individual is assigned to the
+#' generation following the greater of the two parents (e.g., 2 in this
+#' example).
+#' 
+#' @aliases genAssign genAssign.default genAssign.numPed
+#' @usage genAssign(pedigree, \dots{}) \method{genAssigndefault}(pedigree,
+#' \dots{}) \method{genAssignnumPed}(pedigree, \dots{})
+#' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
+#' @param \dots Arguments to be passed to methods
+#' @return A vector of values is returned.  This vector is in the same order as
+#' the ID column of the pedigree.
+#' @author \email{matthewwolak@@gmail.com}
+#' @export genAssign
 genAssign <- function(pedigree, ...){
   UseMethod("genAssign", pedigree)
 }

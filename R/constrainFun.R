@@ -1,3 +1,25 @@
+#' Function used in conjunction with others to produce a profile likelihood for
+#' a variance component
+#' 
+#' Given a model object from \code{asreml} and a range of estimates of the
+#' parameter, the function will supply the likelihood ratio test statistic for
+#' the comparison of the full model to one where the parameter of interest is
+#' constrained.
+#' 
+#' Used internally in the \code{proLik} function
+#' 
+#' @usage constrainFun(parameter.val, full, fm2, comp, G, mit = 600)
+#' @param parameter.val a value for which the log-Likelihood of a model is to
+#' be calculated
+#' @param full the full model \code{asreml} object
+#' @param fm2 starting values for the full model
+#' @param comp which variance component to constrain
+#' @param G logical, indicating if the component is part of the G structure
+#' @param mit numeric, indicating maximum number of iterations for the
+#' constrained asreml model
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso See also \code{\link{proLik}}
+#' @export constrainFun
 constrainFun <- function(parameter.val, full, fm2, comp, G, mit = 600){
   row <- which(fm2$Gamma == comp)
   fm2[row, 2:3] <- c(parameter.val, "F")

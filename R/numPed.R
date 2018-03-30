@@ -4,6 +4,59 @@
 #in the 'MCMCglmm' package
 ################################################
 
+
+
+#' Integer Format Pedigree
+#' 
+#' Conversion, checking, and row re-ordering of a pedigree in integer form of
+#' class \sQuote{numPed}.
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA',
+#' '0', '-998', or '*'.
+#' 
+#' Individuals must appear in the ID column in rows preceeding where they
+#' appear in either the Dam or Sire column. See the
+#' \code{\link[nadiv]{prepPed}} function if this is not the case.
+#' 
+#' If pedigree inherits the class "numPed" (from a previous call to
+#' \code{numPed()}) and \code{check = TRUE}, the checks are skipped. If
+#' \code{check = FALSE} any pedigree will be transformed into a pedigree
+#' consisting of integers and missing values denoted by '-998'.
+#' 
+#' Based on code from the \code{MCMCglmm} package
+#' 
+#' @aliases numPed is.numPed ronPed
+#' @usage numPed(pedigree, check = TRUE)
+#' 
+#' \method{isnumPed}(x)
+#' 
+#' ronPed(x, i, \dots{})
+#' @param pedigree A three column pedigree object, where the columns correspond
+#' to: ID, Dam, & Sire
+#' @param check A logical argument indicating if checks on the validity of the
+#' pedigree structure should be made, but see Details
+#' @param x A pedigree of class \sQuote{\code{numPed}}
+#' @param i, Index specifying elements to extract or replace: see
+#' \code{\link[base]{[}}
+#' @param list() Index specifying elements to extract or replace: see
+#' \code{\link[base]{[}}
+#' @param Index specifying elements to extract or replace: see
+#' \code{\link[base]{[}}
+#' @return An S3 object of class "numPed" representing the pedigree, where
+#' individuals are now numbered from 1 to n and unknown parents are assigned a
+#' value of '-998'.
+#' @seealso \code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}},
+#' \code{\link[base]{[}}
+#' @examples
+#' 
+#' (nPed <- numPed(Mrode2))
+#' is(nPed)
+#' 
+#' # re-order and retain class 'numPed'
+#' ronPed(nPed, order(nPed[, 2], nPed[, 3]))
+#' is(nPed)
+#' 
+#' @export numPed
 numPed <- function(pedigree, check = TRUE){
  if(!is.numPed(pedigree) && check){      
   if(any(pedigree[, 2] == 0, na.rm = TRUE)){

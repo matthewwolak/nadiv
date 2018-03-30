@@ -1,3 +1,31 @@
+#' Half-sib pedigree construction
+#' 
+#' Simulates a pedigree for a half-sib mating design (sometimes also called the
+#' North Carolina Design 1).
+#' 
+#' \code{n} must be greater than or equal to 2, because one male and one female
+#' offspring are produced from each mating
+#' 
+#' Some functions/calculations get bogged down if no two dams have the same ID
+#' in the entire pedigree (e.g., \code{aov}).  However, other functions must
+#' have unique identifiers for every individual.
+#' 
+#' @usage simPedHS(s, d, n, uniqueDname = TRUE, prefix = NULL)
+#' @param s Number of sires
+#' @param d Number of dams per sire
+#' @param n Number of offspring per mating (must be > or = 2)
+#' @param uniqueDname Logical indicating if dams should have unique names
+#' within sire families or throughout the entire pedigree
+#' @param prefix Optional prefix to every identity
+#' @return A \code{data.frame} with columns corresponding to: id, dam, sire,
+#' and sex.  Sex is "M" for males and "F" for females.
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link{simPedDFC}}
+#' @examples
+#' 
+#'   simPedHS(s = 1, d = 3, n = 2)
+#' 
+#' @export simPedHS
 simPedHS <- function(s, d, n, uniqueDname = TRUE, prefix = NULL){
   if(n<2){ stop("must have more than 1 offspring per family (n > or = 2)")
    }
