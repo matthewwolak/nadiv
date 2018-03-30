@@ -27,9 +27,9 @@ makeAstarMult <- function(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE){
   Ainv <- makeAinv(pedAlt)$Ainv
   # U matrix defined pp.1342-1343, Quaas 1988
   if(gOnTop){
-    U <- cBind(-Q, Diagonal(x = 1, n = nrow(Ainv)))
+    U <- cbind(-Q, Diagonal(x = 1, n = nrow(Ainv)))
   } else{
-      U <- cBind(Diagonal(x = 1, n = nrow(Ainv)), -Q)
+      U <- cbind(Diagonal(x = 1, n = nrow(Ainv)), -Q)
     }
   Astar <- drop0(zapsmall(crossprod(U, Ainv) %*% U, 12))
     Astar@Dimnames[[1L]] <- if(gOnTop) c(colnames(Q), rownames(Ainv)) else c(rownames(Ainv), colnames(Q))

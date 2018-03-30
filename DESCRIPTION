@@ -7,7 +7,7 @@ Date: 2017-10-25
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
 URL: http://github.com/matthewwolak/nadiv
 BugReports: http://github.com/matthewwolak/nadiv/issues
-Depends: Matrix
+Depends: R (>= 3.2.0), Matrix
 Suggests: parallel
 Enhances: MCMCglmm, asreml
 Imports: graphics, methods, stats

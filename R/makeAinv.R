@@ -201,7 +201,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  
   groupFuzz <- Diagonal(x = 1, n = nggroups)
   groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
-  fuzzmat <- rBind(groupFuzz, as(fuzz, "sparseMatrix"))
+  fuzzmat <- rbind(groupFuzz, as(fuzz, "sparseMatrix"))
   # predict non-zero elements of Astar
   ## make H from Quaas 1988:
   ## H = [-Pb Qb : Tinv]
@@ -233,7 +233,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 	  index1 = FALSE, dims = Qb@Dim, symmetric = FALSE,
 	  dimnames = Qb@Dimnames)
   ## sH = [-(sPb %*% sQb) : sTinv]
-  sH <- cBind((sPb %*% sQb), sTinv)
+  sH <- cbind((sPb %*% sQb), sTinv)
   Ainv <- t(crossprod(sH))  # transpose stores lower triangle
 
   phantomless[phantomless == -998] <- N + 1

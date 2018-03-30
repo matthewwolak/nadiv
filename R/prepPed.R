@@ -71,7 +71,7 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]), silent = TRUE)
  if(class(itwork) == "try-error"){
    G <- Matrix(FALSE, npf, npf, sparse = TRUE)
-   G[cBind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
+   G[cbind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
    Gtmp <- G
    gconv <- Matrix(TRUE, nrow = 1, ncol = npf, sparse = TRUE)
    gendepth <- rep(0, npf) + as((gconv %*% Gtmp), "ngCMatrix") 
