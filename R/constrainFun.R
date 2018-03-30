@@ -8,18 +8,18 @@
 #' 
 #' Used internally in the \code{proLik} function
 #' 
-#' @usage constrainFun(parameter.val, full, fm2, comp, G, mit = 600)
 #' @param parameter.val a value for which the log-Likelihood of a model is to
-#' be calculated
+#'   be calculated
 #' @param full the full model \code{asreml} object
 #' @param fm2 starting values for the full model
 #' @param comp which variance component to constrain
 #' @param G logical, indicating if the component is part of the G structure
 #' @param mit numeric, indicating maximum number of iterations for the
 #' constrained asreml model
+#'
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso See also \code{\link{proLik}}
-#' @export constrainFun
+#' @export
 constrainFun <- function(parameter.val, full, fm2, comp, G, mit = 600){
   row <- which(fm2$Gamma == comp)
   fm2[row, 2:3] <- c(parameter.val, "F")

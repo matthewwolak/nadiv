@@ -56,35 +56,35 @@
 #' the output of \code{makeSd}.
 #' 
 #' @aliases makeD makeSd
-#' @usage makeD(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
-#' invertD = TRUE, returnA = FALSE, det = TRUE) makeD(pedigree, heterogametic,
-#' DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"), parallel =
-#' FALSE, ncores = getOption("mc.cores", 2L), invertSd = TRUE, returnS = FALSE,
-#' det = TRUE)
 #' @param pedigree A pedigree with columns organized: ID, Dam, Sire. For use
-#' with \code{makeSd}, a fourth column indicates the sex of each individual in
-#' the pedigree.
+#'   with \code{makeSd}, a fourth column indicates the sex of each individual in
+#'   the pedigree.
 #' @param heterogametic Character indicating the label corresponding to the
-#' heterogametic sex used in the "Sex" column of the pedigree
+#'   heterogametic sex used in the "Sex" column of the pedigree
 #' @param DosageComp A character indicating which model of dosage compensation.
-#' If "NULL" then the "ngdc" model is assumed.
+#'   If \code{NULL} then the \dQuote{ngdc} model is assumed.
 #' @param parallel Logical, indicating whether computation should be run on
-#' multiple processors at once. See details for considerations.
+#'   multiple processors at once. See details for considerations.
 #' @param ncores Number of cores to use when parallel = TRUE.  Default is
-#' maximum available.  Otherwise, set with an integer. See details for
-#' considerations.
+#'   maximum available.  Otherwise, set with an integer. See details for
+#'   considerations.
 #' @param invertD,invertSd A logical indicating whether or not to invert the D
-#' or S matrix
+#'   or S matrix
 #' @param returnA,returnS Logical, indicating if the numerator relationship
-#' matrix (A or S) should be stored and returned.
+#'   matrix (A or S) should be stored and returned.
 #' @param det Logical, indicating if the determinant of the D or Sd matrix
-#' should be returned.
-#' @return \item{A,S }{the A or S matrix in sparse matrix form} \item{D,Sd
-#' }{the D or Sd matrix in sparse matrix form} \item{logDet }{the log
-#' determinant of the D or Sd matrix} \item{Dinv,Sdinv }{the inverse of the D
-#' or inverse of the Sd matrix in sparse matrix form} \item{listDinv,listSdinv
-#' }{the three column form of the non-zero elements for the inverse of the D or
-#' the inverse of the Sd matrix}
+#'   should be returned.
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{A,S }{the A or S matrix in sparse matrix form}
+#'     \item{D,Sd }{the D or Sd matrix in sparse matrix form}
+#'     \item{logDet }{the log determinant of the D or Sd matrix} 
+#'     \item{Dinv,Sdinv }{the inverse of the D or inverse of the Sd matrix in
+#'       sparse matrix form}
+#'     \item{listDinv,listSdinv }{the three column form of the non-zero 
+#'       elements for the inverse of the D or the inverse of the Sd matrix}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeDsim}}, \code{\link{makeSdsim}}
 #' @references Quaas, R.L. 1995. Fx algorithms. An unpublished note.
@@ -110,7 +110,7 @@
 #'   uSdx <- unique(makeSd(simPedDFC(3), heterogametic = "M", returnS = FALSE)$Sd@x)
 #'   stopifnot(all(uSdx %in% c(1, 0.5, 3/16, 1/16))) #<-- must match one of these 4
 #' 
-#' @export makeD
+#' @export
 makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
 	invertD = TRUE, returnA = FALSE, det = TRUE){
 

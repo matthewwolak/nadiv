@@ -27,51 +27,49 @@
 #' below.
 #' 
 #' @aliases proLik is.proLik plot.proLik
-#' @usage proLik(full.model, component, G = TRUE, negative = FALSE,
-#' nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001, parallel =
-#' FALSE, ncores = getOption("mc.cores", 2L))
-#' 
-#' \method{isproLik}(x)
-#' 
-#' \method{plotproLik}(x, CL = TRUE, alpha = NULL, type = "l", main = NULL,
-#' xlab = NULL, ylab = NULL, \dots{})
 #' @param full.model An \code{asreml} model object
 #' @param component A character indicating for which variance component the
-#' profile likelihood will be constructed. Must be an object in
-#' \code{full.model$gammas}.
+#'   profile likelihood will be constructed. Must be an object in
+#'   \code{full.model$gammas}.
 #' @param G Logical indicating whether component is part of the G structure. If
-#' the component is part of the R structure, G = FALSE.
+#'   the component is part of the R structure, G = FALSE.
 #' @param negative Logical indicating whether or not the \code{component} can
-#' take on a negative value (i.e., a covariance)
+#'   take on a negative value (i.e., a covariance)
 #' @param nsample.units Number of sample units to be used in constructing the
-#' area between the confidence limits for the profile likelihood
+#'   area between the confidence limits for the profile likelihood
 #' @param nse Number of standard errors on either side of the estimate, over
-#' which the confidence limits should be evaluated.
+#'   which the confidence limits should be evaluated.
 #' @param alpha The critical value for determining the Confidence Interval
 #' @param tolerance Acceptable distance between actual and desired minimization
-#' criteria for determining the upper and lower limits of the confidence
-#' interval. See Details for more
+#'   criteria for determining the upper and lower limits of the confidence
+#'   interval. See Details for more
 #' @param parallel A logical indicating whether or not parallel processing will
-#' be used. Note, may only be available for Mac and Linux operating systems.
+#'   be used. Note, may only be available for Mac and Linux operating systems.
 #' @param ncores Argument indicating number of cpu units to use. Default is all
-#' available.
+#'   available.
 #' @param x Object of class \code{proLik}.
 #' @param CL A logical indicating whether a lines at the confidence limits are
-#' to be drawn when plotting.
+#'   to be drawn when plotting.
 #' @param type,main,xlab,ylab See arguments to \code{\link[graphics]{plot}}.
 #' @param \dots other arguments to \code{\link[graphics]{plot}}.
-#' @return An S3 object of class proLik \item{lambdas }{negative log-Likelihood
-#' ratio test statistic. Estimated from the log-Likelihood of the
-#' \code{full.model} and the log-Likelihood of the model with the
-#' \code{component} constrained to a value in the sampling interval}
-#' \item{var.estimates }{value along the sampling interval for which the
-#' \code{component} was constrained} \item{UCL }{approximate Upper Confidence
-#' Limit} \item{LCL }{approximate Lower Confidence Limit} \item{component }{the
-#' component for which the profile likelihood surface has been constructed}
-#' \item{alpha }{the alpha level at which the confidence limits have been
-#' calculated}
+#'
+#' @return An S3 object of class \dQuote{proLik} containing:
+#'   \describe{
+#'     \item{lambdas }{negative log-Likelihood ratio test statistic. Estimated 
+#'       from the log-Likelihood of the \code{full.model} and the 
+#'       log-Likelihood of the model with the \code{component} constrained to 
+#'       a value in the sampling interval}
+#'     \item{var.estimates }{value along the sampling interval for which the 
+#'       \code{component} was constrained}
+#'     \item{UCL }{approximate Upper Confidence Limit}
+#'     \item{LCL }{approximate Lower Confidence Limit}
+#'     \item{component }{the component for which the profile likelihood surface 
+#'       has been constructed}
+#'     \item{alpha }{the alpha level at which the confidence limits have been 
+#'       calculated}
+#'   }
 #' @section Warning : May be unfeasible to estimate profile likelihoods for
-#' complex models with many variance components
+#'   complex models with many variance components
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{aiFun}}
 #' @examples
@@ -99,7 +97,7 @@
 #'    }
 #' 
 #' 
-#' @export proLik
+#' @export
 proLik <- function(full.model, component,
 	G = TRUE, negative = FALSE,
 	nsample.units = 3, nse = 3,
@@ -231,8 +229,34 @@ proLik <- function(full.model, component,
 }
 
 
-
+#' @method is proLik
+#' @rdname proLik
+#' @export
 is.proLik <- function(x) inherits(x, "proLik")
 
 
+
+
+
+#' @method plot proLik
+#' @rdname proLik
+#' @export
+plot.proLik <- function(x, CL = TRUE, alpha = NULL, type = "l",
+	main = NULL, xlab = NULL, ylab = NULL, ...)
+{
+  if(is.null(alpha)) alpha <- x$alpha
+  if(is.null(main)) main <- deparse(substitute(x))
+  if(is.null(xlab)) xlab <- x$component
+  if(is.null(ylab)) ylab <- "LRT statistic"
+
+  plot(x$lambdas ~ x$var.estimates,
+     main = main, 
+     xlab = xlab, ylab = ylab, 
+     type = type, ...)
+     if(CL){  
+        chi <- (0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))
+        abline(h = chi, lty = "dotted", col = "red", lwd = 2)
+        abline(v = unlist(x[c("LCL", "UCL")]), lty = "dashed", col = "blue", lwd = 2)
+    }  
+}
 

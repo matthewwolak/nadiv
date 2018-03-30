@@ -33,19 +33,18 @@
 #' of slightly less than (greater than) 1 (-1).  For example: 0.9999 or
 #' -0.9999.
 #' 
-#' @usage grfx(n, G, incidence = NULL, saveIncidence = FALSE, output =
-#' "matrix", stdnorms = NULL, warn = TRUE)
 #' @param n The number of individuals for which to simulate effects
 #' @param G The variance-covariance matrix to model the effects after
 #' @param incidence The covariance structure of the 'n' individuals
 #' @param saveIncidence A logical or NULL, indicating if the cholesky
-#' decomposition of the incidence matrix should be saved/retrieved to the
-#' global environment.  SEE details below!!
+#'   decomposition of the incidence matrix should be saved/retrieved to the
+#'   global environment.  SEE details below!!
 #' @param output Format for the output
 #' @param stdnorms Standard normal deviates to use
 #' @param warn Should a warning be produced when \code{incidence = NULL}
-#' indicating that a previous incidence matrix is being used if one exists,
-#' otherwise an Identity matrix
+#'   indicating that a previous incidence matrix is being used if one exists,
+#'   otherwise an Identity matrix
+#'
 #' @return The random effects coerced to be in the format specified by output.
 #' The default is a "matrix".
 #' @author \email{matthewwolak@@gmail.com}
@@ -69,7 +68,7 @@
 #'   var(breedingValues2b)
 #' 
 #' 
-#' @export grfx
+#' @export
 grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", stdnorms = NULL, warn = TRUE){
   d <- nrow(G)
   if(d > 1 && all(G == G[1,1])) warning("variance-covariance matrix 'G' may have caused 'chol.default(G)' error.  If so, consider subtracting 0.0001 from the covariances to make correlations < 1 or >-1")

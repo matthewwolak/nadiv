@@ -10,19 +10,23 @@
 #' calculates the Hadamard (element-wise) product of the A matrix with itself
 #' (A # A).
 #' 
-#' @usage makeAA(pedigree)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
-#' @return \item{AA }{the AA matrix in sparse matrix form} \item{logDet }{the
-#' log determinant of the AA matrix} \item{AAinv }{the inverse of the AA matrix
-#' in sparse matrix form} \item{listAAinv }{the three column form of the
-#' non-zero elements for the inverse of the AA matrix}
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{AA }{the AA matrix in sparse matrix form}
+#'     \item{logDet }{the log determinant of the AA matrix}
+#'     \item{AAinv }{the inverse of the AA matrix in sparse matrix form}
+#'     \item{listAAinv }{the three column form of the non-zero elements for the
+#'       inverse of the AA matrix}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeA}}
 #' @examples
 #' 
 #'   makeAA(Mrode2)
 #' 
-#' @export makeAA
+#' @export
 makeAA <- function(pedigree)
 {
   A <- makeA(pedigree)

@@ -20,28 +20,27 @@
 #' for the random terms in the model as described above. Note, either
 #' \code{model} or \code{AI.vec} must be supplied, but not both.
 #' 
-#' @usage aiFun(model = NULL, AI.vec = NULL, inverse = TRUE, Dimnames = NULL)
-#' @param model A model object returned by a call to the \code{asreml}
-#' function.
+#' @param model A model object returned by a call to the \code{asreml} function.
 #' @param AI.vec A numeric vector of the Average Information matrix. The order
-#' must be the row-wise lower triangle of the matrix (including the diagonal).
+#'   must be the row-wise lower triangle of the matrix (including the diagonal).
 #' @param inverse A logical indicating whether the elements of the
-#' \emph{inverse} Average Information matrix are being provided. If FALSE, the
-#' Average Information matrix (and not its inverse) is being supplied.
+#'   \emph{inverse} Average Information matrix are being provided. If FALSE, 
+#'    the Average Information matrix (and not its inverse) is being supplied.
 #' @param Dimnames A vector of characters if names are desired for the output
-#' (co)variance matrix. If not specified, either the default labels from the
-#' \code{asreml} object will be used or the rows and columns will be
-#' un-labeled.
-#' @return A matrix of k x k dimensions is returned, if k is the number of
-#' (co)variance components estimated in the model. Sampling covariances are
-#' above and below the diagonal while variances are located along the diagonal.
-#' If \code{Dimnames} is specified, the row and column names are assigned
-#' according the vector of names in this argument.
+#'   (co)variance matrix. If not specified, either the default labels from the
+#'   \code{asreml} object will be used or the rows and columns will be
+#'   un-labeled.
+#'
+#' @return A /code{matrix} of k x k dimensions is returned, if k is the number
+#'   of (co)variance components estimated in the model. Sampling covariances are
+#'   above and below the diagonal while variances are located along the
+#'    diagonal. If \code{Dimnames} is specified, the row and column names are
+#'    assigned according the vector of names in this argument.
 #' @note The vector of \code{Dimnames} should match the same order of variance
-#' components specified in the model.
+#'   components specified in the model.
 #' @author \email{matthewwolak@@gmail.com}
 #' @references Gilmour, A.R., Gogel, B.J., Cullis, B.R., & Thompson, R. 2009.
-#' ASReml User Guide Release 3.0. VSN International Ltd., Hemel Hempstead, UK.
+#'   ASReml User Guide Release 3.0. VSN International Ltd., Hemel Hempstead, UK.
 #' @examples
 #' 
 #'   \dontrun{
@@ -58,7 +57,7 @@
 #'   output <- c(7.3075921, 7.0635161, 12.3423380, 1.9539486, 2.7586340, 0.6626111)
 #'   aiFun(AI.vec = output, inverse = FALSE, Dimnames = c("Va", "Vd", "Ve"))
 #' 
-#' @export aiFun
+#' @export
 aiFun <- function(model = NULL, AI.vec = NULL, inverse = TRUE, Dimnames=NULL)
 {
   if(!is.null(model)){

@@ -7,16 +7,17 @@
 #' model are translated according to the \code{\link{varTrans}} function and
 #' used in constructing the 1-alpha Confidence Interval.
 #' 
-#' @usage aiCI(asr.model, Dimnames = NULL, alpha = 0.05)
 #' @param asr.model Object from a call to \code{asreml}
 #' @param Dimnames A vector of characters if names are desired for the output.
-#' If not specified, the default labels from the \code{asreml} object will be
-#' used.
+#'   If not specified, the default labels from the \code{asreml} object will be
+#'   used.
 #' @param alpha A numeric value indicating the level of Type I error for
-#' constructing the Confidence Intervals.
-#' @return A matrix is returned with a row for each variance component. The
-#' three columns correspond to the Lower Confidence Limit, estimate from the
-#' \code{asreml} model, and Upper Confidence Limit for each variance component.
+#'   constructing the Confidence Intervals.
+#'
+#' @return A \code{matrix} is returned with a row for each variance component. 
+#'   The three columns correspond to the Lower Confidence Limit, estimate from
+#'   the \code{asreml} model, and Upper Confidence Limit for each variance 
+#'   component.
 #' @note The vector of \code{Dimnames} should match the same order of variance
 #' components specified in the model.
 #' @author \email{matthewwolak@@gmail.com}
@@ -34,7 +35,7 @@
 #'     aiCI(warcolak.mod)    
 #'    }
 #' 
-#' @export aiCI
+#' @export
 aiCI <- function(asr.model, Dimnames = NULL, alpha = 0.05)
 {
    za2 <- qnorm(alpha/2, mean = 0, sd = 1) 

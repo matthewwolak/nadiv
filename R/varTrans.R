@@ -7,10 +7,9 @@
 #' component estimates.
 #' 
 #' 
-#' @usage varTrans(asr.object)
 #' @param asr.object Object from a call to \code{asreml}
 #' @return Returns a numeric vector of variances for each variance component in
-#' an ASReml-R model.
+#'   an ASReml-R model.
 #' @author \email{matthewwolak@@gmail.com}
 #' @examples
 #' 
@@ -25,7 +24,7 @@
 #'     sqrt(varTrans(warcolak.mod))  # sqrt() so can compare with standard errors from summary
 #'    }
 #' 
-#' @export varTrans
+#' @export
 varTrans <- function(asr.object){
     if(asr.object$sigma2 == 1){
        vars <- diag(aiFun(asr.object))

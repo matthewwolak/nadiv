@@ -23,25 +23,27 @@
 #' is that the model with a greater negative log-likelihood (closer to zero) or
 #' greater positive log-likelihood provides a better fit to the data.
 #' 
-#' @usage LRTest(full, reduced, df = 1, boundaryCorrection = FALSE)
 #' @param full A numeric variable indicating the log-likelihood of the full
-#' model
+#'   model
 #' @param reduced A numeric variable indicating the log-likelihood of the
-#' reduced model
+#'   reduced model
 #' @param df The number of degrees of freedom to use, representing the
-#' difference between the full and reduced model in the number of parameters
-#' estimated
+#'   difference between the full and reduced model in the number of parameters
+#'   estimated
 #' @param boundaryCorrection A logical argument indicating whether a boundary
-#' correction under one degree of freedom should be included. If the parameter
-#' that is dropped from the reduced model is estimated at the boundary of its
-#' parameter space in the full model, the boundary correction is often
-#' required. See Details for more.
-#' @return \item{lambda }{a numeric log-likelihood ratio test statistic}
-#' \item{Pval }{a numeric p-value given the \code{lambda} tested against a
-#' chi-squared distribution with the number of degrees of freedom as specified.
-#' May have had a boundary correction applied.} \item{corrected.Pval }{a
-#' logical indicating if the p-value was derived using a boundary correction.
-#' See \code{Details}}
+#'   correction under one degree of freedom should be included. If the parameter
+#'   that is dropped from the reduced model is estimated at the boundary of its
+#'   parameter space in the full model, the boundary correction is often
+#'   required. See Details for more.
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{lambda }{a numeric log-likelihood ratio test statistic}
+#'     \item{Pval }{a numeric p-value given the \code{lambda} tested against a
+#'       chi-squared distribution with the number of degrees of freedom as
+#'       specified. May have had a boundary correction applied.} 
+#'     \item{corrected.Pval }{a logical indicating if the p-value was derived 
+#'       using a boundary correction. See \code{Details}}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{constrainFun}}
 #' @references Self, S. G., and K. Y. Liang. 1987. Asymptotic properties of
@@ -61,7 +63,7 @@
 #' 	df = 1, boundaryCorrection = TRUE))
 #' stopifnot(noBC$Pval == 2*withBC$Pval)
 #' 
-#' @export LRTest
+#' @export
 LRTest <- function(full, reduced, df = 1, boundaryCorrection = FALSE){
     if(sign(full) != sign(reduced)){
        stop("Signs of the log-likelihoods are opposite - or 1 log-likelihood is zero...don't know what to do")

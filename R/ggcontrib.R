@@ -49,18 +49,19 @@
 #' genetic group substituted instead of the missing value symbol (i.e., either
 #' 'NA', '0', or '*').
 #' 
-#' @usage ggcontrib(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix")
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param ggroups An optional vector of either: genetic group assignment for
-#' every individual or just the unique genetic groups. \code{fuzz} must be
-#' \code{NULL} if an object is supplied to the \code{ggroups} argument.
+#'   every individual or just the unique genetic groups. \code{fuzz} must be
+#'   \code{NULL} if an object is supplied to the \code{ggroups} argument.
 #' @param fuzz A matrix containing the fuzzy classification of phantom parents
-#' into genetic groups. \code{ggroups} must be \code{NULL} if an object is
-#' supplied to the \code{fuzz} argument.
+#'   into genetic groups. \code{ggroups} must be \code{NULL} if an object is
+#'   supplied to the \code{fuzz} argument.
 #' @param output Format for the output
-#' @return Returns i x r genetic group contributions to all 'i' individuals
-#' from each of the 'r' genetic groups. Default output is a matrix (dense), but
-#' this format can be changed (e.g., "dgCMatrix" for a sparse matrix).
+#'
+#' @return Returns i x r genetic group contributions to all 'i' individuals 
+#'   from each of the 'r' genetic groups. Default output is an object of class
+#'   \code{matrix} (dense), but this format can be changed (e.g., "dgCMatrix"
+#'   for a sparse matrix).
 #' @author \email{matthewwolak@@gmail.com}
 #' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
 #' an animal model. Genetics, Selection, Evolution. 41:42.
@@ -129,7 +130,7 @@
 #' 
 #'   stopifnot(gg1 == gg3)
 #' 
-#' @export ggcontrib
+#' @export
 ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
  
   if(!is.null(ggroups) & !is.null(fuzz)){

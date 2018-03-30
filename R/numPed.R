@@ -26,25 +26,22 @@
 #' Based on code from the \code{MCMCglmm} package
 #' 
 #' @aliases numPed is.numPed ronPed
-#' @usage numPed(pedigree, check = TRUE)
-#' 
-#' \method{isnumPed}(x)
-#' 
-#' ronPed(x, i, \dots{})
-#' @param pedigree A three column pedigree object, where the columns correspond
-#' to: ID, Dam, & Sire
-#' @param check A logical argument indicating if checks on the validity of the
-#' pedigree structure should be made, but see Details
+#' @param pedigree A three column pedigree object, where the columns correspond 
+#'   to: ID, Dam, & Sire
+#' @param check A logical argument indicating if checks on the validity of the 
+#'   pedigree structure should be made, but see Details
 #' @param x A pedigree of class \sQuote{\code{numPed}}
 #' @param i, Index specifying elements to extract or replace: see
-#' \code{\link[base]{[}}
+#'   \code{\link[base]{[}}
 #' @param list() Index specifying elements to extract or replace: see
-#' \code{\link[base]{[}}
+#'   \code{\link[base]{[}}
 #' @param Index specifying elements to extract or replace: see
-#' \code{\link[base]{[}}
-#' @return An S3 object of class "numPed" representing the pedigree, where
-#' individuals are now numbered from 1 to n and unknown parents are assigned a
-#' value of '-998'.
+#'   \code{\link[base]{[}}
+#'
+#' @return An S3 object of class \dQuote{numPed} representing the pedigree, 
+#'   where individuals are now numbered from 1 to \code{n} and unknown parents 
+#'   are assigned a value of \sQuote{-998}.
+#' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}},
 #' \code{\link[base]{[}}
 #' @examples
@@ -56,7 +53,7 @@
 #' ronPed(nPed, order(nPed[, 2], nPed[, 3]))
 #' is(nPed)
 #' 
-#' @export numPed
+#' @export
 numPed <- function(pedigree, check = TRUE){
  if(!is.numPed(pedigree) && check){      
   if(any(pedigree[, 2] == 0, na.rm = TRUE)){
@@ -126,10 +123,20 @@ numPed <- function(pedigree, check = TRUE){
 
 
 
+#' @ method is numPed
+#' @rdname numPed
+#' @export
 is.numPed <- function(x) inherits(x, "numPed")
 
 
+
+
+
+
 # re-ordering rows of object with class 'numPed'
+
+#' @rdname numPed
+#' @export
 ronPed <- function(x, i, ...){
    r <- structure(unclass(x)[i, ,...], class = "numPed")
    r

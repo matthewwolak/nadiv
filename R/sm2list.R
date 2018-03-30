@@ -16,14 +16,13 @@
 #' 
 #' Adapted from a function in the \code{MCMCglmm} package
 #' 
-#' @usage sm2list(A, rownames = NULL, colnames = c("row", "column", "A"))
 #' @param A a sparse matrix
 #' @param rownames a list of rownames from the 'A' matrix.
 #' @param colnames the columns will be labelled however they are entered in
-#' this character vector
+#'   this character vector
 #' @return returns the list form of the sparse matrix as a \code{data.frame}
 #' @seealso \code{\link[MCMCglmm]{MCMCglmm}}
-#' @export sm2list
+#' @export
 sm2list<-function(A, rownames = NULL, colnames=c("row", "column", "A"))
 {
     ginv <- data.frame(Row = rep(1:length(A@p[-1]),

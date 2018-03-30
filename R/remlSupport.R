@@ -21,14 +21,15 @@
 #' object (e.g., see the row order of \code{summary(object)$varcomp} for
 #' asreml-R models.
 #' 
-#' @usage pin(object, transform)
 #' @param object A list with at least the following elements: \code{gammas},
-#' \code{gammas.type}, and \code{ai} from a REML mixed model
+#'   \code{gammas.type}, and \code{ai} from a REML mixed model
 #' @param transform A formula specifying the linear transformation of variance
-#' components to conduct
-#' @return A dataframe with row names corresponding to the operator on the left
-#' hand side of the \code{transform} formula and the entries corresponding to
-#' the \code{Estimate} and approximate \code{SE} of the linear transformation.
+#'   components to conduct
+#'
+#' @return A \code{data.frame} with row names corresponding to the operator on 
+#'   the left hand side of the \code{transform} formula and the entries 
+#'   corresponding to the \code{Estimate} and approximate \code{SE} of the 
+#'   linear transformation.
 #' @author Ian White
 #' @seealso See Also as \code{\link{aiCI}}, \code{\link{aiFun}}
 #' @examples
@@ -42,7 +43,7 @@
 #'    names(asrMod[[1]]) <- names(asrMod[[2]]) <- namevec
 #' 
 #'    nadiv:::pin(asrMod, h2 ~ V1 / (V1 + V2))
-#' 
+#' @export
 pin <- function (object, transform){
   pframe <- as.list(object$gammas)
   names(pframe) <- paste("V", seq(1, length(pframe)), sep = "")
@@ -80,21 +81,21 @@ pin <- function (object, transform){
 #' object and \code{TRUE} value in the \code{converge} element of the output.
 #' This function will return \code{FALSE} if this is the case.
 #' 
-#' @usage pcc(object, traces = NULL, tol = 0.01, silent = FALSE)
 #' @param object A list with at least one element named: \code{monitor} (see
-#' Details)
+#'   Details)
 #' @param traces Optionally, a matrix to substitute instead of the monitor
-#' element to \code{object}.  Each row corresponds to a different variance
-#' component in the model and each column is a different iteration of the
-#' likelihood calculation (column 1 is the first iterate).
+#'   element to \code{object}.  Each row corresponds to a different variance
+#'   component in the model and each column is a different iteration of the
+#'   likelihood calculation (column 1 is the first iterate).
 #' @param tol The tolerance level for which to check against all of the changes
-#' in variance component parameter estimates
+#'   in variance component parameter estimates
 #' @param silent Optional argument to silence the output of helpful (indicating
-#' default underlying behavior) messages
+#'   default underlying behavior) messages
+#'
 #' @return Returns \code{TRUE} if all variance parameters change less than the
-#' value specified by \code{tol}, otherwise returns \code{FALSE}. Also see the
-#' \code{details} section for other circumstances when \code{FALSE} might be
-#' returned.
+#'   value specified by \code{tol}, otherwise returns \code{FALSE}. Also see the
+#'   \code{details} section for other circumstances when \code{FALSE} might be
+#'   returned.
 #' @author \email{matthewwolak@@gmail.com}
 #' @examples
 #' 
@@ -108,7 +109,7 @@ pin <- function (object, transform){
 #'    pcc(object = NULL, trace = tracein)
 #' 
 #' 
-#' @export pcc
+#' @export
 pcc <- function(object, traces = NULL, tol = 0.01, silent = FALSE){
     if(is.null(object) & is.null(traces)){
        stop("one of object or traces must be non-NULL")

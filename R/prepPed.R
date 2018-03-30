@@ -28,15 +28,15 @@
 #' supplied to try and identify any issues regarding the notation of missing
 #' values and validity of the basic pedigree for further processing.
 #' 
-#' @usage prepPed(pedigree, gender = NULL, check = TRUE)
 #' @param pedigree An object, where the first 3 columns correspond to: ID, Dam,
-#' & Sire. See details.
+#'   & Sire. See details.
 #' @param gender An optional character for the name of the column in
-#' \code{pedigree} that corresponds to the gender/sex of individuals.  If
-#' specified, \code{prepPed} will assign a gender to any founders it adds to
-#' the pedigree.
+#'   \code{pedigree} that corresponds to the gender/sex of individuals. If
+#'   specified, \code{prepPed} will assign a gender to any founders it adds to
+#'   the pedigree.
 #' @param check A logical argument indicating if checks on the validity of the
-#' pedigree structure should be made
+#'   pedigree structure should be made
+#'
 #' @return The pedigree object (can have more columns than just ID, Dam, and
 #' Sire), where: (1) the ID column cotains an ID for all individuals from the
 #' original pedigree object's ID, Dam, and Sire columns (i.e., founders are
@@ -57,7 +57,7 @@
 #'   warcolak_fixed_ordered <- prepPed(warcolak_unsuitable, gender = "sex")
 #'   head(warcolak_fixed_ordered)
 #' 
-#' @export prepPed
+#' @export
 prepPed <- function(pedigree, gender = NULL, check = TRUE){
 
  if(check){      

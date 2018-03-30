@@ -1,3 +1,6 @@
+#' @aliases makeSdsim makeDsim
+#' @rdname makeDsim
+#' @export
 makeSdsim <- function(pedigree, heterogametic, N,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),

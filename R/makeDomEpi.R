@@ -23,32 +23,36 @@
 #' Both the AD and DD matrix are computed from the Hadamard product of the
 #' respective matrices (see also, \code{\link{makeAA}}).
 #' 
-#' @usage makeDomEpi(pedigree, output = c("AD", "DD", "both"), parallel =
-#' FALSE, invertD = FALSE, det = FALSE)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param output Character(s) denoting which matrix and its inverse is to be
-#' constructed.
+#'   constructed.
 #' @param parallel A logical indicating whether or not to use parallel
-#' processing.  Note, this may only be available on Mac and Linux operating
-#' systems.
+#'   processing. Note, this may only be available on Mac and Linux operating
+#'   systems.
 #' @param invertD A logical indicating whether or not to invert the D matrix
 #' @param det A logical indicating whether or not to return the determinants
-#' for the epistatic relationship matrices
-#' @return All of the following will be returned.  However, the values of the
-#' \code{output} and \code{invertD} options passed to the function will
-#' determine which of the following are not NULL objects within the list:
-#' 
-#' \item{D }{the D matrix in sparse matrix form} \item{logDetD }{the log
-#' determinant of the D matrix} \item{AD }{the AD matrix in sparse matrix form}
-#' \item{logDetAD }{the log determinant of the AD matrix} \item{DD }{the DD
-#' matrix in sparse matrix form} \item{logDetDD }{the log determinant of the DD
-#' matrix} \item{Dinv }{the inverse of the D matrix in sparse matrix form}
-#' \item{ADinv }{the inverse of the AD matrix in sparse matrix form}
-#' \item{DDinv }{the inverse of the DD matrix in sparse matrix form}
-#' \item{listDinv }{the three column form of the non-zero elements for the
-#' inverse of the D matrix} \item{listADinv }{the three column form of the
-#' non-zero elements for the inverse of the AD matrix} \item{listDDinv }{the
-#' three column form of the non-zero elements for the inverse of the DD matrix}
+#'   for the epistatic relationship matrices
+#'
+#' @return All of the following will be returned. However, the values of the
+#'   \code{output} and \code{invertD} options passed to the function will
+#'   determine which of the following are not NULL objects within the list:
+#'   \describe{ 
+#'     \item{D }{the D matrix in sparse matrix form}
+#'     \item{logDetD }{the log determinant of the D matrix}
+#'     \item{AD }{the AD matrix in sparse matrix form}
+#'     \item{logDetAD }{the log determinant of the AD matrix}
+#'     \item{DD }{the DD matrix in sparse matrix form} 
+#'     \item{logDetDD }{the log determinant of the DD matrix}
+#'     \item{Dinv }{the inverse of the D matrix in sparse matrix form}
+#'     \item{ADinv }{the inverse of the AD matrix in sparse matrix form}
+#'     \item{DDinv }{the inverse of the DD matrix in sparse matrix form}
+#'     \item{listDinv }{the three column form of the non-zero elements for the
+#'       inverse of the D matrix}
+#'     \item{listADinv }{the three column form of the non-zero elements for the 
+#'       inverse of the AD matrix}
+#'     \item{listDDinv }{the three column form of the non-zero elements for the 
+#'       inverse of the DD matrix}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeA}}, \code{\link{makeD}}, \code{\link{makeAA}}
 #' @examples
@@ -59,7 +63,7 @@
 #'   DADoutput <- makeDomEpi(Mrode9, output = "AD", parallel = FALSE, invertD = TRUE)
 #'   str(DADoutput)
 #' 
-#' @export makeDomEpi
+#' @export
 makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, invertD = FALSE, det = FALSE)
 {
   type <- match.arg(output)

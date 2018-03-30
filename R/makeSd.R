@@ -1,3 +1,6 @@
+#' @aliases makeSd makeD
+#' @rdname makeD
+#' @export
 makeSd <- function(pedigree, heterogametic,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),

@@ -60,63 +60,68 @@
 #' average of each individual's parents' predicted total additive genetic
 #' effects.
 #' 
-#' @usage simGG(K, pairs, noff, g, nimm = 2, nimmG = seq(2, g - 1, 1), VAf = 1,
-#' VAi = 1, VRf = 1, VRi = 1, mup = 20, muf = 0, mui = 0, murf = 0, muri = 0,
-#' d_bvf = 0, d_bvi = 0, d_rf = 0, d_ri = 0)
 #' @param K Integer number of individuals per generation, or the focal
-#' population carrying capacity
+#'   population carrying capacity
 #' @param pairs Integer number of mating pairs created by sampling with
-#' replacement from adults of a given generation
+#'   replacement from adults of a given generation
 #' @param noff Integer number of offspring each pair contributes to the next
-#' generation
+#'   generation
 #' @param g Integer number of (non-overlapping) generations to simulate
 #' @param nimm Integer number of immigrants added to the population each
-#' generation of migration
+#'   generation of migration
 #' @param nimmG Sequence of integers for the generations in which immigrants
-#' arrive in the focal population
+#'   arrive in the focal population
 #' @param VAf Numeric value for the expected additive genetic variance in the
-#' first generation of the focal population - the founders
+#'   first generation of the focal population - the founders
 #' @param VAi Numeric value for the expected additive genetic variance in each
-#' generation of immigrants
+#'   generation of immigrants
 #' @param VRf Numeric value for the expected residual variance in the focal
-#' population
+#'   population
 #' @param VRi Numeric value for the expected residual variance in each
-#' generation of the immigrants
+#'   generation of the immigrants
 #' @param mup Numeric value for the expected mean phenotypic value in the first
-#' generation of the focal population - the founders
+#'   generation of the focal population - the founders
 #' @param muf Numeric value for the expected mean breeding value in the first
-#' generation of the focal population - the founders
+#'   generation of the focal population - the founders
 #' @param mui Numeric value for the expected mean breeding value for the
-#' immigrants
+#'   immigrants
 #' @param murf Numeric value for the expected mean residual (environmental)
-#' deviation in the first generation of the focal population - the founders
+#'   deviation in the first generation of the focal population - the founders
 #' @param muri Numeric value for the expected mean residual (environmental)
-#' deviation for the immigrants
+#'   deviation for the immigrants
 #' @param d_bvf Numeric value for the expected change between generations in
-#' the mean breeding value of the focal population. Sets the rate of genetic
-#' selection occurring across generations
+#'   the mean breeding value of the focal population. Sets the rate of genetic
+#'   selection occurring across generations
 #' @param d_bvi Numeric value for the expected change between generations in
-#' the mean breeding value of the immigrant population each generation
+#'   the mean breeding value of the immigrant population each generation
 #' @param d_rf Numeric value for the expected change between generations in the
-#' mean residual (environmental) deviation of the focal population each
-#' generation
+#'   mean residual (environmental) deviation of the focal population each
+#'   generation
 #' @param d_ri Numeric value for the expected change between generations in the
-#' mean residual (environmental) deviation of the immigrant population each
-#' generation
-#' @return A \code{data.frame} with columns corresponding to: \item{id
-#' }{Integer for each individual's unique identifying code} \item{dam }{Integer
-#' indicating each individual's dam} \item{sire }{Integer indicating each
-#' individual's sire} \item{parAvgU }{Numeric value for the average of each
-#' individual's dam and sire additive genetic effects} \item{mendel }{Numeric
-#' value for each individual's Mendelian sampling deviate from the mid-parental
-#' total additive genetic value} \item{u }{Numeric value of each individual's
-#' total additive genetic effect} \item{r }{Numeric value of each individual's
-#' residual (environmental) deviation} \item{p }{Numeric value of each
-#' individual's phenotypic value} \item{pred.u }{Numeric value of each
-#' individual's predited total additive genetic effect} \item{is }{Integer of
-#' either \code{0} if an individual was born in the focal population or
-#' \code{1} if they were born in an immigrant population} \item{gen }{Integer
-#' value of the generation in which each individual was born}
+#'   mean residual (environmental) deviation of the immigrant population each
+#'   generation
+#'
+#' @return A \code{data.frame} with columns corresponding to:
+#'   \describe{
+#'     \item{id }{Integer for each individual's unique identifying code}
+#'     \item{dam }{Integer indicating each individual's dam}
+#'     \item{sire }{Integer indicating each individual's sire}
+#'     \item{parAvgU }{Numeric value for the average of each individual's dam 
+#'       and sire additive genetic effects}
+#'     \item{mendel }{Numeric value for each individual's Mendelian sampling 
+#'       deviate from the mid-parental total additive genetic value
+#'     \item{u }{Numeric value of each individual's total additive genetic 
+#'       effect}
+#'     \item{r }{Numeric value of each individual's residual (environmental) 
+#'       deviation}
+#'     \item{p }{Numeric value of each individual's phenotypic value}
+#'     \item{pred.u }{Numeric value of each individual's predited total 
+#'       additive genetic effect}
+#'     \item{is }{Integer of either \code{0} if an individual was born in the 
+#'       focal population or \code{1} if they were born in an immigrant 
+#'       population}
+#'     \item{gen }{Integer value of the generation in which each individual was 
+#'       born}
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{ggTutorial}}
 #' @references Verrier, V., J.J. Colleau, and J.L. Foulley. 1993. Long-term
@@ -160,7 +165,7 @@
 #'   a <- ggTutorial$u - Q %*% g_exp
 #' 
 #' 
-#' @export simGG
+#' @export
 simGG <- function(K, pairs, noff, g,
 	nimm = 2, nimmG = seq(2, g-1, 1),
 	VAf = 1, VAi = 1, VRf = 1, VRi = 1,

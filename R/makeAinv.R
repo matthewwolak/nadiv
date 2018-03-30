@@ -63,43 +63,45 @@
 #' set of equations.
 #' 
 #' @aliases makeAinv makeAinv.default makeAinv.fuzzy
-#' @usage makeAinv(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop =
-#' FALSE, det = FALSE, \dots{}) \method{makeAinvdefault}(pedigree, f = NULL,
-#' ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, \dots{})
-#' \method{makeAinvfuzzy}(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop =
-#' FALSE, det = FALSE, \dots{})
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param f A numeric indicating the level of inbreeding. See Details
 #' @param ggroups Either a vector with the unique name of each genetic group,
-#' or a numeric indicating the number of unique genetic groups. See Details for
-#' different ways to specify. Note, if NULL then the regular A-inverse will be
-#' constructed. Also, must be NULL if fuzz is non-NULL.
+#'   or a numeric indicating the number of unique genetic groups. See Details 
+#'   for different ways to specify. Note, if NULL then the regular A-inverse
+#'   will be constructed. Also, must be NULL if fuzz is non-NULL.
 #' @param fuzz A matrix containing the fuzzy classification of phantom parents
-#' into genetic groups. See Details.
+#'   into genetic groups. See Details.
 #' @param gOnTop A logical indicating if (when including genetic groups) the
-#' A-inverse should be constructed with the `g` genetic groups located in the
-#' first `g` rows and columns if TRUE, else the `g` genetic groups are located
-#' in the last `g` rows and columns of A-inverse
+#'   A-inverse should be constructed with the \sQuote{g} genetic groups located 
+#'   in the first \sQuote{g} rows and columns if \code{TRUE}, else the
+#'   \sQuote{g} genetic groups are located in the last \sQuote{g} rows and 
+#'   columns of A-inverse
 #' @param det Logical, indicating if the (log) determinant of the A matrix
-#' should be returned
+#'   should be returned
 #' @param \dots Arguments to be passed to methods
-#' @return \item{Ainv }{the inverse of the additive genetic relationship matrix
-#' in sparse matrix form} \item{listAinv }{the three column list of the
-#' non-zero elements for the inverse of the additive genetic relationship
-#' matrix with attributes \code{rowNames} and \code{geneticGroups}.
-#' \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
-#' column from the pedigree. \code{attr(*, "geneticGroups")} is a two element
-#' vector with the first integer indicating how many genetic groups are
-#' included in the pedigree. This last attribute is necessary for some software
-#' programs to correctly specify the residual degrees of freedom when
-#' calculating the log-likelihood in a model that implicitly fits fixed genetic
-#' group effects.} \item{f }{the individual coefficients of inbreeding for each
-#' individual in the pedigree (matches the order of the first/ID column of the
-#' pedigree). If the pedigree contains \sQuote{g} genetic groups in the first
-#' \sQuote{g} rows, then the first \sQuote{g} elements of \code{f} are assigned
-#' 0. If the pedigree contains \sQuote{p} phantom parents in the first
-#' \sQuote{p} rows, then the first \sQuote{p} elements of \code{f} are assigned
-#' 0. } \item{logDet }{the log determinant of the A matrix}
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{Ainv }{the inverse of the additive genetic relationship matrix
+#'       in sparse matrix form}
+#'     \item{listAinv }{the three column list of the non-zero elements for the 
+#'       inverse of the additive genetic relationship matrix with attributes
+#'       \code{rowNames} and \code{geneticGroups}. \code{attr(*, "rowNames")}
+#'       links the integer for rows/columns to the ID column from the pedigree. 
+#'       \code{attr(*, "geneticGroups")} is a two element vector with the first 
+#'       integer indicating how many genetic groups are included in the 
+#'       pedigree. This last attribute is necessary for some software programs 
+#'       to correctly specify the residual degrees of freedom when calculating 
+#'       the log-likelihood in a model that implicitly fits fixed genetic group 
+#'       effects.}
+#'     \item{f }{the individual coefficients of inbreeding for each individual 
+#'       in the pedigree (matches the order of the first/ID column of the
+#'       pedigree). If the pedigree contains \sQuote{g} genetic groups in the 
+#'       first \sQuote{g} rows, then the first \sQuote{g} elements of \code{f} 
+#'       are assigned 0. If the pedigree contains \sQuote{p} phantom parents in 
+#'       the first \sQuote{p} rows, then the first \sQuote{p} elements of
+#'       \code{f} are assigned 0.}
+#'     \item{logDet }{the log determinant of the A matrix}
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeAstarMult}}, \code{\link{makeA}}
 #' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
@@ -137,7 +139,8 @@
 #' 	ggroups = c("g1", "g2"), gOnTop = FALSE)$Ainv
 #'     noggAinv <- makeAinv(Mrode3[-c(1,2), c("calf", "dam", "sire")],
 #' 	ggroups = NULL)$Ainv
-#'     # First 8 rows & columns of ggAinv are same as the A-inverse without genetic groups
+#'     # First 8 rows & columns of ggAinv are same as A-inverse without 
+#'     ## genetic groups
 #'     ggAinv[1:8, 1:8]
 #'     noggAinv
 #'    stopifnot(all.equal(ggAinv[1:8, 1:8], noggAinv))
@@ -162,7 +165,7 @@
 #' 	identical(AstarNullFuzzy, AstarD))
 #' 
 #' 
-#' @export makeAinv
+#' @export
 makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
   if(is(fuzz, "matrix") | is(fuzz, "Matrix")) class(fuzz) <- "fuzzy"
   UseMethod("makeAinv", fuzz)
@@ -170,8 +173,14 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = F
 
 
 ###############################################################################
-# Methods:
+###############################################################################
+# 	Methods:
+###############################################################################
+###############################################################################
 
+#' @method makeAinv default
+#' @rdname makeAinv
+#' @export
 makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
   if(is.null(ggroups)){
      ptype <- "O"
@@ -285,10 +294,9 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
 ###############################################################################
 ###############################################################################
 
-
-
-
-
+#' @method makeAinv fuzzy
+#' @rdname makeAinv
+#' @export
 makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FALSE, det = FALSE, ...){
 
   if(!is.null(ggroups)){

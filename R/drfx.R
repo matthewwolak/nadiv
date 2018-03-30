@@ -11,15 +11,15 @@
 #' of slightly less than (greater than) 1 (-1).  For example: 0.9999 or
 #' -0.9999.
 #' 
-#' @usage drfx(G, fac, dataf, ...)
 #' @param G The variance-covariance matrix to model the effects after
 #' @param fac A character indicating the factor in \code{dataf} with which to
-#' construct the design matrix
+#'   construct the design matrix
 #' @param dataf A dataframe with \code{fac} in it
 #' @param ...  Arguments to be passed to the internal use of \code{\link{grfx}}
+#'
 #' @return \item{fx }{A matrix with 'd' columns of random effects} \item{Z }{A
 #' design matrix (of the format 'Matrix') from which the random effects in
-#' \code{fx} were assigned }
+#'   \code{fx} were assigned }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{grfx}}
 #' @examples
@@ -30,7 +30,7 @@
 #'   cfx <- drfx(G = Gmat, fac = "Dam", dataf = warcolak[1:200, ])
 #' 
 #' 
-#' @export drfx
+#' @export
 drfx <- function(G, fac, dataf, ...){
    dataf[, fac] <- as.factor(dataf[, fac])
    d <- nrow(G)

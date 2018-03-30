@@ -15,10 +15,10 @@
 #' with missing parents (and in this case just a single missing parent
 #' classifies an individual as a founder).
 #' 
-#' @usage founderLine(pedigree, sex)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire, Sex
 #' @param sex Character indicating the column name in pedigree identifying
-#' either the dam (for matriline) or sire (for patriline) identities
+#'   either the dam (for matriline) or sire (for patriline) identities
+#'
 #' @return A vector of length equal to the number of rows in the pedigree
 #' @author \email{matthewwolak@@gmail.com}
 #' @examples
@@ -30,7 +30,8 @@
 #'  K <- 8  # No. individuals per generation (KEEP and even number)
 #'  gen <- 10 # No. of generations
 #'  datArr <- array(NA, dim = c(K, 5, gen))
-#'  dimnames(datArr) <- list(NULL, c("id", "dam", "sire", "sex", "matriline"), NULL)
+#'  dimnames(datArr) <- list(NULL, 
+#'	c("id", "dam", "sire", "sex", "matriline"), NULL)
 #'  # initialize the data array
 #'  datArr[, "id", ] <- seq(K*gen)
 #'  datArr[, "sex", ] <- c(1, 2)
@@ -39,7 +40,8 @@
 #'  datArr[femRow, "matriline", 1] <- femRow
 #'  # males have overlapping generations, BUT females DO NOT
 #'  for(g in 2:gen){
-#'    datArr[, "sire", g] <- sample(c(datArr[femRow-1, "id", 1:(g-1)]), size = K, replace = TRUE)
+#'    datArr[, "sire", g] <- sample(c(datArr[femRow-1, "id", 1:(g-1)]),
+#'	size = K, replace = TRUE)
 #'    gdams <- sample(femRow, size = K, replace = TRUE)
 #'    datArr[, c("dam", "matriline"), g] <- datArr[gdams, c("id", "matriline"), g-1]
 #'  }
@@ -52,7 +54,7 @@
 #' 	range(ped$matriline-ped$line, na.rm = TRUE) == 0)
 #' 
 #' 
-#' @export founderLine
+#' @export
 founderLine <- function(pedigree, sex){
    colsel <- match(sex, names(pedigree))
    if(!colsel %in% seq(ncol(pedigree))){

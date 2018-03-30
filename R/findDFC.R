@@ -15,24 +15,26 @@
 #' \code{parallel} = TRUE should only be used on Linux or Mac OSes (i.e., not
 #' Windows).
 #' 
-#' @usage findDFC(pedigree, exact = FALSE, parallel = FALSE, ncores =
-#' getOption("mc.cores", 2L))
 #' @param pedigree A pedigree with columns organized: ID, Dam, Sire
 #' @param exact A logical statement indicating if individuals who are exactly
-#' double first cousins are to be identified
+#'   double first cousins are to be identified
 #' @param parallel A logical statement indicating if parallelization should be
-#' attempted.  Note, only reliable for Mac and Linux operating systems.
+#'   attempted.  Note, only reliable for Mac and Linux operating systems.
 #' @param ncores Number of cpus to use, default is maximum available
-#' @return \item{PedPositionList }{gives the list of row numbers for all the
-#' pairs of indidivuals that are related as double first cousins } \item{DFC
-#' }{gives the list of IDs, as characters, for all the pairs of individuals
-#' that are related as double first cousins } \item{FamilyCnt }{If two
-#' individuals, i and j, are double first cousins, then i's siblings will also
-#' be double first cousins with j's siblings.  Therefore, this is the total
-#' number of family pairs where offspring are related as double first cousins.
-#' }
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{PedPositionList }{gives the list of row numbers for all the
+#'       pairs of indidivuals that are related as double first cousins.}
+#'     \item{DFC }{gives the list of IDs, as characters, for all the pairs of 
+#'       individuals that are related as double first cousins.}
+#'     \item{FamilyCnt }{If two individuals, i and j, are double first cousins,
+#'       then i's siblings will also be double first cousins with j's siblings.
+#'       Therefore, this is the total number of family pairs where offspring
+#'       are related as double first cousins.}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
-#' @export findDFC
+#' @export
 findDFC <- function(pedigree, exact = FALSE, parallel = FALSE, ncores = getOption("mc.cores", 2L))
 {
   numeric.pedigree <- numPed(pedigree)

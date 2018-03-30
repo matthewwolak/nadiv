@@ -10,17 +10,17 @@
 #' See function \code{\link{makeAinv}} for directly obtaining the inverse of
 #' the additive genetic relationship matrix.
 #' 
-#' @usage makeA(pedigree)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
-#' @return Returns A, or the numerator relationship matrix, in sparse matrix
-#' form.
+#'
+#' @return Returns A, or the numerator relationship matrix, in sparse 
+#'   matrix form.
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeD}}, \code{\link{makeS}}
 #' @examples
 #' 
 #'  makeA(Mrode2)
 #' 
-#' @export makeA
+#' @export
 makeA <- function(pedigree)
 {
   nPed <- numPed(pedigree)

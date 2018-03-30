@@ -21,23 +21,27 @@
 #' expression of both sex chromosomes in the homogametic sex ("hoha"), or
 #' inactivation of the paternal sex chromosome in the homogametic sex ("hopi").
 #' 
-#' @usage makeS(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori",
-#' "hedo", "hoha", "hopi"), returnS = FALSE)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire, Sex
 #' @param heterogametic Character indicating the label corresponding to the
-#' heterogametic sex used in the "Sex" column of the pedigree
+#'   heterogametic sex used in the \dQuote{Sex} column of the pedigree
 #' @param DosageComp A character indicating which model of dosage compensation.
-#' If "NULL" then the "ngdc" model is assumed.
+#'   If \code{NULL} then the \dQuote{ngdc} model is assumed.
 #' @param returnS Logical statement, indicating if the relationship matrix
-#' should be constructed in addition to the inverse
-#' @return \item{model }{the model of sex-chromosome dosage compensation
-#' assumed.} \item{S }{the sex-chromosome relationship matrix in sparse matrix
-#' form or NULL if \code{returnS} = FALSE} \item{Sinv }{the inverse of the S
-#' matrix in sparse matrix form} \item{listSinv }{the three column form of the
-#' non-zero elements for the inverse of the S matrix} \item{inbreeding }{the
-#' sex-linked inbreeding coefficients for all individuals in the pedigree}
-#' \item{v }{a vector of the Mendelian sampling variances for a sex-linked
-#' locus}
+#'   should be constructed in addition to the inverse
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{model }{the model of sex-chromosome dosage compensation assumed.}
+#'     \item{S }{the sex-chromosome relationship matrix in sparse matrix
+#'       form or NULL if \code{returnS} = FALSE}
+#'     \item{Sinv }{the inverse of the S matrix in sparse matrix form}
+#'     \item{listSinv }{the three column form of the non-zero elements for the 
+#'       inverse of the S matrix}
+#'     \item{inbreeding }{the sex-linked inbreeding coefficients for all 
+#'       individuals in the pedigree}
+#'     \item{v }{a vector of the Mendelian sampling variances for a sex-linked 
+#'       locus}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @references Wolak, M.E., D.A. Roff, and D.J. Fairbairn. in prep. The
 #' contribution of sex chromosomal additive genetic (co)variation to the
@@ -53,7 +57,7 @@
 #' 
 #'  makeS(FG90, heterogametic = "0", returnS = TRUE)
 #' 
-#' @export makeS
+#' @export
 makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"), returnS = FALSE){
 
     if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")

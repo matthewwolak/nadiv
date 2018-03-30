@@ -42,19 +42,19 @@
 #' See function \code{\link{makeAinv}} for directly obtaining the inverse of
 #' the additive genetic relationship matrix with genetic groups.
 #' 
-#' @usage makeAstarMult(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE)
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param ggroups Either a vector with the unique name of each genetic group,
-#' or a numeric indicating the number of unique genetic groups. See Details for
-#' different ways to specify. Note, cannot be NULL.
+#'   or a numeric indicating the number of unique genetic groups. See Details 
+#'   for different ways to specify. Note, cannot be NULL.
 #' @param fuzz A matrix containing the fuzzy classification of individuals into
-#' genetic groups.
+#'   genetic groups.
 #' @param gOnTop A logical indicating if the A-inverse should be constructed
-#' with the `g` genetic groups located in the first `g` rows and columns if
-#' TRUE, else the `g` genetic groups are located in the last `g` rows and
-#' columns of A-inverse
+#'   with the \sQuote{g} genetic groups located in the first \sQuote{g} rows 
+#'   and columns if TRUE, else the \sQuote{g} genetic groups are located in the 
+#'   last \sQuote{g} rows and columns of A-inverse.
+#'
 #' @return Returns A*, or the inverse of the numerator relationship with
-#' groups, in sparse matrix form.
+#'   groups, in sparse matrix form.
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeAinv}}, \code{\link{ggcontrib}}
 #' @references Quaas, R.L. 1988. Additive genetic model with groups and
@@ -97,7 +97,7 @@
 #' 	- Astar_direct, 10))@x) == 0)
 #'  
 #' 
-#' @export makeAstarMult
+#' @export
 makeAstarMult <- function(pedigree, ggroups, fuzz = NULL, gOnTop = FALSE){
   if(is.null(fuzz)){
     if(inherits(ggroups, "numeric") && length(ggroups) == 1){

@@ -13,16 +13,16 @@
 #' still has difficulty separating dominance variance from common maternal
 #' environmental variance (Meyer 2008).
 #' 
-#' @usage simPedDFC(F, gpn = 4, fsn = 4, s = 2, prefix = NULL)
 #' @param F Number of blocks for the design
 #' @param gpn Number of grandparents in the first/GP generation (must be >= 2)
 #' @param fsn Number of offspring in the full-sib families of the second/P
-#' generation (must be an even number >= 4)
+#'   generation (must be an even number >= 4)
 #' @param s Number of sires per full-sib family in the second/P generation
-#' (must be >=2)
+#'   (must be >=2)
 #' @param prefix Optional prefix to add to every identity
+#'
 #' @return A \code{data.frame} with columns corresponding to: id, dam, sire,
-#' and sex.  Sex is \code{M} for males and \code{F} for females.
+#'   and sex. Sex is \code{M} for males and \code{F} for females.
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{simPedHS}}, \code{\link{warcolak}}
 #' @references Fairbairn, D.J. and D.A. Roff. 2006.  The quantitative genetics
@@ -35,7 +35,7 @@
 #' 
 #'   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2)
 #' 
-#' @export simPedDFC
+#' @export
 simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, prefix = NULL)
 {
 

@@ -15,21 +15,22 @@
 #' example).
 #' 
 #' @aliases genAssign genAssign.default genAssign.numPed
-#' @usage genAssign(pedigree, \dots{}) \method{genAssigndefault}(pedigree,
-#' \dots{}) \method{genAssignnumPed}(pedigree, \dots{})
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param \dots Arguments to be passed to methods
+#'
 #' @return A vector of values is returned.  This vector is in the same order as
 #' the ID column of the pedigree.
 #' @author \email{matthewwolak@@gmail.com}
-#' @export genAssign
+#' @export
 genAssign <- function(pedigree, ...){
   UseMethod("genAssign", pedigree)
 }
 
 ###############################################################################
 # Methods:
-
+#' @rdname genAssign
+#' @method genAssign default
+#' @export
 genAssign.default <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
@@ -51,6 +52,9 @@ genAssign.default <- function(pedigree, ...)
 
 ######################################
 
+#' @rdname genAssign
+#' @method genAssign numPed
+#' @export
 genAssign.numPed <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
