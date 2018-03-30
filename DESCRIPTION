@@ -1,9 +1,7 @@
 Package: nadiv
 Type: Package
 Title: (Non)Additive Genetic Relatedness Matrices
-Version: 2.15.0.4
-Description: Constructs (non)additive genetic relationship matrices, and their inverses, from a pedigree to be used in linear mixed effect models (A.K.A. the 'animal model'). Also includes other functions to facilitate the use of animal models. Some functions have been created to be used in conjunction with the R package 'asreml' for the 'ASReml' software, which can be obtained upon purchase from 'VSN' international (http://www.vsni.co.uk/software/asreml).
-Date: 2017-10-25
+Version: 2.16.0.0
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
 URL: http://github.com/matthewwolak/nadiv
 BugReports: http://github.com/matthewwolak/nadiv/issues
@@ -14,7 +12,11 @@ Imports: graphics, methods, stats
 License: GPL (>=2)
 LazyData: yes
 NeedsCompilation: yes
-Packaged: 2016-09-22 11:31:16 UTC; matthew
-Author: Matthew Wolak [cre, aut]
-Maintainer: Matthew Wolak <matthewwolak@gmail.com>
+Description: Constructs (non)additive genetic relationship matrices, and their
+    inverses, from a pedigree to be used in linear mixed effect models (A.K.A.
+    the 'animal model'). Also includes other functions to facilitate the use of
+    animal models. Some functions have been created to be used in conjunction
+    with the R package 'asreml' for the 'ASReml' software, which can be
+    obtained upon purchase from 'VSN' international 
+    (http://www.vsni.co.uk/software/asreml).
 RoxygenNote: 6.0.1
