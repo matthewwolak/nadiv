@@ -5,36 +5,35 @@
 #' 
 #' A \code{data.frame} with 16 observations on the following 11 variables:
 #'   \describe{
-#'     \item{id }{a factor with levels indicating the unique
-#' individuals (including phantom parents) and genetic groups}
-#'     \item{dam }{a factor of observed maternal
-#' identities}
+#'     \item{id }{a factor with levels indicating the unique individuals 
+#'       (including phantom parents) and genetic groups}
+#'     \item{dam }{a factor of observed maternal identities}
 #'     \item{sire }{a factor vector of observed paternal identities}
-#'     \item{damGG }{a
-#' factor of maternal identities with genetic groups inserted instead of
-#' \code{NA}}
-#'     \item{sireGG }{a factor of paternal
-#' identities with genetic groups inserted instead of \code{NA}}
-#'     \item{phantomDam }{a factor of maternal identities with
-#' phantom parents inserted instead of \code{NA}}
-#'     \item{phantomSire }{a factor of paternal identities with phantom
-#' parents inserted instead of \code{NA}}
+#'     \item{damGG }{a factor of maternal identities with genetic groups
+#'       inserted instead of \code{NA}}
+#'     \item{sireGG }{a factor of paternal identities with genetic groups
+#'       inserted instead of \code{NA}}
+#'     \item{phantomDam }{a factor of maternal identities with phantom parents
+#'       inserted instead of \code{NA}}
+#'     \item{phantomSire }{a factor of paternal identities with phantom parents
+#'       inserted instead of \code{NA}}
 #'     \item{group }{a factor of genetic groups to which each phantom parent
-#' belongs}
-#'     \item{g1 }{a numeric vector with probabilities of group
-#' \code{g1} membership for each phantom parent}
+#'       belongs}
+#'     \item{g1 }{a numeric vector with probabilities of group \code{g1}
+#'       membership for each phantom parent}
 #'     \item{g2 }{a numeric vector with probabilities of group \code{g2}
-#' membership for each phantom parent}
+#'       membership for each phantom parent}
 #'     \item{g3 }{a numeric vector with probabilities of group \code{g3}
-#' membership for each phantom parent}
+#'       membership for each phantom parent}
 #'   }
 #'
 #' @docType data
 #' @source Fikse, F. 2009. Fuzzy classification of phantom parent groups in an
-#' animal model. Genetics Selection Evolution 41:42.
+#'   animal model. Genetics Selection Evolution 41:42.
 #' @keywords datasets
 #' @examples
 #'   data(F2009)
+#'   str(F2009)
 "F2009"
 
 
@@ -60,6 +59,7 @@
 #' @keywords datasets
 #' @examples
 #'   data(FG90)
+#'   str(FG90)
 "FG90"
 
 
@@ -159,6 +159,7 @@
 #' @keywords datasets
 #' @examples
 #    data(Mrode2)
+#'   str(Mrode2)
 "Mrode2"
 
 
@@ -190,6 +191,7 @@
 #' @keywords datasets
 #' @examples
 #'   data(Mrode3)
+#'   str(Mrode3)
 "Mrode3"
 
 
@@ -213,6 +215,7 @@
 #' @keywords datasets
 #' @examples
 #'   data(Mrode9)
+#'   str(Mrode9)
 "Mrode9"
 
 
@@ -247,6 +250,7 @@
 #' @keywords datasets
 #' @examples
 #'   data(Q1988)
+#'   str(Q1988)
 "Q1988"
 
 
