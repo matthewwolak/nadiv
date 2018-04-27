@@ -102,6 +102,7 @@
 #'       the first \sQuote{p} rows, then the first \sQuote{p} elements of
 #'       \code{f} are assigned 0.}
 #'     \item{logDet }{the log determinant of the A matrix}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeAstarMult}}, \code{\link{makeA}}
 #' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
