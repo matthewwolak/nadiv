@@ -109,7 +109,7 @@
 #'     \item{parAvgU }{Numeric value for the average of each individual's dam 
 #'       and sire additive genetic effects}
 #'     \item{mendel }{Numeric value for each individual's Mendelian sampling 
-#'       deviate from the mid-parental total additive genetic value
+#'       deviate from the mid-parental total additive genetic value}
 #'     \item{u }{Numeric value of each individual's total additive genetic 
 #'       effect}
 #'     \item{r }{Numeric value of each individual's residual (environmental) 
@@ -122,6 +122,7 @@
 #'       population}
 #'     \item{gen }{Integer value of the generation in which each individual was 
 #'       born}
+#'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{ggTutorial}}
 #' @references Verrier, V., J.J. Colleau, and J.L. Foulley. 1993. Long-term
