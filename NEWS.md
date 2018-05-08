@@ -1,3 +1,7 @@
+# 2.16.0
+## NEW
+  * `roxygen2` documentation
+
 # 2.15.0
 ## NEW
   * Functions to construct sex-chromosomal dominance relatedness matrices
