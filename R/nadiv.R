@@ -23,3 +23,13 @@
 "_PACKAGE"
 
 
+
+
+
+#` nadiv Cleanup
+#'
+#' Unload DLL when library unloaded
+.onUnload <- function (libpath) {
+  library.dynam.unload("nadiv", libpath)
+}
+
