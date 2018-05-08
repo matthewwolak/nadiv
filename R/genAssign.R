@@ -34,7 +34,9 @@ genAssign <- function(pedigree, ...){
 genAssign.default <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
-   if(any(apply(pedigree[, 1:3], MARGIN = 2, FUN = function(x){min(x, na.rm = TRUE) < 0}))){
+   numbCols <- which(apply(pedigree[, 1:3], MARGIN = 2, FUN = is.integer) |
+	apply(pedigree[, 1:3], MARGIN = 2, FUN = is.numeric))
+   if(length(numbCols) > 0 && any(apply(pedigree[, numbCols], MARGIN = 2, FUN = function(x){min(x, na.rm = TRUE) < 0}))){
       warning("Negative values in pedigree interpreted as missing values")
       pedigree[pedigree < 0] <- -998
    }
