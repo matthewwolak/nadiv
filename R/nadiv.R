@@ -8,7 +8,7 @@
 #' 'VSN' international (http://www.vsni.co.uk/software/asreml).
 #' 
 #' @aliases nadiv-package nadiv
-#' @useDynLib nadiv
+#' @useDynLib nadiv, .registration = TRUE
 #' @importFrom methods as is
 #' @importFrom graphics abline plot
 #' @importFrom stats as.formula deriv na.omit optimize
@@ -22,4 +22,12 @@
 #' }
 "_PACKAGE"
 
+
+
+
+
+# nadiv Cleanup: Unload DLL when library unloaded
+.onUnload <- function (libpath) {
+  library.dynam.unload("nadiv", libpath)
+}
 
