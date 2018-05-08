@@ -9,6 +9,7 @@
 #' 
 #' @aliases nadiv-package nadiv
 #' @import methods Matrix
+#' @useDynLib nadiv
 #' @author Matthew Wolak \email{matthewwolak@@gmail.com}
 #' @examples
 #' #TODO: simple examples of the most important functions
