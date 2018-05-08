@@ -1,3 +1,26 @@
+#' Creates the additive genetic relationship matrix
+#' 
+#' This returns the additive relationship matrix in sparse matrix format.
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA',
+#' '0', or '*'.
+#' 
+#' Used as a support function to \code{\link{makeD}}.
+#' 
+#' See function \code{\link{makeAinv}} for directly obtaining the inverse of
+#' the additive genetic relationship matrix.
+#' 
+#' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
+#'
+#' @return Returns A, or the numerator relationship matrix, in sparse 
+#'   matrix form.
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link{makeD}}, \code{\link{makeS}}
+#' @examples
+#' 
+#'  makeA(Mrode2)
+#' 
+#' @export
 makeA <- function(pedigree)
 {
   nPed <- numPed(pedigree)
@@ -17,7 +40,7 @@ makeA <- function(pedigree)
   nA <- nA + sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
   nPed[nPed == -998] <- N + 1
-    Cout <- .C("acinv",
+    Cout <- .C("acinv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f

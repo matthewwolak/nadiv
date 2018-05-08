@@ -1,3 +1,103 @@
+#' Profile Likelihoods
+#' 
+#' Estimation, checking, and plotting of profile likelihoods and objects of
+#' class \code{proLik} from a mixed model in ASReml-R.
+#' 
+#' For the \code{negative} argument, this should be used if the profile
+#' likelihood of a covariance component is to be constructed.
+#' 
+#' \code{parallel} = TRUE should only be used on Linux or Mac OSes (i.e., not
+#' Windows).
+#' 
+#' The function uses the \code{optimize} function to obtain the approximate
+#' confidence limits. Therefore, \code{nse} should be carefully thought about
+#' beforehand when running the function. Increasing this value will ensure the
+#' confidence limits are contained by the search space, but at a cost to time.
+#' 
+#' \code{tolerance} is expressed in terms of the \code{alpha} value desired.
+#' Convergence to a confidence limit will only be achieved when the constrained
+#' value proposed for the confidence limit yields a likelihood ratio test
+#' statistic that is no worse than \code{alpha + tolerance}.
+#' 
+#' If \code{negative} is FALSE, and the lower bound of the sampling interval
+#' extends beyond zero, this will instead be set to effectively zero.
+#' 
+#' Obtaining the profile likelihood for residual variances may necessitate
+#' explicitly specifying the R structure of the ASReml model. See example
+#' below.
+#' 
+#' @aliases proLik is.proLik plot.proLik
+#' @param full.model An \code{asreml} model object
+#' @param component A character indicating for which variance component the
+#'   profile likelihood will be constructed. Must be an object in
+#'   \code{full.model$gammas}.
+#' @param G Logical indicating whether component is part of the G structure. If
+#'   the component is part of the R structure, G = FALSE.
+#' @param negative Logical indicating whether or not the \code{component} can
+#'   take on a negative value (i.e., a covariance)
+#' @param nsample.units Number of sample units to be used in constructing the
+#'   area between the confidence limits for the profile likelihood
+#' @param nse Number of standard errors on either side of the estimate, over
+#'   which the confidence limits should be evaluated.
+#' @param alpha The critical value for determining the Confidence Interval
+#' @param tolerance Acceptable distance between actual and desired minimization
+#'   criteria for determining the upper and lower limits of the confidence
+#'   interval. See Details for more
+#' @param parallel A logical indicating whether or not parallel processing will
+#'   be used. Note, may only be available for Mac and Linux operating systems.
+#' @param ncores Argument indicating number of cpu units to use. Default is all
+#'   available.
+#' @param x Object of class \code{proLik}.
+#' @param CL A logical indicating whether a lines at the confidence limits are
+#'   to be drawn when plotting.
+#' @param type,main,xlab,ylab See arguments to \code{\link[graphics]{plot}}.
+#' @param \dots other arguments to \code{\link[graphics]{plot}}.
+#'
+#' @return An S3 object of class \dQuote{proLik} containing:
+#'   \describe{
+#'     \item{lambdas }{negative log-Likelihood ratio test statistic. Estimated 
+#'       from the log-Likelihood of the \code{full.model} and the 
+#'       log-Likelihood of the model with the \code{component} constrained to 
+#'       a value in the sampling interval}
+#'     \item{var.estimates }{value along the sampling interval for which the 
+#'       \code{component} was constrained}
+#'     \item{UCL }{approximate Upper Confidence Limit}
+#'     \item{LCL }{approximate Lower Confidence Limit}
+#'     \item{component }{the component for which the profile likelihood surface 
+#'       has been constructed}
+#'     \item{alpha }{the alpha level at which the confidence limits have been 
+#'       calculated}
+#'   }
+#' @section Warning : May be unfeasible to estimate profile likelihoods for
+#'   complex models with many variance components
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link{aiFun}}
+#' @examples
+#' 
+#'   \dontrun{
+#'     library(asreml)
+#'     ginvA <- asreml.Ainverse(warcolak[, c(1,3,2)])$ginv
+#'     ginvD <- makeD(warcolak[,1:3])$listDinv
+#'     warcolak$IDD <- warcolak$ID
+#'     warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(ID) + giv(IDD), 
+#' 	ginverse = list(ID = ginvA, IDD = ginvD), rcov = ~ idv(units), data = warcolak) 
+#'     summary(warcolak.mod)$varcomp
+#'     profileA <- proLik(full.model = warcolak.mod, component = "ped(ID)!ped", 
+#'         G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
+#'     profileA
+#'     profileD <- proLik(warcolak.mod, component = "giv(IDD).giv", 
+#' 	G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)
+#'     profileE <- proLik(warcolak.mod, component = "R!units.var", G = FALSE, negative = FALSE)
+#' 
+#'     x11(w = 6, h = 8)
+#'     par(mfrow = c(3,1))
+#'       plot(profileA) 
+#'       plot(profileD)
+#'       plot(profileE)
+#'    }
+#' 
+#' 
+#' @export
 proLik <- function(full.model, component,
 	G = TRUE, negative = FALSE,
 	nsample.units = 3, nse = 3,
@@ -129,8 +229,34 @@ proLik <- function(full.model, component,
 }
 
 
-
+#' @method is proLik
+#' @rdname proLik
+#' @export
 is.proLik <- function(x) inherits(x, "proLik")
 
 
+
+
+
+#' @method plot proLik
+#' @rdname proLik
+#' @export
+plot.proLik <- function(x, CL = TRUE, alpha = NULL, type = "l",
+	main = NULL, xlab = NULL, ylab = NULL, ...)
+{
+  if(is.null(alpha)) alpha <- x$alpha
+  if(is.null(main)) main <- deparse(substitute(x))
+  if(is.null(xlab)) xlab <- x$component
+  if(is.null(ylab)) ylab <- "LRT statistic"
+
+  plot(x$lambdas ~ x$var.estimates,
+     main = main, 
+     xlab = xlab, ylab = ylab, 
+     type = type, ...)
+     if(CL){  
+        chi <- (0.5 * qchisq(alpha, df = 1, lower.tail = FALSE))
+        abline(h = chi, lty = "dotted", col = "red", lwd = 2)
+        abline(v = unlist(x[c("LCL", "UCL")]), lty = "dashed", col = "blue", lwd = 2)
+    }  
+}
 

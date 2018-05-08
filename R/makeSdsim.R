@@ -1,3 +1,6 @@
+#' @aliases makeSdsim makeDsim
+#' @rdname makeDsim
+#' @export
 makeSdsim <- function(pedigree, heterogametic, N,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
@@ -55,7 +58,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
   nSd <- nhom + 2 * length(dnmiss) + 2 * length(snmiss)
   nSd <- nSd + 2 * sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
 
-  Cout <- .C("sdsim",
+  Cout <- .C("sdsim", PACKAGE = "nadiv",
 	as.integer(Ndalleles),        # [[1]] N dam alleles (or homogametic sex if ZZ/ZW)
 	as.integer(Nsalleles),	      # [[2]] N sire alleles (or heterogametic sex if ZZ/ZW)
 	as.integer(N),  	      # [[3]] N (number of replications)
