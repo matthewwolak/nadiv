@@ -18,5 +18,8 @@
 
 
 
+#' @import methods
+NULL
+
 
 
