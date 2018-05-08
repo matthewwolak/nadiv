@@ -10,6 +10,9 @@
 #' @aliases nadiv-package nadiv
 #' @useDynLib nadiv
 #' @importFrom methods as is
+#' @importFrom graphics abline plot
+#' @importFrom stats as.formula deriv na.omit optimize
+#' @importFrom stats pchisq qchisq qnorm rnorm sd
 #' @import Matrix
 #' @author Matthew Wolak \email{matthewwolak@@gmail.com}
 #' @examples
