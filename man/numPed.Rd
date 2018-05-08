@@ -23,13 +23,7 @@ pedigree structure should be made, but see Details}
 
 \item{x}{A pedigree of class \sQuote{\code{numPed}}}
 
-\item{i, }{Index specifying elements to extract or replace: see
-\code{\link[base]{[}}}
-
-\item{list()}{Index specifying elements to extract or replace: see
-\code{\link[base]{[}}}
-
-\item{Index}{specifying elements to extract or replace: see
+\item{i, \dots}{Index specifying elements to extract or replace: see
 \code{\link[base]{[}}}
 }
 \value{

@@ -31,11 +31,7 @@
 #' @param check A logical argument indicating if checks on the validity of the 
 #'   pedigree structure should be made, but see Details
 #' @param x A pedigree of class \sQuote{\code{numPed}}
-#' @param i, Index specifying elements to extract or replace: see
-#'   \code{\link[base]{[}}
-#' @param list() Index specifying elements to extract or replace: see
-#'   \code{\link[base]{[}}
-#' @param Index specifying elements to extract or replace: see
+#' @param i,\dots Index specifying elements to extract or replace: see
 #'   \code{\link[base]{[}}
 #'
 #' @return An S3 object of class \dQuote{numPed} representing the pedigree, 
