@@ -254,7 +254,7 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
   nPed[nPed == -998] <- N + 1
   f <- c(rep(-1, nggroups), rep(0, eN), -1)
-  Cout <- .C("ainvml",
+  Cout <- .C("ainvml", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
@@ -412,7 +412,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   phantomless[phantomless == -998] <- N + 1
   # for now, phantom parents cannot be inbred (just like genetic groups)
   f <- c(rep(-1, nggroups), rep(0, eN), -1)
-  Cout <- .C("ainvfuzz",
+  Cout <- .C("ainvfuzz", PACKAGE = "nadiv",
 	    as.integer(phantomless[, 2] - 1), 			#dam
 	    as.integer(phantomless[, 3] - 1),  			#sire
 	    as.integer(phantomless[, 4] - 1), 			#phantom dam

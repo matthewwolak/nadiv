@@ -128,7 +128,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 
   if(!parallel){
      cat("starting to make D...")
-     Cout <- .C("dij",
+     Cout <- .C("dij", PACKAGE = "nadiv",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
 		as.integer(A@i), 			
@@ -155,7 +155,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
         wrap_dij <- function(x){
            sub_lA <- listA[min(x):max(x), 1:2]
            lA_r <- dim(sub_lA)[1]
-           Cout <- .C("dijp",
+           Cout <- .C("dijp", PACKAGE = "nadiv",
 		as.integer(numeric.pedigree[, 2] - 1),
 		as.integer(numeric.pedigree[, 3] - 1), 
                 as.integer(lA_r),  

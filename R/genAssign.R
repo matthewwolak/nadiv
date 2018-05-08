@@ -42,7 +42,7 @@ genAssign.default <- function(pedigree, ...)
       pedigree[, 1:3] <- numPed(pedigree[, 1:3])
    }
 
-   Cout <- .C("ga",
+   Cout <- .C("ga", PACKAGE = "nadiv",
 	as.integer(pedigree[, 2] - 1),
 	as.integer(pedigree[, 3] - 1),
         vector("integer", length = n),
@@ -58,7 +58,7 @@ genAssign.default <- function(pedigree, ...)
 genAssign.numPed <- function(pedigree, ...)
 { 
    n <- nrow(pedigree)
-   Cout <- .C("ga",
+   Cout <- .C("ga", PACKAGE = "nadiv",
 	as.integer(pedigree[, 2] - 1),
 	as.integer(pedigree[, 3] - 1),
         vector("integer", length = n),

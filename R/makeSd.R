@@ -52,7 +52,7 @@ makeSd <- function(pedigree, heterogametic,
   if(!parallel){
      cat("starting to make Sd...")
 
-     Cout <- .C("sdij",
+     Cout <- .C("sdij", PACKAGE = "nadiv",
                 as.integer(nPed[, 2] - 1), 		# [[1]] dam ID/No.
 		as.integer(nPed[, 3] - 1), 		# [[2]] sire ID/No.
 		as.integer(S@i), 			# [[3]] S@i
@@ -83,7 +83,7 @@ stop("code not yet written to parallelize function") #FIXME
 #        wrap_dij <- function(x){
 #           sub_lA <- listA[min(x):max(x), 1:2]
 #           lA_r <- dim(sub_lA)[1]
-#           Cout <- .C("dijp",
+#           Cout <- .C("dijp", PACKAGE = "nadiv",
 #		as.integer(numeric.pedigree[, 2] - 1),
 #		as.integer(numeric.pedigree[, 3] - 1), 
 #                as.integer(lA_r),  

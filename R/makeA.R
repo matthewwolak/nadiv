@@ -40,7 +40,7 @@ makeA <- function(pedigree)
   nA <- nA + sum(duplicated(paste(nPed[, 2], nPed[, 3])[bnmiss]) == FALSE)
   inbreeding <- c(rep(0, N), -1)
   nPed[nPed == -998] <- N + 1
-    Cout <- .C("acinv",
+    Cout <- .C("acinv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(inbreeding),  #f

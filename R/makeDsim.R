@@ -106,7 +106,7 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
   
   cat("making Dsim ...")
 
-  Cout <- .C("dsim",
+  Cout <- .C("dsim", PACKAGE = "nadiv",
 	as.integer(dalleles),
 	as.integer(salleles),
 	as.integer(N),

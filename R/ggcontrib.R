@@ -244,7 +244,7 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
     Tinv.row <- Tinv.x <- rep(0, maxcnt)
     Tinv.col <- rep(0, N+1)
 
-    Cout <- .C("reT",
+    Cout <- .C("reT", PACKAGE = "nadiv",
 	as.integer(nPed[, 2] - 1),
 	as.integer(nPed[, 3] - 1),
         as.integer(Tinv.row),

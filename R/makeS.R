@@ -105,7 +105,7 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
           Vii <- (sex + 1)/2
           f <- c(rep(0, N), -1)
 
-          Cout <- .C("sinv",
+          Cout <- .C("sinv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), #dam
 	    as.integer(nPed[, 3] - 1),  #sire
 	    as.double(f),  #f
@@ -154,7 +154,7 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
              Vii <- (2 - sex)
              f <- c(rep(0, N), -1)
 
-             Cout <- .C("sinv",
+             Cout <- .C("sinv", PACKAGE = "nadiv",
 	       as.integer(nPed[, 2] - 1), #dam
 	       as.integer(nPed[, 3] - 1),  #sire
 	       as.double(f),  #f
@@ -198,7 +198,7 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
                 Vii <- rep(1, N) 
                 f <- rep(0, N)
 
-             Cout <- .C("sinv",
+             Cout <- .C("sinv", PACKAGE = "nadiv",
 	       as.integer(nPed[, 2] - 1), #dam
 	       as.integer(nPed[, 3] - 1),  #sire
 	       as.double(f),  #f

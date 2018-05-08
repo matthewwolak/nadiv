@@ -120,7 +120,7 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  }
 
  nPed_fixed <- numPed(ped_fixed[, 1:3], check = FALSE)
- Cout <- .C("gaUnsort",
+ Cout <- .C("gaUnsort", PACKAGE = "nadiv",
 	as.integer(nPed_fixed[, 2] - 1),
 	as.integer(nPed_fixed[, 3] - 1),
         as.integer(rep(0, npf)),
