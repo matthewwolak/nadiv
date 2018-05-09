@@ -6,7 +6,7 @@
 genetic relationship matrices}
 \usage{
 makeDomEpi(pedigree, output = c("AD", "DD", "both"), parallel = FALSE,
-  invertD = FALSE, det = FALSE)
+  invertD = FALSE, det = TRUE)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}

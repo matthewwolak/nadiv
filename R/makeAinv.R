@@ -108,7 +108,7 @@
 #'       contains \sQuote{g} genetic groups in the first \sQuote{g} rows, then
 #'       the first \sQuote{g} elements of \code{f} are assigned 0. If the
 #'       pedigree contains \sQuote{p} phantom parents in the first \sQuote{p}
-#'       rows, then the first \sQuote{p} elements of \code{f} are assigned 0. 
+#'       rows, then the first \sQuote{p} elements of \code{f} are assigned 0.} 
 #'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeAstarMult}}, \code{\link{makeA}}
