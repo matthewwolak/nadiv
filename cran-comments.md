@@ -2,7 +2,8 @@
   - Ubuntu 17.10
     - R 3.4.3 (2017-11-30) x86_64-pc-linux-gnu (64-bit)
 
-  - win-builder (devel and release): http://win-builder.r-project.org/
+  - win-builder (devel, release, and old version): http://win-builder.r-project.org/
+    - R Under development (unstable) (2018-05-05 r74699), platform: x86_64-w64-mingw32 (64-bit) 
     - R version 3.5.0 (2018-04-23), platform: x86_64-w64-mingw32 (64-bit) 
     - R version 3.4.4 (2018-03-15), platform: x86_64-w64-mingw32 (64-bit) 
 
