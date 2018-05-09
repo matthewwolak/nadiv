@@ -8,7 +8,7 @@
 #' 
 #' 0 is the base population.
 #' 
-#' Migrants, or any individuals where both parens are unknown, are assigned to
+#' Migrants, or any individuals where both parents are unknown, are assigned to
 #' generation zero.  If parents of an individual are from two different
 #' generations (e.g., dam = 0 and sire = 1), the individual is assigned to the
 #' generation following the greater of the two parents (e.g., 2 in this

@@ -5,7 +5,7 @@
 #' 
 #' Many functions (both in nadiv and from other programs) dealing with
 #' pedigrees must first sort a pedigree such that individuals appear in the ID
-#' column in rows preceeding where they appear in either the Dam or Sire
+#' column in rows preceding where they appear in either the Dam or Sire
 #' column.  Further, these functions and programs require that all individuals
 #' in the dam and sire columns of a pedigree also have an entry in the ID
 #' column.  This function easily prepares data sets to accommodate these
@@ -38,7 +38,7 @@
 #'   pedigree structure should be made
 #'
 #' @return The pedigree object (can have more columns than just ID, Dam, and
-#' Sire), where: (1) the ID column cotains an ID for all individuals from the
+#' Sire), where: (1) the ID column contains an ID for all individuals from the
 #' original pedigree object's ID, Dam, and Sire columns (i.e., founders are
 #' added) and (2) the pedigree is now sorted so that individuals are not in
 #' rows preceding either their Dam or Sire.

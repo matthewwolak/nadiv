@@ -54,7 +54,7 @@
 #' X-chromosomal inheritance. Theoretical and Applied Genetics, 80:75-80.
 #' 
 #' Meuwissen, T.H.E. and Z. Luo. 1992. Computing inbreeding coefficients in
-#' large populations. Genetics, Seleciton, Evolution, 24:305-313.
+#' large populations. Genetics, Selection, Evolution, 24:305-313.
 #' @examples
 #' 
 #'  makeS(FG90, heterogametic = "0", returnS = TRUE)
