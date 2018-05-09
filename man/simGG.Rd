@@ -83,7 +83,7 @@ A \code{data.frame} with columns corresponding to:
     \item{r }{Numeric value of each individual's residual (environmental) 
       deviation}
     \item{p }{Numeric value of each individual's phenotypic value}
-    \item{pred.u }{Numeric value of each individual's predited total 
+    \item{pred.u }{Numeric value of each individual's predicted total 
       additive genetic effect}
     \item{is }{Integer of either \code{0} if an individual was born in the 
       focal population or \code{1} if they were born in an immigrant 

@@ -41,7 +41,7 @@ method is numPed
 Missing parents (e.g., base population) should be denoted by either 'NA',
 '0', '-998', or '*'.
 
-Individuals must appear in the ID column in rows preceeding where they
+Individuals must appear in the ID column in rows preceding where they
 appear in either the Dam or Sire column. See the
 \code{\link[nadiv]{prepPed}} function if this is not the case.
 

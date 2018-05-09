@@ -83,7 +83,7 @@ Missing parents (e.g., base population) should be denoted by either 'NA',
 '0', or '*'.
 
 The function implements an adaptation of the Meuwissen and Luo (1992)
-algorithm (particularly, forllowing the description of the algorithm in
+algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
 Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a
 non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm

@@ -74,7 +74,7 @@ Fernando, R.L. & Grossman, M. 1990. Genetic evaluation with autosomal and
 X-chromosomal inheritance. Theoretical and Applied Genetics, 80:75-80.
 
 Meuwissen, T.H.E. and Z. Luo. 1992. Computing inbreeding coefficients in
-large populations. Genetics, Seleciton, Evolution, 24:305-313.
+large populations. Genetics, Selection, Evolution, 24:305-313.
 }
 \author{
 \email{matthewwolak@gmail.com}

@@ -26,7 +26,7 @@ Returns A*, or the inverse of the numerator relationship with
   groups, in sparse matrix form.
 }
 \description{
-This returns the invers of the additive genetic relationship matrix with
+This returns the inverse of the additive genetic relationship matrix with
 genetic groups (A*). The matrix is set up through matrix multiplication of
 two sub-matrices instead of directly (as \code{\link{makeAinv}} does).
 }
@@ -57,7 +57,7 @@ Fuzzy classification of genetic groups is implemented when \code{fuzz} is
 non-NULL.
 
 The argument to \code{gOnTop} specifies if the elements in the A-inverse
-should come at the beggining (\code{gOnTop = TRUE}) or end (\code{gOnTop =
+should come at the beginning (\code{gOnTop = TRUE}) or end (\code{gOnTop =
 FALSE}) of the matrix. Depending on how the software implementing an animal
 model solves the mixed model equations, the equations for the genetic groups
 (and thus the elements in the augmented A-inverse) should be the first or
