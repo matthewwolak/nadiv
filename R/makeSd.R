@@ -120,7 +120,8 @@ stop("code not yet written to parallelize function") #FIXME
     cat(".done", "\n")
     listSdinv <- sm2list(Sdinv, rownames = Sd@Dimnames[[1L]],
 	colnames = c("row", "column", "Sdinverse"))
- return(list(S = S, Sd = Sd, logDet = logDet, Sdinv = Sdinv, listSdinv = listSdinv))
+ return(list(S = S, Sd = Sd, logDet = logDet,
+		Sdinv = Sdinv, listSdinv = listSdinv))
   } else{
     return(list(S = S, Sd = Sd, logDet = logDet))
     } 

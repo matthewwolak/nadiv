@@ -87,7 +87,9 @@
 #'   simSd <- makeSdsim(FG90, heterogametic = "0", N = 1000, parallel = FALSE,
 #' 		invertSd = TRUE, calcSE = TRUE)$listSdsim
 #' @export
-makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, calcSE = FALSE, returnA = FALSE){
+makeDsim <- function(pedigree, N, parallel = FALSE,
+	ncores = getOption("mc.cores", 2L), invertD = TRUE,
+	calcSE = FALSE, returnA = FALSE){
 
   approxD <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
   lapproxD <- summary(approxD$D)
@@ -146,9 +148,13 @@ makeDsim <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
     cat(".done", "\n")
     listDsiminv <- sm2list(Dsiminv, rownames = pedigree[,1], colnames = c("row", "column", "simDinverse"))
     Dsim <- as(Dsim, "dgCMatrix")
-    return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet, Dinv = approxD$Dinv, listDinv = approxD$listDinv, Dsim = Dsim, logDetDsim = logDetDsim, Dsiminv = Dsiminv, listDsim = listDsim, listDsiminv = listDsiminv))
+    return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet,
+	Dinv = approxD$Dinv, listDinv = approxD$listDinv,
+	Dsim = Dsim, logDetDsim = logDetDsim,
+	Dsiminv = Dsiminv, listDsim = listDsim, listDsiminv = listDsiminv))
   } else{
-      return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet, Dsim = Dsim, logDetDsim = logDetDsim, listDsim = listDsim))
+      return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet,
+	Dsim = Dsim, logDetDsim = logDetDsim, listDsim = listDsim))
     } 
 
 }

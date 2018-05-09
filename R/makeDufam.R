@@ -1,4 +1,6 @@
-makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
+makeDufam <- function(pedigree, parallel = FALSE,
+	ncores = getOption("mc.cores", 2L), invertD = TRUE,
+	returnA = FALSE, det = TRUE){
 
   N <- nrow(pedigree)
   pedigree <- cbind(pedigree, gen = genAssign(pedigree), oseq = seq.int(N))

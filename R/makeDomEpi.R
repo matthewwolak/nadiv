@@ -64,7 +64,8 @@
 #'   str(DADoutput)
 #' 
 #' @export
-makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"), parallel = FALSE, invertD = FALSE, det = FALSE)
+makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"),
+	parallel = FALSE, invertD = FALSE, det = TRUE)
 {
   type <- match.arg(output)
   Dout <- makeD(pedigree, parallel = parallel, invertD = invertD, returnA = TRUE)

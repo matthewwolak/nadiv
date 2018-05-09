@@ -140,7 +140,8 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
                 as.integer(rep(0, N)),                  
 		as.integer(0))	                        
 
-     D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
+     D <- Matrix(0, N, N, sparse = TRUE,
+		dimnames = list(as.character(pedigree[, 1]), NULL))
      D@uplo <- "U"
      D@i <- Cout[[8]][1:Cout[[10]]]
      D@p <- c(Cout[[9]], Cout[[10]])
@@ -169,9 +170,12 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
         }
 
         cat("starting to make D...")
-        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
+        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1),
+		FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE,
+		mc.cores = ncores, mc.cleanup = TRUE)
   
-        D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
+        D <- Matrix(0, N, N, sparse = TRUE,
+		dimnames = list(as.character(pedigree[, 1]), NULL))
         D@uplo <- "U"
         D@i <- A@i
         D@p <- A@p
