@@ -1,4 +1,6 @@
-makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L), invertD = TRUE, returnA = FALSE, det = FALSE){
+makeDufam <- function(pedigree, parallel = FALSE,
+	ncores = getOption("mc.cores", 2L), invertD = TRUE,
+	returnA = FALSE, det = TRUE){
 
   N <- nrow(pedigree)
   pedigree <- cbind(pedigree, gen = genAssign(pedigree), oseq = seq.int(N))
@@ -16,7 +18,7 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
 
   if(!parallel){
      cat(paste("starting to make D..."))
-     Cout <- .C("dijjskip",
+     Cout <- .C("dijjskip", PACKAGE = "nadiv",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
 		as.integer(A@i), 			
@@ -43,7 +45,7 @@ makeDufam <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores",
         wrap_dij <- function(x){
            sub_lA <- listA[min(x):max(x), 1:2]
            lA_r <- dim(sub_lA)[1]
-           Cout <- .C("dijp",
+           Cout <- .C("dijp", PACKAGE = "nadiv",
 		as.integer(numeric.pedigree[, 2] - 1),
 		as.integer(numeric.pedigree[, 3] - 1), 
                 as.integer(lA_r),  

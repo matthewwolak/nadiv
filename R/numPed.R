@@ -4,6 +4,52 @@
 #in the 'MCMCglmm' package
 ################################################
 
+
+
+#' Integer Format Pedigree
+#' 
+#' Conversion, checking, and row re-ordering of a pedigree in integer form of
+#' class \sQuote{numPed}.
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA',
+#' '0', '-998', or '*'.
+#' 
+#' Individuals must appear in the ID column in rows preceding where they
+#' appear in either the Dam or Sire column. See the
+#' \code{\link[nadiv]{prepPed}} function if this is not the case.
+#' 
+#' If pedigree inherits the class "numPed" (from a previous call to
+#' \code{numPed()}) and \code{check = TRUE}, the checks are skipped. If
+#' \code{check = FALSE} any pedigree will be transformed into a pedigree
+#' consisting of integers and missing values denoted by '-998'.
+#' 
+#' Based on code from the \code{MCMCglmm} package
+#' 
+#' @aliases numPed is.numPed ronPed
+#' @param pedigree A three column pedigree object, where the columns correspond 
+#'   to: ID, Dam, & Sire
+#' @param check A logical argument indicating if checks on the validity of the 
+#'   pedigree structure should be made, but see Details
+#' @param x A pedigree of class \sQuote{\code{numPed}}
+#' @param i,\dots Index specifying elements to extract or replace: see
+#'   \code{\link[base]{[}}
+#'
+#' @return An S3 object of class \dQuote{numPed} representing the pedigree, 
+#'   where individuals are now numbered from 1 to \code{n} and unknown parents 
+#'   are assigned a value of \sQuote{-998}.
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link[nadiv]{prepPed}}, \code{\link[MCMCglmm]{MCMCglmm}},
+#' \code{\link[base]{[}}
+#' @examples
+#' 
+#' (nPed <- numPed(Mrode2))
+#' is(nPed)
+#' 
+#' # re-order and retain class 'numPed'
+#' ronPed(nPed, order(nPed[, 2], nPed[, 3]))
+#' is(nPed)
+#' 
+#' @export
 numPed <- function(pedigree, check = TRUE){
  if(!is.numPed(pedigree) && check){      
   if(any(pedigree[, 2] == 0, na.rm = TRUE)){
@@ -73,10 +119,20 @@ numPed <- function(pedigree, check = TRUE){
 
 
 
+#' @ method is numPed
+#' @rdname numPed
+#' @export
 is.numPed <- function(x) inherits(x, "numPed")
 
 
+
+
+
+
 # re-ordering rows of object with class 'numPed'
+
+#' @rdname numPed
+#' @export
 ronPed <- function(x, i, ...){
    r <- structure(unclass(x)[i, ,...], class = "numPed")
    r

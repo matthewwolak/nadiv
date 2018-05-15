@@ -1,3 +1,38 @@
+# 2.16.0
+## NEW
+  * `roxygen2` documentation
+  * Return diagonal of Mendelian sampling variance matrix in `makeAinv()` and `makeS()`
+    * These (or their inverses?) can be used in JAGS or BUGS when running a quantitative genetic mixed model
+
+## Small changes
+  * default action is to calculate log-determinant of matrices
+    * switched from not calculating this by default
+
+# 2.15.0
+## NEW
+  * Functions to construct sex-chromosomal dominance relatedness matrices
+    * `makeSd()` and `makeSdsim()` 
+        * These are similar to what `makeD()` and `makeDsim()` accomplish for autosomes
+        * The ouptut contains the **Sd** and **Sdsim** dominance relatedness matrices
+        * The inverses of these can be obtained from **Sdinv** and **Sdsiminv** and used in a mixed model
+
+
+## Small changes
+   * `proLik()` improved/bug fixed to find confidence limits
+     * previously would declare confidence limits found when they hadn't been
+         * this was due to `optimize()` quitting too early with default `tol` argument
+     * returns `NA` if confidence limits are not, in fact, found (e.g., for boundary parameters, variances that are not significantly greater than zero)
+     * `plot.proLik()` now includes vertical lines to better visualize CIs
+   * use lower_bound algorithm for matrix lookup within c++ code
+     * based on c++ <algorithm>std::lower_bound 
+       * affect `makeAinv()` and `makeD()`
+     * greater speedup as **A^-1** and **D** become more dense
+   * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
+     * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
+     * this speeds up/uses less memory
+     * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
+     * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
+
 # 2.14.3 Released 20 April 2016
 ## NEW
   * Fuzzy classification of genetic groups to construct **A^-1**.
