@@ -1,4 +1,9 @@
+# 2.16.0.1
+## NEW
+## Small changes
+
 # 2.16.0 Released to CRAN 5 May 2018
+
 ## NEW
   * `roxygen2` documentation
   * Return diagonal of Mendelian sampling variance matrix in `makeAinv()` and `makeS()`
