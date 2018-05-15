@@ -1,3 +1,7 @@
+# 2.16.0.1
+## NEW
+## Small changes
+
 # 2.16.0
 ## NEW
   * `roxygen2` documentation
