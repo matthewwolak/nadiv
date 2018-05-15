@@ -25,7 +25,7 @@
 #' @return a \code{list}:
 #'   \describe{
 #'     \item{PedPositionList }{gives the list of row numbers for all the
-#'       pairs of indidivuals that are related as double first cousins.}
+#'       pairs of individuals that are related as double first cousins.}
 #'     \item{DFC }{gives the list of IDs, as characters, for all the pairs of 
 #'       individuals that are related as double first cousins.}
 #'     \item{FamilyCnt }{If two individuals, i and j, are double first cousins,

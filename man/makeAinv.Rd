@@ -9,13 +9,13 @@
 \title{Creates the inverse additive genetic relationship matrix}
 \usage{
 makeAinv(pedigree, f = NULL, ggroups = NULL, fuzz = NULL,
-  gOnTop = FALSE, det = FALSE, ...)
+  gOnTop = FALSE, det = TRUE, ...)
 
 \method{makeAinv}{default}(pedigree, f = NULL, ggroups = NULL,
-  fuzz = NULL, gOnTop = FALSE, det = FALSE, ...)
+  fuzz = NULL, gOnTop = FALSE, det = TRUE, ...)
 
 \method{makeAinv}{fuzzy}(pedigree, f = NULL, ggroups = NULL, fuzz,
-  gOnTop = FALSE, det = FALSE, ...)
+  gOnTop = FALSE, det = TRUE, ...)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
@@ -64,6 +64,13 @@ a \code{list}:
       the first \sQuote{p} rows, then the first \sQuote{p} elements of
       \code{f} are assigned 0.}
     \item{logDet }{the log determinant of the A matrix}
+    \item{dii }{the (non-zero) elements of the diagonal D matrix of the A=TDT'
+      decomposition. Contains the variance of Mendelian sampling. Matches
+      the order of the first/ID column of the pedigree. If the pedigree
+      contains \sQuote{g} genetic groups in the first \sQuote{g} rows, then
+      the first \sQuote{g} elements of \code{f} are assigned 0. If the
+      pedigree contains \sQuote{p} phantom parents in the first \sQuote{p}
+      rows, then the first \sQuote{p} elements of \code{f} are assigned 0.} 
   }
 }
 \description{
@@ -76,7 +83,7 @@ Missing parents (e.g., base population) should be denoted by either 'NA',
 '0', or '*'.
 
 The function implements an adaptation of the Meuwissen and Luo (1992)
-algorithm (particularly, forllowing the description of the algorithm in
+algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
 Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a
 non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm

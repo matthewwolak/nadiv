@@ -1,6 +1,12 @@
-# 2.16.0
+# 2.16.0 Released to CRAN 5 May 2018
 ## NEW
   * `roxygen2` documentation
+  * Return diagonal of Mendelian sampling variance matrix in `makeAinv()` and `makeS()`
+    * These (or their inverses?) can be used in JAGS or BUGS when running a quantitative genetic mixed model
+
+## Small changes
+  * default action is to calculate log-determinant of matrices
+    * switched from not calculating this by default
 
 # 2.15.0
 ## NEW

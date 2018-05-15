@@ -6,7 +6,7 @@
 genetic relationship matrices}
 \usage{
 makeDomEpi(pedigree, output = c("AD", "DD", "both"), parallel = FALSE,
-  invertD = FALSE, det = FALSE)
+  invertD = FALSE, det = TRUE)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
@@ -58,7 +58,7 @@ Because of the computational demands of constructing the D matrix (see
 \code{\link{makeD}}), this function allows for the inverses that are derived
 from the D matrix (i.e., D-inverse, AD-inverse, and DD-inverse)to be
 constructed at the same time.  This way, the D matrix will only have to be
-constructed once for use in the three seperate genetic relatedness inverse
+constructed once for use in the three separate genetic relatedness inverse
 matrices that depend upon it.  However, using the \code{output} and
 \code{invertD} options in different combinations will ensure that only the
 desired matrix inverses are constructed.

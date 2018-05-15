@@ -11,7 +11,7 @@
 #' '0', or '*'.
 #' 
 #' The function implements an adaptation of the Meuwissen and Luo (1992)
-#' algorithm (particularly, forllowing the description of the algorithm in
+#' algorithm (particularly, following the description of the algorithm in
 #' Mrode 2005) with some code borrowed from the \code{inverseA} function by
 #' Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a
 #' non-NULL argument to \code{ggroups} incorporates the Quaas (1988) algorithm
@@ -102,6 +102,13 @@
 #'       the first \sQuote{p} rows, then the first \sQuote{p} elements of
 #'       \code{f} are assigned 0.}
 #'     \item{logDet }{the log determinant of the A matrix}
+#'     \item{dii }{the (non-zero) elements of the diagonal D matrix of the A=TDT'
+#'       decomposition. Contains the variance of Mendelian sampling. Matches
+#'       the order of the first/ID column of the pedigree. If the pedigree
+#'       contains \sQuote{g} genetic groups in the first \sQuote{g} rows, then
+#'       the first \sQuote{g} elements of \code{f} are assigned 0. If the
+#'       pedigree contains \sQuote{p} phantom parents in the first \sQuote{p}
+#'       rows, then the first \sQuote{p} elements of \code{f} are assigned 0.} 
 #'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeAstarMult}}, \code{\link{makeA}}
@@ -167,7 +174,7 @@
 #' 
 #' 
 #' @export
-makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
+makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = TRUE, ...){
   if(is(fuzz, "matrix") | is(fuzz, "Matrix")) class(fuzz) <- "fuzzy"
   UseMethod("makeAinv", fuzz)
 }
@@ -175,14 +182,14 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = F
 
 ###############################################################################
 ###############################################################################
-# 	Methods:
+# 	Methods: `makeAinv.default()` and `makeAinv.fuzzy()`
 ###############################################################################
 ###############################################################################
 
 #' @method makeAinv default
 #' @rdname makeAinv
 #' @export
-makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = FALSE, ...){
+makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = TRUE, ...){
   if(is.null(ggroups)){
      ptype <- "O"
      renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
@@ -272,9 +279,11 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
       f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
+      dii <- Cout[[4]][t(fsOrd)@perm][-seq(nggroups)]
   } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
       f <- c(rep(0, nggroups), Cout[[3]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
+      dii <- c(rep(0, nggroups), Cout[[4]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
     }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
@@ -285,7 +294,8 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
 	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
 	f = f,
-	logDet = logDet))
+	logDet = logDet,
+	dii = dii))
 }
 
 
@@ -298,7 +308,7 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
 #' @method makeAinv fuzzy
 #' @rdname makeAinv
 #' @export
-makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FALSE, det = FALSE, ...){
+makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FALSE, det = TRUE, ...){
 
   if(!is.null(ggroups)){
     stop("when 'fuzz' is non-NULL, 'ggroups' should not have any arguments (i.e., 'ggroups==NULL")
@@ -435,6 +445,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
   Ainv@Dimnames <- list(as.character(pedalt[(t(fsOrd1) %*% matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
   f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
+  dii <- (fsOrd1 %*% Cout[[6]][-c(N+1)])@x[-groupRows]
   if(!gOnTop){ 
     permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
     Ainv <- t(permute) %*% Ainv %*% permute
@@ -444,6 +455,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
 	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
 	f = f,
-	logDet = logDet))
+	logDet = logDet,
+	dii = dii))
 }
 

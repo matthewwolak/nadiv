@@ -26,13 +26,15 @@ a \code{list}:
     \item{model }{the model of sex-chromosome dosage compensation assumed.}
     \item{S }{the sex-chromosome relationship matrix in sparse matrix
       form or NULL if \code{returnS} = FALSE}
+    \item{logDet }{the log determinant of the S matrix}
     \item{Sinv }{the inverse of the S matrix in sparse matrix form}
     \item{listSinv }{the three column form of the non-zero elements for the 
       inverse of the S matrix}
     \item{inbreeding }{the sex-linked inbreeding coefficients for all 
       individuals in the pedigree}
-    \item{v }{a vector of the Mendelian sampling variances for a sex-linked 
-      locus}
+    \item{vii }{a vector of the (non-zero) elements of the diagonal V matrix
+      of the S=TVT' decomposition. Contains the variance of Mendelian
+      sampling for a sex-linked locus}
   }
 }
 \description{
@@ -72,7 +74,7 @@ Fernando, R.L. & Grossman, M. 1990. Genetic evaluation with autosomal and
 X-chromosomal inheritance. Theoretical and Applied Genetics, 80:75-80.
 
 Meuwissen, T.H.E. and Z. Luo. 1992. Computing inbreeding coefficients in
-large populations. Genetics, Seleciton, Evolution, 24:305-313.
+large populations. Genetics, Selection, Evolution, 24:305-313.
 }
 \author{
 \email{matthewwolak@gmail.com}

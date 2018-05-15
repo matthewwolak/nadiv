@@ -34,13 +34,15 @@
 #'     \item{model }{the model of sex-chromosome dosage compensation assumed.}
 #'     \item{S }{the sex-chromosome relationship matrix in sparse matrix
 #'       form or NULL if \code{returnS} = FALSE}
+#'     \item{logDet }{the log determinant of the S matrix}
 #'     \item{Sinv }{the inverse of the S matrix in sparse matrix form}
 #'     \item{listSinv }{the three column form of the non-zero elements for the 
 #'       inverse of the S matrix}
 #'     \item{inbreeding }{the sex-linked inbreeding coefficients for all 
 #'       individuals in the pedigree}
-#'     \item{v }{a vector of the Mendelian sampling variances for a sex-linked 
-#'       locus}
+#'     \item{vii }{a vector of the (non-zero) elements of the diagonal V matrix
+#'       of the S=TVT' decomposition. Contains the variance of Mendelian
+#'       sampling for a sex-linked locus}
 #'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @references Wolak, M.E., D.A. Roff, and D.J. Fairbairn. in prep. The
@@ -52,13 +54,15 @@
 #' X-chromosomal inheritance. Theoretical and Applied Genetics, 80:75-80.
 #' 
 #' Meuwissen, T.H.E. and Z. Luo. 1992. Computing inbreeding coefficients in
-#' large populations. Genetics, Seleciton, Evolution, 24:305-313.
+#' large populations. Genetics, Selection, Evolution, 24:305-313.
 #' @examples
 #' 
 #'  makeS(FG90, heterogametic = "0", returnS = TRUE)
 #' 
 #' @export
-makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"), returnS = FALSE){
+makeS <- function(pedigree, heterogametic,
+	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
+	returnS = FALSE){
 
     if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
     nPed <- numPed(pedigree[, 1:3])
@@ -226,7 +230,7 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
            }
       }              
 
-
+    logDet <- -1*determinant(Sinv, logarithm = TRUE)$modulus[1]
     listSinv <- sm2list(Sinv, rownames = as.character(pedigree[, 1]), colnames = c("Row", "Column", "Sinverse"))
     if(returnS){
        cat("S-inverse made: Starting to make S...")
@@ -238,6 +242,8 @@ makeS <- function(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", 
          S <- NULL
       }
 
-return(list(model = dc.model, S = S, Sinv = Sinv, listSinv = listSinv, inbreeding = f, v = Vii))
+return(list(model = dc.model, S = S, logDet = logDet,
+	Sinv = Sinv, listSinv = listSinv,
+	inbreeding = f, vii = Vii))
 }
 

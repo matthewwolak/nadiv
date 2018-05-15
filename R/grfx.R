@@ -23,7 +23,7 @@
 #' function at a later call.  This can be useful for Monte Carlo simulation, to
 #' avoid performing the cholesky decomposition on a large matrix at each
 #' iteration.  Setting \code{warn = FALSE} will suppress the warnings that this
-#' is occuring. DO NOT turn this warning off unless you are sure which
+#' is occurring. DO NOT turn this warning off unless you are sure which
 #' incidence matrix will be used by \code{grfx}.
 #' 
 #' If G = x, where 'x' is a single number, then 'x' should still be specified
