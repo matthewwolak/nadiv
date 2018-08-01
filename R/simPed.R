@@ -228,6 +228,10 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
 
 
   sapply(seq(F), FUN = unitFun)
+  ped_out$id <- as.factor(ped_out$id)
+  ped_out$dam <- as.factor(ped_out$dam)
+  ped_out$sire <- as.factor(ped_out$sire)
+  ped_out$sex <- as.factor(ped_out$sex)
 
  return(ped_out)
 }
