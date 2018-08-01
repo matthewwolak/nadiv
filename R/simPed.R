@@ -73,9 +73,9 @@ ped
 #' still has difficulty separating dominance variance from common maternal
 #' environmental variance (Meyer 2008).
 #'
-#' For a given unit of the design (\code{F} total), 2*\code{gpn} 0-generation 
-#' (grandparental) individuals are created and paired to make \code{gpn} full-
-#' sib families. Then the first \code{fws} families are each allocated \code{s}
+#' For a given unit of the design (\code{F} total), \code{2*gpn} 0-generation 
+#' (grandparental or GP) individuals are created and paired to make \code{gpn}
+#' full-sib families. Then the first \code{fws} families are each allocated \code{s}
 #' males/sires and \code{s*(fws-1)} females/dams in the 1/P generation. The
 #' remaining (\code{gpn-fws}) families (only when: \code{gpn > fws}) are assigned
 #' \code{s*fws} females/dams. If \code{fsn > (s*fws)}, the remaining 1/P 
@@ -112,7 +112,7 @@ ped
 #' estimate genetic variances. Heredity 101:212-221.
 #' @examples
 #' 
-#'   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2)
+#'   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2, fws = 2)
 #' 
 #' @export
 simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
