@@ -1,6 +1,7 @@
 # 2.16.0.1
 ## NEW
 ## Small changes
+  * update to `simPedDFC()` to allow more flexibility in designing pedigrees
 
 # 2.16.0 Released to CRAN 5 May 2018
 
