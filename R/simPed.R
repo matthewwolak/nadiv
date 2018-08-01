@@ -64,21 +64,40 @@ ped
 #' (Fairbairn and Roff 2006).
 #' 
 #' This is an adaption to a half-sib breeding design which also produces first
-#' cousins and double first cousins.  Double first cousins are produced by
+#' cousins and double first cousins. Double first cousins are produced by
 #' mating two brothers to two sisters (the offspring of the resulting two
-#' families are double first cousins with one another).  This is described in
+#' families are double first cousins with one another). This is described in
 #' Fairbairn and Roff (2006) as being particularly effective for separating
 #' autosomal additive genetic variance from sex chromosomal additive genetic
-#' variance.  It is also amenable to estimating dominance variance, however, it
+#' variance. It is also amenable to estimating dominance variance, however, it
 #' still has difficulty separating dominance variance from common maternal
 #' environmental variance (Meyer 2008).
+#'
+#' For a given unit of the design (\code{F} total), 2*\code{gpn} 0-generation 
+#' (grandparental) individuals are created and paired to make \code{gpn} full-
+#' sib families. Then the first \code{fws} families are each allocated \code{s}
+#' males/sires and \code{s*(fws-1)} females/dams in the 1/P generation. The
+#' remaining (\code{gpn-fws}) families (only when: \code{gpn > fws}) are assigned
+#' \code{s*fws} females/dams. If \code{fsn > (s*fws)}, the remaining 1/P 
+#' generation individuals in each full-sib family (\code{fsn - (s*fws)}) are
+#' allocated to each family with equal numbers of females and males (this allows
+#' for more individuals to be phenotyped in the 1/P generation than are used to
+#' produce the 2/F1 generation). The 2/F1 generation is then assigned, based on
+#' the mating design in Fairbairn and Roff (2006) - essentially each sire (of
+#' the \code{s} per full-sib family in the 1/P generation) is mated to a female
+#' from each of the other \code{gpn-1} full-sib families to produce \code{fsn}
+#' offspring (with equal numbers of females and males).
 #' 
 #' @param F Number of blocks for the design
-#' @param gpn Number of grandparents in the first/GP generation (must be >= 2)
-#' @param fsn Number of offspring in the full-sib families of the second/P
-#'   generation (must be an even number >= 4)
-#' @param s Number of sires per full-sib family in the second/P generation
+#' @param gpn Number of grandparent pairs in the 0/GP generation
+#'   (must be >= 2). Equals the number of full-sib families in the
+#'   1/P generation.
+#' @param fsn Number of offspring in each full-sib family of the 1/P
+#'   and 2/F1 generations (must be an even number >= 4).
+#' @param s Number of sires per full-sib family in the 1/P generation
 #'   (must be >=2)
+#' @param fws Number of 1/P generation families with sires. Together, with
+#'   \code{s}, sets up how cousins and double first cousins are produced 
 #' @param prefix Optional prefix to add to every identity
 #'
 #' @return A \code{data.frame} with columns corresponding to: id, dam, sire,
@@ -96,47 +115,120 @@ ped
 #'   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2)
 #' 
 #' @export
-simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, prefix = NULL)
+simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
 {
 
-if(gpn < 2) stop("Number of founding grand-parents ('gpn') must be greater than or equal to 2")
-if(fsn < 4) stop("Full-sib family size ('fsn') must be greater than or equal to 4")
-if(s < 2) stop("Number of sires per full-sib family in P generation ('s') must be greater than or equal to 2")
-if(floor(fsn/2) != (fsn/2)) stop("Full-sib family size ('fsn') must be an even number")
+  if(gpn < 2){
+    stop("Number of founding grand-parents ('2*gpn') must be greater than or equal to 4")
+  }
+  if(fsn < 4){
+    stop("Full-sib family size ('fsn') must be greater than or equal to 4")
+  }
+  if(s < 2){
+    stop("Number of sires per full-sib family in 1/P generation ('s') must be greater than or equal to 2")
+  }
+  #FIXME let fsn != even number (then incorporate this below for P and F generations)
+  if(floor(fsn/2) != (fsn/2)){
+    stop("Full-sib family size ('fsn') must be an even number")
+  }
+  if(fsn < (s*fws)){
+    stop("Full-sib family size ('fsn') must be greater than or equal to the product: number of families with sires ('fws') * number of sires per family ('s')")
+  }
 
-unitFun <- function(Fx){
-   design <- matrix(NA, nrow = fsn, ncol = gpn)
-   rc <- cbind(c(1:(floor(fsn/s)*s)), rep(1:floor(fsn/s), each = s))
-   sires <- paste(rep(paste("u", Fx, "_s", seq.int(fsn/s), sep = ""), each = s), letters[1:(floor(fsn/2)*s)], sep = "")
+  if(is.null(prefix)) p <- "" else p <- as.character(prefix)
 
-   for(x in 1:dim(rc)[1]){
-      design[x, rc[x,2]] <- sires[x]
+  # Calculate numbers of types of individuals *PER UNIT*
+  ## 0/GP generation (males and females)
+  gppu <- 2*gpn
+  ## 1/P sires (can be << 0.5*fsn if fsn large - these are 1/P males that do mate)
+  pspu <- s*fws
+  ## 1/P dams (can be << 0.5*fsn if fsn large - these are 1/P females that do mate)
+  pdpu <- (pspu*gpn) - pspu
+  ## 1/P individuals that don't contribute to F1 (alternate male/female)
+  pnmpu <- ifelse(((fsn*gpn) - (pspu + pdpu)) <= 0, 0, (fsn*gpn)-(pspu+pdpu))
+  ## 2/F1 individuals per unit
+  f1pu <- pdpu*fsn
+
+  # total individuals in a unit
+  n <- gppu + pspu + pdpu + pnmpu + f1pu
+  # total individuals in pedigree
+  N <- n*F
+  # allocate output data.frame
+  ped_out <- data.frame(id = rep(NA, N), dam = rep(NA, N), sire = rep(NA, N),
+	sex = rep(NA, N))
+
+  # Calculate starting/ending indices for each group
+  gpsi <- seq(from = 1, by = n, length.out = F)
+    gpei <- gpsi + gppu - 1
+  psi <- gpei + 1
+    pei <- psi + pspu + pdpu + pnmpu - 1
+  f1si <- pei + 1
+    f1ei <- f1si + f1pu - 1
+
+  # designate the letters for distinguishing among full-sibs in same family of
+  ## the 1/P generation
+  if(fsn > 26){
+    pfsletters <- unlist(Reduce(paste0, 
+       replicate(fsn %/% length(letters), letters, simplify = FALSE),
+       init = letters,
+       accumulate = TRUE))[1:fsn]
+  } else pfsletters <- letters[seq(fsn)]
+
+
+  # make a generic 1/P generation block
+  design <- matrix(NA, nrow = fsn, ncol = gpn)
+  sirepos <- cbind(seq(s*fws), rep(seq(fws), each = s))
+
+  # conduct the following on the `Fx`th unit out of `F` total
+  unitFun <- function(Fx){
+    # setup mating females and males (dams/sires) for a unit
+    ## 1/P names are: unit | sire/dam/non-mating male/nom-mating female | gp family number | full-sib letter (order of full-sib within gp family)
+    sires <- paste0(rep(paste0(p, "u", Fx, "_s", seq(fws)), each = s), pfsletters[seq(pspu)])
+
+    for(x in 1:pspu){
+      design[x, sirepos[x,2]] <- sires[x]
       damNumb <- which(is.na(design[x, ]))
-      design[x, damNumb] <- paste("u", Fx, "_d", damNumb, letters[x], sep = "")
+      design[x, damNumb] <- paste0(p, "u", Fx, "_d", damNumb, pfsletters[x])
+    }
+    if(pnmpu != 0){
+      for(y in seq(pspu + 1, fsn, by = 1)){
+        # below so that alternate sexes each row
+        if((y/2) != ceiling(y/2)){
+          design[y, ] <- paste0(p, "u", Fx, "_", "m", seq(gpn), pfsletters[y])  
+        } else design[y, ] <- paste0(p, "u", Fx, "_", "f", seq(gpn), pfsletters[y]) 
+      }
+    }
+
+    # Record male==1==TRUE or female==0==FALSE for a unit of the 1/P generation
+    sexDesign <- grepl(paste("^", p, "u", Fx, "_s", sep = ""), design) | grepl(paste("^", p, "u", Fx, "_m", sep = ""), design)
+
+    #########################
+    # Fill-in ped_out
+    ## Fill-in 0/GP positions for `Fx`th unit of the pedigree
+    ped_out[gpsi[Fx]:gpei[Fx], ] <<- cbind(c(paste0(p, "u", Fx, "_gs", seq(gpn)), paste0(p, "u", Fx, "_gd", seq(gpn))),
+	rep(NA, 2*gpn),
+	rep(NA, 2*gpn),
+	rep(c("M", "F"), each = gpn))
+
+    ## Fill-in 1/P positions for `Fx`th unit of the pedigree
+    ped_out[psi[Fx]:pei[Fx], ] <<- cbind(c(design),
+	rep(paste0(p, "u", Fx, "_gd", seq(gpn), sep = ""), each = fsn),
+	rep(paste0(p, "u", Fx, "_gs", seq(gpn), sep = ""), each = fsn),
+	c("F", "M")[sexDesign+1])
+
+    ## Fill-in 2/F1 positions for `Fx`th unit of the pedigree
+    ped_out[f1si[Fx]:f1ei[Fx], ] <<- cbind(paste0(p, "u", Fx, "_m", rep(seq(pdpu), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq(fsn/2), (2*pdpu))),
+	rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^", p, "u", Fx, "_d", sep = ""), x)]})), each = fsn),
+	rep(sires, each = ((gpn-1)*fsn)),
+	rep(c("M", "F"), each = (fsn/2)))
+
+
+   invisible(Fx)
    }
-   sexDesign <- grepl(paste("^u", Fx, "_s", sep = ""), design)
-
-   if(is.null(prefix)){
-     unitPed <- data.frame(id = as.character(c(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), paste("u", Fx, "_gd", seq.int(gpn), sep = ""), c(design), paste("u", Fx, "_m", rep(seq.int((fsn*(gpn-1))), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq.int(fsn/2), (fsn*(gpn-1))), sep = ""))),
-	dam = as.character(c(rep(NA, (2*gpn)), rep(paste("u", Fx, "_gd", seq.int(gpn), sep = ""), each = fsn), rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^u", Fx, "_d", sep = ""), x)]})), each = fsn))),
-	sire = as.character(c(rep(NA, (2*gpn)), rep(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), each = fsn), rep(sires, each = ((gpn-1)*fsn)))),
-	sex = c(rep("M", gpn), rep("F", gpn), sapply(sexDesign, FUN = function(x) {if(x) "M" else "F"}), rep(rep(c("M", "F"), each = (fsn/2)), ((gpn-1)*fsn))))
-   } else{
-       p <- as.character(prefix)   
-       unitPed <- data.frame(id = as.character(paste0(p, c(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), paste("u", Fx, "_gd", seq.int(gpn), sep = ""), c(design), paste("u", Fx, "_m", rep(seq.int((fsn*(gpn-1))), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq.int(fsn/2), (fsn*(gpn-1))), sep = "")))),
-	dam = as.character(c(rep(NA, (2*gpn)), paste0(p, c(rep(paste("u", Fx, "_gd", seq.int(gpn), sep = ""), each = fsn), rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^u", Fx, "_d", sep = ""), x)]})), each = fsn))))),
-	sire = as.character(c(rep(NA, (2*gpn)), paste0(p, c(rep(paste("u", Fx, "_gs", seq.int(gpn), sep = ""), each = fsn), rep(sires, each = ((gpn-1)*fsn)))))),
-	sex = c(rep("M", gpn), rep("F", gpn), sapply(sexDesign, FUN = function(x) {if(x) "M" else "F"}), rep(rep(c("M", "F"), each = (fsn/2)), ((gpn-1)*fsn))))
-     }
 
 
-   unitPed
-   }
+  sapply(seq(F), FUN = unitFun)
 
-
- ped_out <- do.call(rbind, lapply(seq.int(F), FUN = unitFun))
-
-
-return(ped_out)
+ return(ped_out)
 }
 
