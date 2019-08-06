@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+
 cs *cs_cbind(const cs *A, const cs *B);
 /* Returns the two matrices A and B column bound*/
 void cs_cov2cor(const cs *A);
