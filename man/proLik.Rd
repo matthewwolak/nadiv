@@ -4,8 +4,6 @@
 \alias{proLik}
 \alias{is.proLik}
 \alias{plot.proLik}
-\alias{is.proLik}
-\alias{plot.proLik}
 \title{Profile Likelihoods}
 \usage{
 proLik(full.model, component, G = TRUE, negative = FALSE,

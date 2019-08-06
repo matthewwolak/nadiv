@@ -4,8 +4,6 @@
 \alias{prunePed}
 \alias{prunePed.default}
 \alias{prunePed.numPed}
-\alias{prunePed.default}
-\alias{prunePed.numPed}
 \title{Prunes a pedigree based on individuals with phenotypes}
 \usage{
 prunePed(pedigree, phenotyped, ...)
