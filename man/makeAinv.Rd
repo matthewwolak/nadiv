@@ -4,8 +4,6 @@
 \alias{makeAinv}
 \alias{makeAinv.default}
 \alias{makeAinv.fuzzy}
-\alias{makeAinv.default}
-\alias{makeAinv.fuzzy}
 \title{Creates the inverse additive genetic relationship matrix}
 \usage{
 makeAinv(pedigree, f = NULL, ggroups = NULL, fuzz = NULL,

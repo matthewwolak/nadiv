@@ -4,8 +4,6 @@
 \alias{numPed}
 \alias{is.numPed}
 \alias{ronPed}
-\alias{is.numPed}
-\alias{ronPed}
 \title{Integer Format Pedigree}
 \usage{
 numPed(pedigree, check = TRUE)
@@ -34,8 +32,6 @@ An S3 object of class \dQuote{numPed} representing the pedigree,
 \description{
 Conversion, checking, and row re-ordering of a pedigree in integer form of
 class \sQuote{numPed}.
-
-method is numPed
 }
 \details{
 Missing parents (e.g., base population) should be denoted by either 'NA',

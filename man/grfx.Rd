@@ -4,8 +4,8 @@
 \alias{grfx}
 \title{Simulated genetic random effects}
 \usage{
-grfx(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix",
-  stdnorms = NULL, warn = TRUE)
+grfx(n, G, incidence = NULL, saveIncidence = FALSE,
+  output = "matrix", stdnorms = NULL, warn = TRUE)
 }
 \arguments{
 \item{n}{The number of individuals for which to simulate effects}

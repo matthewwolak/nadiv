@@ -1,3 +1,15 @@
+# 2.16.1.0
+## NEW
+  * added `makeTinv()` and `makeDiiF()` functions
+    * These create items used in the Cholesky factorization of a relatedness matrix (or its inverse) and/or the individual coefficients of inbreeding `f`
+    * `makeDiiF()` creates the __D__ matrix of the Cholesky factorization of the relatedness matrix below (i.e., __A__ and the coefficients of inbreeding (diagonals-1 of __A__)
+    * `makeTinv()` creates __Tinv__ of the Cholesky factorization of the inverse relatedness matrix below (i.e., __Ainv__)
+        * __A__= __T' D T__
+        * __Ainv__=__Tinv' Dinv Tinv__
+    * Note, because __D__ and __Dinv__ are _diagonal_ matrices, __Dinv__= the element-wise operation of `1 / d_ii`
+        * Consequently, obtaining __Dinv__ from __D__ is trivial
+        * Simply do `r Dinv <- D` followed by `Dinv@x <- 1 / D@x`
+
 # 2.16.0.1
 ## NEW
 ## Small changes

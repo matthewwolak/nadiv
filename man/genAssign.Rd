@@ -4,8 +4,6 @@
 \alias{genAssign}
 \alias{genAssign.default}
 \alias{genAssign.numPed}
-\alias{genAssign.default}
-\alias{genAssign.numPed}
 \title{Generation assignment}
 \usage{
 genAssign(pedigree, ...)
