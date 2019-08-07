@@ -275,7 +275,7 @@ makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gO
   Ainv <- as(Ainv, "dsCMatrix")
   Ainv@x <- Cout[[7]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
+  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
       f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
@@ -442,8 +442,8 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   Ainv@x <- Cout[[12]]
   fsOrd1 <- as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "CsparseMatrix")
   fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "sparseMatrix")@x, "pMatrix")
-  Ainv <- as(t(fsOrd) %*% Ainv %*% fsOrd, "dgCMatrix")
-  Ainv@Dimnames <- list(as.character(pedalt[(t(fsOrd1) %*% matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
+  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
+  Ainv@Dimnames <- list(as.character(pedalt[crossprod(fsOrd1, matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
   f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
   dii <- (fsOrd1 %*% Cout[[6]][-c(N+1)])@x[-groupRows]
   if(!gOnTop){ 
