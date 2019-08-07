@@ -1,5 +1,4 @@
 # 2.16.1.0
-
 ## NEW
   * added `makeTinv()` and `makeDiiF()` functions
     * These create items used in the Cholesky factorization of a relatedness matrix (or its inverse) and/or the individual coefficients of inbreeding `f`
@@ -11,7 +10,13 @@
         * Consequently, obtaining __Dinv__ from __D__ is trivial
         * Simply do `r Dinv <- D` followed by `Dinv@x <- 1 / D@x`
 
+# 2.16.0.1
+## NEW
+## Small changes
+  * update to `simPedDFC()` to allow more flexibility in designing pedigrees
+
 # 2.16.0 Released to CRAN 5 May 2018
+
 ## NEW
   * `roxygen2` documentation
   * Return diagonal of Mendelian sampling variance matrix in `makeAinv()` and `makeS()`
