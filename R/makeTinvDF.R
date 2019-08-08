@@ -137,28 +137,4 @@ makeDiiF <- function(pedigree, f = NULL, ...){
 
 
 
-###############################################################################
-###############################################################################
-#' @rdname makeTinv
-#' @export
-makeDiiF2 <- function(pedigree, f = NULL, ...){
-  renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
-  nPed <- numPed(pedigree[renPed, ])
-  N <- nrow(nPed)
-  nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
-  Cout <- .C("fcoeffAlt", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 				#dam
-	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(f),					#f
-            as.double(rep(0, N)),  				#dii
-            as.integer(N))   					#n
-  fsOrd <- as(as.integer(renPed), "pMatrix")
-  f <- Cout[[3]][t(fsOrd)@perm]
-  dii <- Cout[[4]][t(fsOrd)@perm]
-
-
- return(list(D = Diagonal(x = dii, n = N),
-	f = f))
-}
 
