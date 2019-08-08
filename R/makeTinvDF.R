@@ -110,9 +110,17 @@ makeTinv.numPed <- function(pedigree, ...){
 ###############################################################################
 
 
-#' @rdname makeTinv
 #' @export
-makeDiiF <- function(pedigree, f = NULL, ...){
+makeDiiF <- function(pedigree, ...){
+  UseMethod("makeDiiF", pedigree)
+}
+
+################################
+# Methods:
+#' @rdname makeTinv
+#' @method makeDiiF default
+#' @export
+makeDiiF.default <- function(pedigree, f = NULL, ...){
   renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
   nPed <- numPed(pedigree[renPed, ])
   N <- nrow(nPed)
@@ -134,7 +142,28 @@ makeDiiF <- function(pedigree, f = NULL, ...){
 }
 
 
+################################
+#' @rdname makeTinv
+#' @method makeDiiF numPed
+#' @export
+makeDiiF.numPed <- function(pedigree, f = NULL, ...){
+  renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
+  nPed <- ronPed(pedigree, renPed)
+  N <- nrow(nPed)
+  nPed[nPed == -998] <- N + 1
+  f <- c(rep(0, N), -1)
+  Cout <- .C("fcoeff", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(f),					#f
+            as.double(rep(0, N)),  				#dii
+            as.integer(N))   					#n
+  fsOrd <- as(as.integer(renPed), "pMatrix")
+  f <- Cout[[3]][t(fsOrd)@perm]
+  dii <- Cout[[4]][t(fsOrd)@perm]
 
 
-
+ return(list(D = Diagonal(x = dii, n = N),
+	f = f))
+}
 
