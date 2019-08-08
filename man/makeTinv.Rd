@@ -6,6 +6,8 @@
 \alias{makeTinv.numPed}
 \alias{makeDiiF}
 \alias{makeDiiF2}
+\alias{makeDiiF.default}
+\alias{makeDiiF.numPed}
 \title{Creates components of the additive genetic relationship matrix and its inverse}
 \usage{
 makeTinv(pedigree, ...)
@@ -14,9 +16,9 @@ makeTinv(pedigree, ...)
 
 \method{makeTinv}{numPed}(pedigree, ...)
 
-makeDiiF(pedigree, f = NULL, ...)
+\method{makeDiiF}{default}(pedigree, f = NULL, ...)
 
-makeDiiF2(pedigree, f = NULL, ...)
+\method{makeDiiF}{numPed}(pedigree, f = NULL, ...)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
