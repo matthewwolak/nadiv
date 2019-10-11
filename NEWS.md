@@ -9,7 +9,7 @@
     * An example is given in the help documentation (in R, run `?makeGGAinv`), but below is a basic example:
 ```
 ggPed <- Q1988[-c(3:7), c("id", "damGG", "sireGG")]
-AinvOut <- makeGGAinv(typeAped, ggroups = 2)$Ainv  #<-- list with 2 Ainv matrices
+AinvOut <- makeGGAinv(ggPed, ggroups = 2)$Ainv  #<-- list with 2 Ainv matrices
 ```
   * added `makeTinv()` and `makeDiiF()` functions
     * These create items used in the Cholesky factorization of a relatedness matrix (or its inverse) and/or the individual coefficients of inbreeding `f`
