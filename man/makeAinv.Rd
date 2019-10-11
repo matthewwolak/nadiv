@@ -83,7 +83,7 @@ coefficients of inbreeding for the pedigreed population.
 Missing parents (e.g., base population) should be denoted by either 'NA',
 '0', or '*'.
 
-The function implements an adaptation of the Meuwissen and Luo (1992)
+The functions implement an adaptation of the Meuwissen and Luo (1992)
 algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
 Jarrod Hadfield in the \code{MCMCglmm} package. Further, providing a
@@ -92,27 +92,30 @@ for directly obtaining the augmented A-inverse matrix for genetic groups
 into Meuwissen and Luo's (1992) algorithm, thereby, considering inbreeding
 during the construction of the A-inverse. Further calculations needed for
 the algorithm to incorporate inbreeding and genetic groups follow the theory
-presented in VanRaden (1992).
+presented in VanRaden (1992). Alternatively, group-specific inverse
+relatedness matrices can be formed with \code{makeGGAinv}, see below.
 
 At the moment, providing the inbreeding level of individuals or the base
 population has not been implemented. However, this argument is a placeholder
 for now.
 
-Genetic groups can be incorporated into the A-inverse by providing a value
-to the \code{ggroups} argument. The value supplied to \code{ggroups} can
-either be (1) a single integer indicating the number of unique genetic
-groups or (2) a character vector containing the name for each genetic group.
-These are referred to as pedigree types "A" and "D", respectively, and
-further details follow below.  (Type="A") the pedigree contains unique IDs
-for the 'g' genetic groups in the first 'g' lines of the pedigree. The dam
-and sire of the genetic group rows should contain missing values (e.g., NA,
-"0", or "*"). All individuals in the pedigree should then have one of the
-'g' genetic groups instead of an unknown parent.  (Type="D") the pedigree
-contains only individuals in the ID column (no genetic groups have an ID)
-and there should be no missing values for any dams or sires. Instead,
-individuals for whom the dam and/or sire is unknown should have one of the
-genetic groups identified in the vector supplied to \code{ggroups} as the
-dam or sire.
+Genetic groups can be incorporated into a single A-inverse by providing a value
+to the \code{ggroups} argument in \code{makeAinv}. The value supplied to
+\code{ggroups} can either be (1) a single integer indicating the number of
+unique genetic groups or (2) a character vector containing the name for each
+genetic group. These are referred to as pedigree types "A" and "D",
+respectively, and further details follow below.
+
+(Type="A") the pedigree contains unique IDs for the 'g' genetic groups in the
+first 'g' lines of the pedigree. The dam and sire of the genetic group rows
+should contain missing values (e.g., NA, "0", or "*"). All individuals in the
+pedigree should then have one of the `g' genetic groups instead of an unknown
+parent.
+(Type="D") the pedigree contains only individuals in the ID column (no
+genetic groups have an ID) and there should be no missing values for any dams
+or sires. Instead, individuals for whom the dam and/or sire is unknown should
+have one of the genetic groups identified in the vector supplied to
+\code{ggroups} as the dam or sire.
 
 \sQuote{Fuzzy classification} of genetic groups (Fikse 2009) can be
 implemented if a \sQuote{matrix} (of class \code{matrix} or \code{Matrix})
@@ -181,6 +184,14 @@ set of equations.
   stopifnot(identical(AstarNullFuzzy, AstarA),
 	identical(AstarNullFuzzy, AstarD))
 
+ ##  With genetic groups  ##
+  ## Type A
+   typeAped <- Q1988[-c(3:7), c("id", "damGG", "sireGG")]
+   (AinvOutA <- makeGGAinv(typeAped, ggroups = 2)$Ainv)
+  ## Type D
+   typeDped <- Q1988[-c(1:7), c("id", "damGG", "sireGG")]
+   (AinvOutD <- makeGGAinv(typeDped, ggroups = c("g1", "g2"))$Ainv)
+  stopifnot(identical(AinvOutA, AinvOutD))
 
 }
 \references{
