@@ -1,11 +1,11 @@
 # 2.16.1.0
 ## NEW
   * `simGG()` now simulates phenotypes with heterogeneous additive genetic variances among the genetic groups (i.e., immigrant and resident groups)
-    * The changes to this simulation function now ensures phenotypes and underlying breeding value are consistent with the mixed model genetic group analysis approach described by [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7).
+    * The change to this simulation function now ensures phenotypes and underlying breeding values are consistent with the mixed model genetic group analysis approach described by [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7)
     * Breeding values have now been "split" to track resident-specific and immigrant-specific breeding values
     * __Users__ should interact with the function the same way as always, as no changes to the function arguments have been made.
-  * added `makeGGAinv()` to construct genetic group-specific inverse relatedness matrices (__Ainv__).
-    * implements the approach in [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7).
+  * `makeGGAinv()` added as a _new_ function to construct genetic group-specific inverse relatedness matrices (__Ainv__).
+    * implements the approach in [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7)
     * An example is given in the help documentation (in R, run `?makeGGAinv`), but below is a basic example:
 ```
 ggPed <- Q1988[-c(3:7), c("id", "damGG", "sireGG")]
@@ -20,7 +20,12 @@ AinvOut <- makeGGAinv(ggPed, ggroups = 2)$Ainv  #<-- list with 2 Ainv matrices
         * __Ainv__=__Tinv' Dinv Tinv__
     * Note, because __D__ and __Dinv__ are _diagonal_ matrices, __Dinv__= the element-wise operation of `1 / d_ii`
         * Consequently, obtaining __Dinv__ from __D__ is trivial
-        * Simply do `r Dinv <- D` followed by `Dinv@x <- 1 / D@x`
+        * Simply do `Dinv <- D` followed by `Dinv@x <- 1 / D@x`
+    * __Users__ only need to supply a pedigree and the functions do the rest. For example:
+```
+makeTinv(Mrode2)
+makeDiiF(Mrode2)
+```
 
 # 2.16.0.1
 ## NEW
