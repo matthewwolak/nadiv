@@ -1,7 +1,13 @@
 # 2.16.1.0
 ## NEW
+  * `simGG()` now simulates phenotypes with heterogeneous additive genetic variances among the genetic groups (i.e., immigrant and resident groups)
+    * The changes to this simulation function now ensures phenotypes and underlying breeding value are consistent with the mixed model genetic group analysis approach described by [Muff et al. 2019](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7).
+    * Breeding values have now been "split" to track resident-specific and immigrant-specific breeding values
+  * added `makeGGAinv()` to construct genetic group-specific inverse relatedness matrices (__Ainv__).
+    * implements the approach in [Muff et al. 2019](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7).
   * added `makeTinv()` and `makeDiiF()` functions
     * These create items used in the Cholesky factorization of a relatedness matrix (or its inverse) and/or the individual coefficients of inbreeding `f`
+    * In particular, these are used to construct genetic group specific inverse relatedness matrices, and are used "under the hood" in `makeGGAinv()`.
     * `makeDiiF()` creates the __D__ matrix of the Cholesky factorization of the relatedness matrix below (i.e., __A__ and the coefficients of inbreeding (diagonals-1 of __A__)
     * `makeTinv()` creates __Tinv__ of the Cholesky factorization of the inverse relatedness matrix below (i.e., __Ainv__)
         * __A__= __T' D T__
