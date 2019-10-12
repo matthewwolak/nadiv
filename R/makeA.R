@@ -33,9 +33,10 @@ makeA <- function(pedigree)
 	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
             as.integer(N))   					#n
-  Ainv <- as(chol2inv(t(crossprod(makeTinv(nPed), Diagonal(x = sqrt(1 / Cout[[4]]), n = N)))), "symmetricMatrix")
-    Ainv@Dimnames <- list(as.character(pedigree[, 1]),
+  nPed[nPed == (N+1)] <- -998
+  A <- as(chol2inv(t(crossprod(makeTinv(nPed), Diagonal(x = sqrt(1 / Cout[[4]]), n = N)))), "symmetricMatrix")
+    A@Dimnames <- list(as.character(pedigree[, 1]),
 			as.character(pedigree[, 1]))
- Ainv
+ A
 }
 
