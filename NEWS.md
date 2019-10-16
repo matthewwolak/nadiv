@@ -1,3 +1,7 @@
+# 2.16.2.0
+## NEW
+  * `geneDrop()` conducts a gene dropping simulation down a user-supplied pedigree.
+
 # 2.16.1.0
 ## NEW
   * `simGG()` now simulates phenotypes with heterogeneous additive genetic variances among the genetic groups (i.e., immigrant and resident groups)
