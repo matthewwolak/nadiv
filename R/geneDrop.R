@@ -1,3 +1,48 @@
+#' Functions to conduct gene dropping through a pedigree
+#' 
+#' Functions that perform and summarize gene dropping conducted on supplied pedigrees
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA', '0'
+#' , or '*'.
+#'
+#' \code{parallel} = TRUE should only be used on Linux or Mac operating systems
+#' (i.e., not Windows).
+#'
+#' Founder allelic values (the alleles assigned to an individual's maternal,
+#' paternal, or both haplotypes when the maternal, paternal, or both parents are
+#' missing) are equivalent positive and negative integer values corresponding to
+#' the maternal and paternal haplotypes, respectively. For example, if the first
+#' individual in the pedigree has two unknown parents it will have the following
+#' two allelic values: 1=maternal haplotype and -1=paternal haplotype.  
+#'
+#' @aliases geneDrop
+#' @param pedigree A pedigree with columns organized: ID, Dam, Sire.
+#' @param N The number of times to iteratively trace alleles through the
+#'   pedigree
+#' @param parallel A logical indicating whether or not to use parallel
+#'   processing. Note, this may only be available for Mac and Linux operating
+#'   systems.
+#' @param ncores The number of cpus to use when constructing the dominance
+#'   relatedness matrix. Default is all available.
+#' @param \dots Other arguments that can be supplied to alter what summaries are
+#'   reported.
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{IDs }{Original identities in the pedigree}
+#'     \item{maternal }{Simulated maternal haplotypes}
+#'     \item{paternal }{Simulated paternal haplotypes} 
+#'     \item{numericPedigree }{Pedigree in class \code{numPed} for convenient
+#'       post-processing of haplotypes}
+#'   }
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link{makeDsim}}
+#' @examples
+#' 
+#'   geneDrop(Mrode2, N = 10
+#' 
+#' @export
+
 geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
 
   nPed <- if(is.numPed(pedigree)) pedigree else numPed(pedigree)
