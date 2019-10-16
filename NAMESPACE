@@ -2,6 +2,8 @@
 
 S3method(genAssign,default)
 S3method(genAssign,numPed)
+S3method(geneDrop,default)
+S3method(geneDrop,numPed)
 S3method(is,proLik)
 S3method(makeAinv,default)
 S3method(makeAinv,fuzzy)
