@@ -1,3 +1,30 @@
+#' Transforms ASReml-R gamma sampling variances to component scale
+#' 
+#' The inverse of the Average Information matrix in an ASReml-R object produces
+#' the sampling variances of the (co)variance components on the gamma scale.
+#' This function scales these variances to the original component scale.  This
+#' allows for Confidence Intervals to be constructed about the variance
+#' component estimates.
+#' 
+#' 
+#' @param asr.object Object from a call to \code{asreml}
+#' @return Returns a numeric vector of variances for each variance component in
+#'   an ASReml-R model.
+#' @author \email{matthewwolak@@gmail.com}
+#' @examples
+#' 
+#'   \dontrun{
+#'     library(asreml)
+#'     ginvA <- asreml.Ainverse(warcolak)$ginv
+#'     ginvD <- makeD(warcolak[,1:3])$listDinv
+#'     warcolak$IDD <- warcolak$ID
+#'     warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(ID) + giv(IDD), 
+#' 	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
+#'     summary(warcolak.mod)$varcomp
+#'     sqrt(varTrans(warcolak.mod))  # sqrt() so can compare with standard errors from summary
+#'    }
+#' 
+#' @export
 varTrans <- function(asr.object){
     if(asr.object$sigma2 == 1){
        vars <- diag(aiFun(asr.object))

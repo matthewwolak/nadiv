@@ -1,8 +1,139 @@
-# 2.14.2
+# 2.16.1.0
+## NEW
+  * `simGG()` now simulates phenotypes with heterogeneous additive genetic variances among the genetic groups (i.e., immigrant and resident groups)
+    * The change to this simulation function now ensures phenotypes and underlying breeding values are consistent with the mixed model genetic group analysis approach described by [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7)
+    * Breeding values have now been "split" to track resident-specific and immigrant-specific breeding values
+    * __Users__ should interact with the function the same way as always, as no changes to the function arguments have been made.
+  * `makeGGAinv()` added as a _new_ function to construct genetic group-specific inverse relatedness matrices (__Ainv__).
+    * implements the approach in [Muff et al. 2019. Gen. Sel. Evol.](https://gsejournal.biomedcentral.com/articles/10.1186/s12711-019-0449-7)
+    * An example is given in the help documentation (in R, run `?makeGGAinv`), but below is a basic example:
+```
+ggPed <- Q1988[-c(3:7), c("id", "damGG", "sireGG")]
+AinvOut <- makeGGAinv(ggPed, ggroups = 2)$Ainv  #<-- list with 2 Ainv matrices
+```
+  * added `makeTinv()` and `makeDiiF()` functions
+    * These create items used in the Cholesky factorization of a relatedness matrix (or its inverse) and/or the individual coefficients of inbreeding `f`
+    * In particular, these are used to construct genetic group specific inverse relatedness matrices, and are used "under the hood" in `makeGGAinv()`.
+    * `makeDiiF()` creates the __D__ matrix of the Cholesky factorization of the relatedness matrix below (i.e., __A__ and the coefficients of inbreeding (diagonals-1 of __A__)
+    * `makeTinv()` creates __Tinv__ of the Cholesky factorization of the inverse relatedness matrix below (i.e., __Ainv__)
+        * __A__= __T' D T__
+        * __Ainv__=__Tinv' Dinv Tinv__
+    * Note, because __D__ and __Dinv__ are _diagonal_ matrices, __Dinv__= the element-wise operation of `1 / d_ii`
+        * Consequently, obtaining __Dinv__ from __D__ is trivial
+        * Simply do `Dinv <- D` followed by `Dinv@x <- 1 / D@x`
+    * __Users__ only need to supply a pedigree and the functions do the rest. For example:
+```
+makeTinv(Mrode2)
+makeDiiF(Mrode2)
+```
 
-# 2.14.1 Released 22 July 2015
+# 2.16.0.1
+## NEW
+## Small changes
+  * update to `simPedDFC()` to allow more flexibility in designing pedigrees
+
+# 2.16.0 Released to CRAN 5 May 2018
+
+## NEW
+  * `roxygen2` documentation
+  * Return diagonal of Mendelian sampling variance matrix in `makeAinv()` and `makeS()`
+    * These (or their inverses?) can be used in JAGS or BUGS when running a quantitative genetic mixed model
+
+## Small changes
+  * default action is to calculate log-determinant of matrices
+    * switched from not calculating this by default
+
+# 2.15.0
+## NEW
+  * Functions to construct sex-chromosomal dominance relatedness matrices
+    * `makeSd()` and `makeSdsim()` 
+        * These are similar to what `makeD()` and `makeDsim()` accomplish for autosomes
+        * The ouptut contains the **Sd** and **Sdsim** dominance relatedness matrices
+        * The inverses of these can be obtained from **Sdinv** and **Sdsiminv** and used in a mixed model
+
+
+## Small changes
+   * `proLik()` improved/bug fixed to find confidence limits
+     * previously would declare confidence limits found when they hadn't been
+         * this was due to `optimize()` quitting too early with default `tol` argument
+     * returns `NA` if confidence limits are not, in fact, found (e.g., for boundary parameters, variances that are not significantly greater than zero)
+     * `plot.proLik()` now includes vertical lines to better visualize CIs
+   * use lower_bound algorithm for matrix lookup within c++ code
+     * based on c++ <algorithm>std::lower_bound 
+       * affect `makeAinv()` and `makeD()`
+     * greater speedup as **A^-1** and **D** become more dense
+   * create default and class 'numPed' methods for `genAssign()` and `prunePed()`
+     * can greatly trim down `genAssign.numPed()` code (and to some extent `prunePed.numped()`)
+     * this speeds up/uses less memory
+     * since `genAssign()` and `prunePed()` are frequently called in many nadiv functions which operate on class 'numPed', this will have modest, but significant performance increases
+     * thanks to [`profvis`](https://github.com/rstudio/profvis) for bringing my attention to this!
+
+# 2.14.3 Released 20 April 2016
+## NEW
+  * Fuzzy classification of genetic groups to construct **A^-1**.
+    * Allows individuals' phantom parents to be assigned to genetic groups with a probability. Meaning, they can be assigned to more than one genetic group.
+    * To implement, the pedigree must have phantom parent identities as unique rows and a matrix of probabilities of group membership for every phantom parent in every genetic group has to be supplied to the `fuzz` argument.
+    * Examples can be seen in the `makeAinv.Rd` help file or by running the following commands in `R`:
+
+```R
+?makeAinv              # launches the help documentation
+example(makeAinv)      # runs the examples in the help documentation
+```
+
+    * Notably, fuzzy classification can be set to 'null', where each phantom parent is assigned to one genetic group with probability=1. This produces the same **Astar** matrix as regular genetic group methods (without fuzzy classification). See this demonstrated in the examples of the help documentation.
+
+  * Add the `makeAstarMult()` function to create the inverse numerator relationship matrix with genetic groups (and possibly also fuzzy classification of genetic groups) through matrix multiplication instead of using direct algorithms to set this up.
+    * Uses `ggcontrib()` and `makeAinv()` to create **Q** and **A^-1** directly, then multiplies these in such a way as to obtain **Astar**.
+    * Examples using the two different types of pedigree formats and either with or without fuzzy classication can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
+```R
+?makeAstarMult		# launches the help documentation
+example(makeAstarMult)	# runs the examples in the help documentation
+```
+
+  * Add the `F2009` dataset
+    * This dataset can be used as an example for fuzzy classification of genetic groups when constructing a numerator relationship matrix with groups (i.e., with `makeAinv()`)
+    * See a description in `F2009.Rd` or in R type:
+```R
+?F2009
+```
+
+  * Add the `simGG()` function to simulate pedigree and phenotype when immigration occurs in a focal population
+    * Allows fairly fine control over a simulation. For example, the function is flexible in the: population size, number of immigrants per generation, number of generations, and both spatial and temporal trends in both focal and immigrant populations.
+    * This is the function used to simulate the new `ggTutorial` dataset (below)
+
+  * Added the `ggTutorial` dataset
+    * This is a simulated dataset to be used in analyses with genetic group animal model  methods.
+    * See a description in `ggTutorial.Rd` or in R type:
+```R
+?ggTutorial
+```
+
+  * `LRTest()` is now an exported function to do log-likelihood ratio tests
+
+## Small changes
+   * new S3 generic and methods for `makeAinv()`.
+     * method dispatch is based on class of the `fuzz` argument
+       * if `fuzz == NULL` then dispatch the method `makeAinv.default()`
+       * if `fuzz == "matrix" | fuzz == "Matrix"` then dispatch `makeAinv.fuzzy()`
+
+   * fix issue with `proLik()` and the confidence interval estimation
+     * use `LRTest()` as basis of `constrainFun()` within `proLik()` so consistently define log-likelihood ratio test statistics
+     * close issue #4 with commit [978ad610198398848d97e90c4eb57f4834a4c278](https://github.com/matthewwolak/nadiv/commits/978ad610198398848d97e90c4eb57f4834a4c278)
+  
+
+# 2.14.2 Released 5 Feb 2016
+## New
+   * `ggcontrib()` can now incorporate fuzzy classification of genetic groups
+     * To facilitate this, the examples for `ggcontrib()` have been changed. For more information and examples, read the help documentation `ggcontrib.Rd` or in `R` type:
+```R
+?ggcontrib		# launches the help documentation
+example(ggcontrib)	# runs the examples in the help documentation
+```
+
 ## Small changes
    * fixed ordering of *f* coefficients returned by `makeAinv()`
+
+# 2.14.1 Released 22 July 2015
 
 # 2.14.0 Released 3 July 2015
 ## New
@@ -10,7 +141,7 @@
      * This change has introduced new arguments to `makeAinv()`, however, the defaults are set to produce the normal A-inverse. For more information and examples, read the help documentation `makeAinv.Rd` or in R type:
 ```R
 ?makeAinv              # launches the help documentation
-examples("makeAinv")   # runs the examples in the help documentation
+example("makeAinv")    # runs the examples in the help documentation
 ```
    * Improved algorithm underlying `makeAinv()` - significant speed-up!
    * Created new class `numPed` for pedigrees constructed by `numPed()`.
@@ -53,7 +184,7 @@ as a minimum
 # 2.13.3  Released 4 June 2015
 
 ## New
-   * Added `LDtL()`, a function to take the LDL' Cholesky decomposition of a matrix (not currently exported).
+   * Added `TDtT()`, a function to take the **TDT'** Cholesky decomposition of a matrix (not currently exported).
    * Added `founderLine()` which traces all individuals back to either the paternal or maternal founder
    * `grfx()` now has a new argument to allow user to supply the standard normal deviates instead of generating them within the function.
      * extended the warn argument to apply to the warning when `incidence = NULL`
