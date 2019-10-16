@@ -40,8 +40,7 @@
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso \code{\link{makeDsim}}
 #' @examples
-#' 
-#'   geneDrop(Mrode2, N = 10
+#'   geneDrop(Mrode2, N = 10)
 #' 
 #' @export
 geneDrop <- function(pedigree, N,

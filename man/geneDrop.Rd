@@ -59,8 +59,7 @@ individual in the pedigree has two unknown parents it will have the following
 two allelic values: 1=maternal haplotype and -1=paternal haplotype.
 }
 \examples{
-
-  geneDrop(Mrode2, N = 10
+  geneDrop(Mrode2, N = 10)
 
 }
 \seealso{
