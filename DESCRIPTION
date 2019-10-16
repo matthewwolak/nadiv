@@ -1,7 +1,7 @@
 Package: nadiv
 Type: Package
 Title: (Non)Additive Genetic Relatedness Matrices
-Version: 2.16.1.0
+Version: 2.16.2.0
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
 URL: http://github.com/matthewwolak/nadiv
 BugReports: http://github.com/matthewwolak/nadiv/issues
