@@ -44,7 +44,8 @@
 #'   geneDrop(Mrode2, N = 10
 #' 
 #' @export
-geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
+geneDrop <- function(pedigree, N,
+	parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
   UseMethod("geneDrop", pedigree)
 }
 
@@ -53,7 +54,8 @@ geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
 #' @rdname geneDrop
 #' @method geneDrop default
 #' @export
-geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
+geneDrop.default <- function(pedigree, N,
+	parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
 
   nPed <- numPed(pedigree)
   n <- nrow(pedigree)
@@ -88,7 +90,8 @@ geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores
 #' @rdname geneDrop
 #' @method geneDrop numPed
 #' @export
-geneDrop <- function(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
+geneDrop.numPed <- function(pedigree, N,
+	parallel = FALSE, ncores = getOption("mc.cores", 2L), ...){
 
   n <- nrow(pedigree)
   dfounders <- which(pedigree[, 2] == -998)
