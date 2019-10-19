@@ -3,17 +3,16 @@
 \name{makeDsim}
 \alias{makeDsim}
 \alias{makeSdsim}
-\alias{makeSdsim}
-\alias{makeDsim}
 \title{Create the dominance genetic relationship matrix through an iterative
 (simulation) process}
 \usage{
-makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores", 2L),
-  invertD = TRUE, calcSE = FALSE, returnA = FALSE)
+makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores",
+  2L), invertD = TRUE, calcSE = FALSE, returnA = FALSE)
 
-makeSdsim(pedigree, heterogametic, N, DosageComp = c(NULL, "ngdc", "hori",
-  "hedo", "hoha", "hopi"), parallel = FALSE, ncores = getOption("mc.cores",
-  2L), invertSd = TRUE, calcSE = FALSE, returnS = FALSE)
+makeSdsim(pedigree, heterogametic, N, DosageComp = c(NULL, "ngdc",
+  "hori", "hedo", "hoha", "hopi"), parallel = FALSE,
+  ncores = getOption("mc.cores", 2L), invertSd = TRUE,
+  calcSE = FALSE, returnS = FALSE)
 }
 \arguments{
 \item{pedigree}{A pedigree with columns organized: ID, Dam, Sire. For use

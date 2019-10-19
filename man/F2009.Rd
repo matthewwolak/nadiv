@@ -3,7 +3,7 @@
 \docType{data}
 \name{F2009}
 \alias{F2009}
-\title{Pedigree, adapted from Fikse (2009)}
+\title{Pedigree, adapted from Fikse 2009}
 \format{An object of class \code{data.frame} with 16 rows and 11 columns.}
 \source{
 Fikse, F. 2009. Fuzzy classification of phantom parent groups in an

@@ -1,4 +1,4 @@
-#' Pedigree, adapted from Fikse (2009)
+#' Pedigree, adapted from Fikse 2009
 #' 
 #' An example pedigree with genetic groups and fuzzy classification of genetic
 #' groups.

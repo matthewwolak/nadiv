@@ -9,7 +9,7 @@
 #' 
 #' @aliases nadiv-package nadiv
 #' @useDynLib nadiv, .registration = TRUE
-#' @importFrom methods as is
+#' @importFrom methods as is new
 #' @importFrom graphics abline plot
 #' @importFrom stats as.formula deriv na.omit optimize
 #' @importFrom stats pchisq qchisq qnorm rnorm sd

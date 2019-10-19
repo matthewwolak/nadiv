@@ -3,16 +3,15 @@
 \name{makeD}
 \alias{makeD}
 \alias{makeSd}
-\alias{makeSd}
-\alias{makeD}
 \title{Create the dominance genetic relationship matrix}
 \usage{
 makeD(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
   invertD = TRUE, returnA = FALSE, det = TRUE)
 
-makeSd(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori", "hedo",
-  "hoha", "hopi"), parallel = FALSE, ncores = getOption("mc.cores", 2L),
-  invertSd = TRUE, returnS = FALSE, det = TRUE)
+makeSd(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori",
+  "hedo", "hoha", "hopi"), parallel = FALSE,
+  ncores = getOption("mc.cores", 2L), invertSd = TRUE,
+  returnS = FALSE, det = TRUE)
 }
 \arguments{
 \item{pedigree}{A pedigree with columns organized: ID, Dam, Sire. For use

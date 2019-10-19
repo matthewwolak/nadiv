@@ -99,11 +99,11 @@ makeS <- function(pedigree, heterogametic,
           Q.row <- c(nPed[,2][dnmiss], nPed[,3][fsnmiss], 1:N)
           Q.x <- c(rep(-0.5, length(dnmiss)), rep(-1, length(fsnmiss)), rep(1, N))
           ord <- order(Q.col + Q.row/(N+1), decreasing = FALSE)
-          Q <- Matrix(0, N, N, sparse = TRUE)
-          Q[1, 2] <- 1
-          Q@i <- as.integer(Q.row[ord] -1)
-          Q@p <- as.integer(c(match(1:N, Q.col[ord]), length(ord) + 1) - 1)
-          Q@x <- as.double(Q.x[ord])
+          Q <- sparseMatrix(i = as.integer(Q.row[ord] - 1),
+	    p = as.integer(c(match(1:N, Q.col[ord]), length(ord) + 1) - 1),
+            x = as.double(Q.x[ord]),
+            index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+            dimnames = list(NULL, NULL))
 
           nPed[nPed == -998] <- N2
           Vii <- (sex + 1)/2
@@ -126,11 +126,12 @@ makeS <- function(pedigree, heterogametic,
             as.double(0.25), #DC
             as.double(Vii))  #sex
 
-          Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
-          Sinv[1, 2] <- 1
-          Sinv@i <- Cout[[10]][1:Cout[[13]]]
-          Sinv@p <- Cout[[11]]
-          Sinv@x <- Cout[[12]][1:Cout[[13]]]
+          Sinv <- sparseMatrix(i = Cout[[10]][1:Cout[[13]]],
+	    p = Cout[[11]],
+            x = Cout[[12]][1:Cout[[13]]],
+            index1 = FALSE, dims = c(N, N),
+            dimnames = list(as.character(pedigree[, 1]),
+                           as.character(pedigree[, 1])))
           Vii <- Cout[[4]]
           f <- Cout[[3]][1:N]
 
@@ -148,11 +149,11 @@ makeS <- function(pedigree, heterogametic,
              Q.row <- c(nPed[,2][fdnmiss], nPed[,2][mdnmiss], nPed[,3][fsnmiss], 1:N)
              Q.x <- c(rep(-0.5, length(fdnmiss)), rep(-1, length(mdnmiss)), rep(-0.5, length(fsnmiss)), rep(1, N))
              ord <- order(Q.col + Q.row/(N+1), decreasing = FALSE)
-             Q <- Matrix(0, N, N, sparse = TRUE)
-             Q[1, 2] <- 1
-             Q@i <- as.integer(Q.row[ord] - 1)
-             Q@p <- as.integer(c(match(1:N, Q.col[ord]), length(ord) + 1) - 1)
-             Q@x <- as.double(Q.x[ord])
+             Q <- sparseMatrix(i = as.integer(Q.row[ord] - 1),
+	       p = as.integer(c(match(1:N, Q.col[ord]), length(ord)+1) - 1),
+               x = as.double(Q.x[ord]),
+               index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+               dimnames = list(NULL, NULL))
 
              nPed[nPed == -998] <- N2
              Vii <- (2 - sex)
@@ -175,11 +176,12 @@ makeS <- function(pedigree, heterogametic,
                as.double(1), #DC
                as.double(Vii))  #sex
 
-             Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
-             Sinv[1, 2] <- 1
-             Sinv@i <- Cout[[10]][1:Cout[[13]]]
-             Sinv@p <- Cout[[11]]
-             Sinv@x <- Cout[[12]][1:Cout[[13]]]
+             Sinv <- sparseMatrix(i = Cout[[10]][1:Cout[[13]]],
+	       p = Cout[[11]],
+               x = Cout[[12]][1:Cout[[13]]],
+               index1 = FALSE, dims = c(N, N),
+               dimnames = list(as.character(pedigree[, 1]),
+                           as.character(pedigree[, 1])))
              Vii <- Cout[[4]]
              f <- Cout[[3]][1:N]
 
@@ -192,11 +194,11 @@ makeS <- function(pedigree, heterogametic,
                 Q.row <- c(nPed[,2][dnmiss], 1:N)
                 Q.x <- c(rep(-0.5, length(dnmiss)), rep(1, N))
                 ord <- order(Q.col + Q.row/(N+1), decreasing = FALSE)
-                Q <- Matrix(0, N, N, sparse = TRUE)
-                Q[1, 2] <- 1
-                Q@i <- as.integer(Q.row[ord] - 1)
-                Q@p <- as.integer(c(match(1:N, Q.col[ord]), length(ord) + 1) - 1)
-                Q@x <- as.double(Q.x[ord])
+                Q <- sparseMatrix(i = as.integer(Q.row[ord] - 1),
+	          p = as.integer(c(match(1:N, Q.col[ord]), length(ord)+1) - 1),
+                  x = as.double(Q.x[ord]),
+                  index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+                  dimnames = list(NULL, NULL))
 
                 nPed[nPed == -998] <- N2
                 Vii <- rep(1, N) 
@@ -219,11 +221,12 @@ makeS <- function(pedigree, heterogametic,
                as.double(0), #DC
                as.double(Vii))  #sex
 
-             Sinv <- Matrix(0, N, N, dimnames = list(as.character(pedigree[,1]), NULL))
-             Sinv[1, 2] <- 1
-             Sinv@i <- Cout[[10]][1:Cout[[13]]]
-             Sinv@p <- Cout[[11]]
-             Sinv@x <- Cout[[12]][1:Cout[[13]]]
+             Sinv <- sparseMatrix(i = Cout[[10]][1:Cout[[13]]],
+	       p = Cout[[11]],
+               x = Cout[[12]][1:Cout[[13]]],
+               index1 = FALSE, dims = c(N, N),
+               dimnames = list(as.character(pedigree[, 1]),
+                           as.character(pedigree[, 1])))
              Vii <- Cout[[4]]
              f <- Cout[[3]][1:N]
 

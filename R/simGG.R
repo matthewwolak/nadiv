@@ -167,7 +167,7 @@
 #' 
 #' 
 #' @export
-simGG2 <- function(K, pairs, noff, g,
+simGG <- function(K, pairs, noff, g,
 	nimm = 2, nimmG = seq(2, g-1, 1),
 	VAf = 1, VAi = 1, VRf = 1, VRi = 1,
 	mup = 20, muf = 0, mui = 0, murf = 0, muri = 0,
@@ -176,9 +176,9 @@ simGG2 <- function(K, pairs, noff, g,
   if(pairs*2 > K) stop("pairs must be less than half of K")
   if(nimmG[1] == 1) stop("immigrants cannot arrive in the first generation")
   N <- pairs*noff
-  da <- array(NA, dim = c(K, 12, g))
+  da <- array(NA, dim = c(K, 16, g))
   dimnames(da) <- list(NULL,
-     c("id", "dam", "sire", "parAvgU", "mendel", "u", "r", "p", "pred.u", "is", "gen", "q_imm"), seq(g))
+     c("id", "dam", "sire", "parAvgG", "parAvgA_f", "parAvgA_i", "mendel_f", "mendel_i", "a_f", "a_i", "r", "p", "pred.u", "is", "gen", "q_imm"), seq(g))
   da[, "id", ] <- seq(K*g)
   # Assume last nimm rows in each generation are the immigrants: 
   ## 1=immigrant & 0=NOT immigrant
@@ -186,19 +186,28 @@ simGG2 <- function(K, pairs, noff, g,
   da[, c("is", "q_imm"), ] <- 0
   da[(K-nimm+1):K, c("is", "q_imm"), nimmG] <- 1
   da[, "gen", ] <- rep(seq(g), each = K)
+  # All individuals need these values=0 initially for math later down
+#XXX DELETEME  da[, c("a_f", "a_i"), ] <- 0
+  # Assign genetic group effects to individuals with phantom parents
+  da[, "parAvgG", 1] <- muf
+  da[(K-nimm+1):K, "parAvgG", nimmG] <- mui
   # Create standard normals for generation 1
-  da[, "u", 1] <- rnorm(K, muf, sqrt(VAf))
+  ## No immigrants in generation 1
+  da[, "a_f", 1] <- rnorm(K, 0, sqrt(VAf))
   da[, "r", 1] <- rnorm(K, murf, sqrt(VRf))
   # Calculate phenotypes for generation 1
-  da[, "p", 1] <- mup + rowSums(da[, c("u", "r"), 1])
+  da[, "p", 1] <- mup + rowSums(da[, c("parAvgG", "a_f", "r"), 1])
   # Calculate predicted total additive genetic effects for generation 1
   ## equation 1.3 in Mrode (2005, p. 3)
   da[, "pred.u", 1] <- (VAf / (VAf + VRf)) * (da[, "p", 1] - mean(da[, "p", 1]))
 
-  ########
+
+
+  #################    Loop through generations   ##############################
   # Mating
   for(i in 2:g){
     if(i %in% nimmG) Knimm <- K-nimm else Knimm <- K
+    ###### Determine parents of next generation  ###########
     # Parents ranked: how close pred.u is to the next generation's mean u
     ## Define function to do this
     prFun <- function(x, theta = 0){
@@ -224,67 +233,107 @@ simGG2 <- function(K, pairs, noff, g,
     iOff <- matrix(rep(c(pool0, pool1), each = noff), ncol = 2)
     da[1:Knimm, c("dam", "sire"), i] <- iOff[sort(sample(seq(nrow(iOff)),
 	size = Knimm, replace = FALSE)), ]
-    # Average of parent total additive genetic effects
-    da[1:Knimm, "parAvgU", i] <- rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
-	da[, "id", i-1]), "u", i-1], ncol = 2, byrow = FALSE))
+
+
+
+    ###### Inheritance of genetic values  ###########
+    # Average of parent genetic group effects (g)
+    ## Should be equivalent to Q[i, ] %*% g OR summation of q_ij * g_j
+    da[1:Knimm, "parAvgG", i] <- rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
+	da[, "id", i-1]), "parAvgG", i-1], ncol = 2, byrow = FALSE))
+
     # Average of parent immigrant genetic group contributions (`q_imm`)
     da[1:Knimm, "q_imm", i] <- rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
 	da[, "id", i-1]), "q_imm", i-1], ncol = 2, byrow = FALSE))
 
+    # Average of parent founder breeding values (a_f)
+    ### parAvgA_f = 0.5 * (a_f_dam + a_f_sire)
+    ### Based on T (not group-specific T_j) matrix; see eqn. 12, Muff et al. 2019
+    da[1:Knimm, "parAvgA_f", i] <- .rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
+	da[, "id", i-1]), "a_f", i-1], ncol = 2, byrow = FALSE),
+	m = Knimm, n = 2, na.rm = TRUE)
+    # Average of parent immigrant breeding values (a_i)
+    ### parAvgA_i = 0.5 * (a_i_dam + a_i_sire)
+    ### Based on T (not group-specific T_j) matrix; see eqn. 12, Muff et al. 2019
+    da[1:Knimm, "parAvgA_i", i] <- .rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
+	da[, "id", i-1]), "a_i", i-1], ncol = 2, byrow = FALSE),
+	m = Knimm, n = 2, na.rm = TRUE)
+
     # Assign Mendelian sampling variation
     # Within-family additive genetic variance
     ## p. 447, second eqn. in Verrier, Colleau, & Foulley. 1993. Theor. Appl. Genetics
-    # Genetic group specific VAs, so group-specific sampling variances
-    ## Splitting breeding values, but don't have to do that 
-    ### Just split Mendelian sampling deviations by Muff et al. eqn. (10)
-    #### Muff et al. eqn. (10) gives proportion of group VA for distribution of
+    # Genetic group specific VAs - mean group-specific sampling variances
+    ## Splitting breeding values/Mendelian sampling deviations
+    #### Muff et al. 2019 (eqn 10) gives proportion of group VA for distribution of
     ##### group-specific Mendelian sampling deviations
-    if(i == 2){  #<-- all ancestors from same genetic group: no need to split BVs
-      da[1:Knimm, "mendel", i] <- rnorm(Knimm, 0, sqrt(0.5 * VAf))
+    ## Note, immigration not allowed in i=1
+    if(i == 2){ #<-- all ancestors from same genetic group: don't split BVs
+      da[1:Knimm, "mendel_f", i] <- rnorm(Knimm, 0, sqrt(0.5 * VAf))
     } else{
       tmpPed <- prunePed(data.frame(apply(da[, 1:3, 1:i], MARGIN = 2,
-		FUN = function(x){x})), as.character(unique(c(da[1:Knimm, "id", i]))))
-      igen_dii <- makeAinv(tmpPed)$dii[match(as.character(c(da[1:Knimm, "id", i])),
+					FUN = function(x){x})),
+			as.character(unique(c(da[1:Knimm, "id", i]))))
+      igen_dii <- makeDiiF(tmpPed)$D@x[match(as.character(c(da[1:Knimm, "id", i])),
 				tmpPed[, 1])]
-#TODO CHECK this      # If homogeneous genetic group VAs, then don't need to split
-      if(VAf == VAi){
-        da[1:Knimm, "mendel", i] <- rnorm(Knimm, 0, sqrt(igen_dii * VAf))
-      } else{
-        ## Split Mendelian sampling deviations (Muff et al. eqn. 10)
-        ### Total Mendelian sampling deviation is:
-        #### rnorm(1, 0, sqrt(d_ii^(f) * VAf)) + rnorm(1, 0, sqrt(d_ii^(i) * VAi))
-          da[1:Knimm, "mendel", i] <- rnorm(Knimm, 0,
-		sqrt((1 - (1-da[1:Knimm, "q_imm", i]) * (1 - igen_dii)) * VAf)) +
-	    rnorm(Knimm, 0, sqrt((1 - da[1:Knimm, "q_imm", i] * (1 - igen_dii)) * VAi))
-        }
+      ## Split Mendelian sampling deviations (approximation: Muff et al. eqn 10)
+      ### Introduces q_j^2, because T (not T_j) matrix used for parental average breeding values
+      #### Thus, d_ii below are actually from D_tilda_j (Muff et al. 2019 eqn. 12)
+      ###TODO use group-specific inbreeding coefficients (Muff et al. eqn 11)
+      da[1:Knimm, "mendel_f", i] <- rnorm(Knimm, 0,
+                    ## q_i,founder^2               * 1  -   q_i,founder         * (1 - d_ii)
+		sqrt((1-da[1:Knimm, "q_imm", i])^2 * (1 - (1-da[1:Knimm, "q_imm", i]) * (1 - igen_dii)) * VAf))
+        ### check: assign mendel_f=0 for q_imm==1 (i.e., 0 founder alleles)
+        da[1:Knimm, "mendel_f", i][which(da[1:Knimm, "q_imm", i] == 1)] <- 0
+
+      da[1:Knimm, "mendel_i", i] <- rnorm(Knimm, 0,
+                    ## q_i,founder^2            * 1  -   q_i,immigrant      *    (1 - d_ii)
+		sqrt(da[1:Knimm, "q_imm", i]^2 * (1 - da[1:Knimm, "q_imm", i] * (1 - igen_dii)) * VAi))
+        ### check: assign mendel_i=0 for q_imm==0 (i.e., 0 immigrant alleles)
+        da[1:Knimm, "mendel_i", i][which(da[1:Knimm, "q_imm", i] == 0)] <- 0
       }
-    # Total additive genetic effects
-    da[1:Knimm, "u", i] <- rowSums(da[1:Knimm, c("parAvgU", "mendel"), i])
-    # Calculate predicted total additive genetic effects
+
+
+    # breeding values: ai_j = 0.5(as_j + ad_j) + mi_j
+    da[1:Knimm, "a_f", i] <- .rowSums(da[1:Knimm, c("parAvgA_f", "mendel_f"), i],
+	m = Knimm, n = 2, na.rm = TRUE)
+    da[1:Knimm, "a_i", i] <- .rowSums(da[1:Knimm, c("parAvgA_i", "mendel_i"), i],
+	m = Knimm, n = 2, na.rm = TRUE)
+
+    
+    # Calculate predicted total additive genetic effects (predicted u)
     ## average of parents' predicted total additive genetic effects
     ## equation 1.9 in Mrode (2005, p. 10)
     da[1:Knimm, "pred.u", i] <- rowMeans(matrix(da[match(da[1:Knimm, c("dam", "sire"), i],
 	da[, "id", i-1]), "pred.u", i-1], ncol = 2, byrow = FALSE))
+
+
     # Residual deviations
     da[1:Knimm, "r", i] <- rnorm(Knimm, murf + d_rf*sqrt(VRf)*(i-1), sqrt(VRf))
+
+
     #############
     # Immigrants: assumed outbred
     if(i %in% nimmG){
       # no trend in first generation (hence i-2)
-      da[(Knimm+1):K, "u", i] <- rnorm(nimm, mui + d_bvi*sqrt(VAi)*(i-2), sqrt(VAi))
+      da[(Knimm+1):K, "a_i", i] <- rnorm(nimm, d_bvi*sqrt(VAi)*(i-2), sqrt(VAi))
       # no trend in first generation (hence i-2)
       da[(Knimm+1):K, "r", i] <- rnorm(nimm, muri + d_ri*sqrt(VRi)*(i-2), sqrt(VRi))
     }
     #############
+
+
     # All individuals in generation 'i'
     # Calculate phenotypes
-    da[, "p", i] <- mup + rowSums(da[, c("u", "r"), i])
+    da[, "p", i] <- mup + .rowSums(da[, c("parAvgG", "a_f", "a_i", "r"), i],
+	m = K, n = 4, na.rm = TRUE)
+
     # Calculate predicted total additive genetic effects for immigrants
     ## equation 1.3 in Mrode (2005, p. 3)
     if(i %in% nimmG){
       da[(Knimm+1):K, "pred.u", i] <- (VAi / (VAi + VRi)) * (da[(Knimm+1):K, "p", i] - mean(da[(Knimm+1):K, "p", i]))
     }    
-  } 
+  }  # End for i loop through generations
+
   # create a data.frame out of the array
   df <- data.frame(apply(da, MARGIN = 2, FUN = function(x){x}))
  df
