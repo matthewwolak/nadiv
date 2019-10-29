@@ -3,12 +3,9 @@
     - R 3.6.1 (2019-07-05) x86_64-pc-linux-gnu (64-bit)
 
   - win-builder (devel, release, and old version): http://win-builder.r-project.org/
-    - R Under development (unstable) (2018-05-05 r74699), platform: x86_64-w64-mingw32 (64-bit) 
     - R version 3.5.3 (2019-03-11), platform: x86_64-w64-mingw32 (64-bit) 
     - R version 3.6.1 (2019-07-05), platform: x86_64-w64-mingw32 (64-bit) 
 
-
-    R-devel: R-devel, to be R-3.7.0
 
 
 # R CMD check results

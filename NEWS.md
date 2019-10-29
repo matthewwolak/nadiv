@@ -1,4 +1,4 @@
-# 2.16.2.0
+# 2.16.2.0 Released to CRAN 20 October 2019
 ## NEW
   * `geneDrop()` conducts a gene dropping simulation down a user-supplied pedigree.
 
