@@ -79,7 +79,13 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
      warning("Check to ensure first three columns of the pedigree object are ID, Dam, and Sire")
      pedigree <- pedigree[-which(idMiss), ]
    }
- }
+
+   if(any(pedigree[!is.na(pedigree[, 2]), 2] %in% pedigree[!is.na(pedigree[, 3]), 3])){
+    self <- TRUE
+    warning("Dams appearing as Sires - assumed selfing in pedigree")
+   }
+
+ }  #<-- end if check
 
   
  facflag <- is.factor(pedigree[, 1])
@@ -90,12 +96,20 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  usire <- usire[!is.na(usire)]
  misssire <- usire[which(is.na(match(usire, pedigree[, 1])))]
 
+
  if(length(missdam) == 0 & length(misssire) == 0){
    ped_fixed <- pedigree
  } else{
-     topPed <- data.frame(c(missdam, misssire), rep(NA, length(missdam) + length(misssire)), rep(NA, length(missdam) + length(misssire)), matrix(NA, nrow = (length(missdam) + length(misssire)), ncol = ncol(pedigree) - 3))
-  names(topPed) <- names(pedigree)
+     missparent <- union(missdam, misssire)
+     topPed <- data.frame(missparent,
+         rep(NA, length(missparent)),
+         rep(NA, length(missparent)),
+         matrix(NA, nrow = length(missparent), ncol = ncol(pedigree) - 3))
+     names(topPed) <- names(pedigree)
      if(!is.null(gender)){
+        if(self | (length(missdam) + length(misssire)) != length(missparent)){
+          warning("Selfing in the pedigree: the gender argument might not apply")
+        }
         if(is.factor(pedigree[, gender])){
           damgender <- as.character(pedigree[which(pedigree[, 1] == udam[which(!udam %in% missdam)][1]), gender]) 
           siregender <- as.character(pedigree[which(pedigree[, 1] == usire[which(!usire %in% misssire)][1]), gender]) 
