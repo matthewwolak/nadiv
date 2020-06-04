@@ -167,19 +167,19 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
           if(any(nonggped == "0" | nonggped == "*" | is.na(nonggped))){
             stop("All individuals with missing parents (indicated as '0', '*', or <NA>) must have a genetic group specified")
           }
-          if(length(which(pedigree[, 2] == 0)) > 0){
-            pedigree[which(pedigree[, 2] == 0), 2] <- NA
+          if(length(d0 <- which(pedigree[, 2] == 0)) > 0){
+            pedigree[d0, 2] <- NA
             warning("Zero in the dam column interpreted as a missing parent")
           }
-          if(length(which(pedigree[, 3] == 0)) > 0){
-            pedigree[which(pedigree[, 3] == 0), 3] <- NA
+          if(length(s0 <- which(pedigree[, 3] == 0)) > 0){
+            pedigree[s0, 3] <- NA
             warning("Zero in the sire column interpreted as a missing parent")
           }
-          if(length(which(pedigree[, 2] == "*")) > 0){ 
-            pedigree[which(pedigree[, 2] == "*"), 2] <- NA
+          if(length(dast <- which(pedigree[, 2] == "*")) > 0){ 
+            pedigree[dast, 2] <- NA
           }
-          if(length(which(pedigree[, 3] == "*")) > 0){
-            pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+          if(length(sast <- which(pedigree[, 3] == "*")) > 0){
+            pedigree[sast, 3] <- NA
           }   
           pedalt <- data.frame(id = I(as.character(pedigree[, 1])),
 		dam = I(as.character(pedigree[, 2])),
