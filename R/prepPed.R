@@ -141,6 +141,20 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
 	as.integer(rep(0, npf)),
 	as.integer(npf))
 
+ # check for errors/return values indicating an infinite loop
+ if(Cout[[5]] < npf){
+   infLooper <- Cout[[5]] + 1
+   if(Cout[[3]][1] == -999){
+     cat("\n Problem: infinite pedigree loop involving individual",
+       as.character(ped_fixed[infLooper, 1]), "and dam/female ancestors\n\n")
+   }
+   if(Cout[[4]][1] == -999){
+     cat("\n Problem: infinite pedigree loop involving individual",
+       as.character(ped_fixed[infLooper, 1]), "and sire/male ancestors\n\n")
+   }
+   stop("Check for individuals that appear as their own ancestor")
+ }
+
  ped_fixed_ord <- ped_fixed[order(Cout[[3]], Cout[[4]]), ]
  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]), silent = TRUE)
  if(class(itwork) == "try-error"){
