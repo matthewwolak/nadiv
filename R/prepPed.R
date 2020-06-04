@@ -61,23 +61,23 @@
 prepPed <- function(pedigree, gender = NULL, check = TRUE){
 
  if(check){      
-   if(length(which(pedigree[, 2] == 0)) > 0){
-     pedigree[which(pedigree[, 2] == 0), 2] <- NA
+   if(length(d0 <- which(pedigree[, 2] == 0)) > 0){
+     pedigree[d0, 2] <- NA
      warning("Zero in the dam column interpreted as a missing parent")
    }
-   if(length(which(pedigree[, 3] == 0)) > 0){
-     pedigree[which(pedigree[, 3] == 0), 3] <- NA
+   if(length(s0 <- which(pedigree[, 3] == 0)) > 0){
+     pedigree[s0, 3] <- NA
      warning("Zero in the sire column interpreted as a missing parent")
    }
-   if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
-   if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+   if(length(dast <- which(pedigree[,2] == "*")) > 0) pedigree[dast, 2] <- NA
+   if(length(sast <- which(pedigree[,3] == "*")) > 0) pedigree[sast, 3] <- NA
    if(all(is.na(pedigree[, 2])) & all(is.na(pedigree[, 3]))){
      stop("All dams and sires are missing")
    }
-   if(any(pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1]))){
+   if(any(idMiss <- pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1]))){
      warning("Missing value in the ID column - row discarded")
      warning("Check to ensure first three columns of the pedigree object are ID, Dam, and Sire")
-     pedigree <- pedigree[-which(pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1])), ]
+     pedigree <- pedigree[-which(idMiss), ]
    }
  }
 
