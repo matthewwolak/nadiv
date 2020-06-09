@@ -155,20 +155,22 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
    stop("Check for individuals that appear as their own ancestor")
  }
 
- ped_fixed_ord <- ped_fixed[order(Cout[[3]], Cout[[4]]), ]
- itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]), silent = TRUE)
- if(class(itwork) == "try-error"){
-   G <- Matrix(FALSE, npf, npf, sparse = TRUE)
-   G[cbind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
-   Gtmp <- G
-   gconv <- Matrix(TRUE, nrow = 1, ncol = npf, sparse = TRUE)
-   gendepth <- rep(0, npf) + as((gconv %*% Gtmp), "ngCMatrix") 
-   while(nnzero(Gtmp) > 0){
-     Gtmp <- Gtmp %*% G
-     gendepth <- gendepth + as((gconv %*% Gtmp), "ngCMatrix") 
-   }
-   ped_fixed_ord <- ped_fixed[order(as(gendepth, "matrix")), ]
- }
+ ped_fixed_ord <- ped_fixed[order(sapply(seq(npf),
+     FUN = function(x) max(Cout[[3]][x], Cout[[4]][x]))), ]  #<-- use maximum
+# ped_fixed_ord <- ped_fixed[order(Cout[[3]], Cout[[4]]), ]
+ itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]))#, silent = TRUE)
+# if(class(itwork) == "try-error"){
+#   G <- Matrix(FALSE, npf, npf, sparse = TRUE)
+#   G[cbind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
+#   Gtmp <- G
+#   gconv <- Matrix(TRUE, nrow = 1, ncol = npf, sparse = TRUE)
+#   gendepth <- rep(0, npf) + as((gconv %*% Gtmp), "ngCMatrix") 
+#   while(nnzero(Gtmp) > 0){
+#     Gtmp <- Gtmp %*% G
+#     gendepth <- gendepth + as((gconv %*% Gtmp), "ngCMatrix") 
+#   }
+#   ped_fixed_ord <- ped_fixed[order(as(gendepth, "matrix")), ]
+# }
 
  return(ped_fixed_ord) 
 }
