@@ -4,7 +4,9 @@
 \name{Q1988}
 \alias{Q1988}
 \title{Pedigree, adapted from Quaas (1988) equation [5]}
-\format{An object of class \code{data.frame} with 11 rows and 8 columns.}
+\format{
+An object of class \code{data.frame} with 11 rows and 8 columns.
+}
 \source{
 Quaas, R.L. 1988. Additive genetic model with groups and
 relationships. Journal of Dairy Science 71:1338-1345.

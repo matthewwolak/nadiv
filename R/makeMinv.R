@@ -1,0 +1,114 @@
+#' Creates the inverse (additive) mutational effects relationship matrix
+#' 
+#' This returns the inverse of the numerator relationship matrix (inverse
+#' additive genetic relatedness matrix). It can also be used to obtain
+#' coefficients of inbreeding for the pedigreed population.
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA',
+#' '0', or '*'.
+#' 
+#' The functions implement an adaptation of the Meuwissen and Luo (1992)
+#' algorithm (particularly, following the description of the algorithm in
+#' Mrode 2005) with some code borrowed from the \code{inverseA} function by
+#' Jarrod Hadfield in the \code{MCMCglmm} package.
+#' 
+#' @aliases makeMinv
+#' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
+#' @param \dots Arguments to be passed to methods
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{Minv }{the inverse of the (additive) mutational effects
+#'       relationship matrix in sparse matrix form}
+#'     \item{listAinv }{the three column list of the non-zero elements for the 
+#'       inverse of the (additive) mutational effects relationship matrix.
+#'       \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
+#'       column from the pedigree.}
+#'     \item{f }{the individual coefficients of inbreeding for each individual 
+#'       in the pedigree (matches the order of the first/ID column of the
+#'       pedigree).}
+#'     \item{logDet }{the log determinant of the M matrix}
+#'     \item{dii }{the (non-zero) elements of the diagonal D matrix of the M=TDT'
+#'       decomposition. Contains the variance of Mendelian sampling. Matches
+#'       the order of the first/ID column of the pedigree.} 
+#'   }
+#' @author \email{matthewwolak@@gmail.com}
+#' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
+#' an animal model. Genetics Selection Evolution 41:42.
+#' 
+#' Meuwissen, T.H.E & Luo, Z. 1992. Computing inbreeding coefficients in large
+#' populations. Genetics, Selection, Evolution. 24:305-313.
+#' 
+#' Mrode, R.A. 2005. Linear Models for the Prediction of Animal Breeding
+#' Values, 2nd ed.  Cambridge, MA: CABI Publishing.
+#' 
+#' Quaas, R.L. 1988. Additive genetic model with groups and relationships.
+#' Journal of Dairy Science. 71:1338-1345.
+#' 
+#' VanRaden, P.M. 1992. Accounting for inbreeding and crossbreeding in genetic
+#' evaluation of large populations. Journal of Dairy Science. 75:3136-3144.
+#' @examples
+#' 
+#'  ##  Example pedigree from Wray 1990
+#'    Wray90 <- data.frame(id = seq(8),
+#'	dam = c(NA, NA, 1, 1, 4, 4, 6, 7),
+#'	sire = c(NA, NA, 2, 2, 3, 2, 5, 5),
+#'	time = c(0, 0, 1, 1, 2, 2, 3, 4))
+#'    makeMinv(Mrode2)
+#'  
+#' 
+#' @export
+makeMinv <- function(pedigree, ...){
+#TODO / FIXME; turned off for now
+  renPed <- seq(nrow(pedigree))
+#  renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3],
+#    na.last = FALSE)
+  nPed <- numPed(pedigree[renPed, ])
+  N <- nrow(nPed)
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
+  el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
+  sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+    p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+    index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+    dimnames = list(as.character(nPed[, 1]), NULL))
+
+  Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
+  # 1: Adds Minv elements in same for loop as calculation of f
+  #TODO 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
+  nPed[nPed == -998] <- N + 1
+  f <- c(rep(0, N), -1)
+  Cout <- .C("minvw", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(f),					#f
+            as.double(rep(0, N)),  				#dii
+            as.integer(N),   					#n
+            as.double(rep(0, length(Minv@i))),  			#xMinv
+	    as.integer(Minv@i), 				#iMinv
+	    as.integer(Minv@p)) 				#pMinv
+#	    as.integer(length(Minv@i))) 			#nzmaxMinv
+  Minv <- as(Minv, "dsCMatrix")
+  Minv@x <- Cout[[6]]
+  fsOrd <- as(as.integer(renPed), "pMatrix")
+  Minv <- as(crossprod(fsOrd, Minv) %*% fsOrd, "dgCMatrix")
+    Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+  f <- Cout[[3]][t(fsOrd)@perm][1:N]
+  dii <- Cout[[4]][t(fsOrd)@perm][1:N]
+  logDet <- -1*determinant(Minv, logarithm = TRUE)$modulus[1]
+
+ return(list(Minv = Minv,
+	listAinv = sm2list(Minv, rownames = rownames(Minv),
+	  colnames = c("row", "column", "Ainv")),
+	f = f,
+	logDet = logDet,
+	dii = dii))
+}
+
+
+
+
+
+

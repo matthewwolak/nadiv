@@ -4,9 +4,27 @@
 \alias{simGG}
 \title{Genetic group pedigree and data simulation}
 \usage{
-simGG(K, pairs, noff, g, nimm = 2, nimmG = seq(2, g - 1, 1), VAf = 1,
-  VAi = 1, VRf = 1, VRi = 1, mup = 20, muf = 0, mui = 0,
-  murf = 0, muri = 0, d_bvf = 0, d_bvi = 0, d_rf = 0, d_ri = 0)
+simGG(
+  K,
+  pairs,
+  noff,
+  g,
+  nimm = 2,
+  nimmG = seq(2, g - 1, 1),
+  VAf = 1,
+  VAi = 1,
+  VRf = 1,
+  VRi = 1,
+  mup = 20,
+  muf = 0,
+  mui = 0,
+  murf = 0,
+  muri = 0,
+  d_bvf = 0,
+  d_bvi = 0,
+  d_rf = 0,
+  d_ri = 0
+)
 }
 \arguments{
 \item{K}{Integer number of individuals per generation, or the focal

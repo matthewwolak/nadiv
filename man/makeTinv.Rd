@@ -52,7 +52,7 @@ Missing parents (e.g., base population) should be denoted by either 'NA',
 The function implements an adaptation of the Meuwissen and Luo (1992)
 algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
-Jarrod Hadfield in the \code{MCMCglmm} package.
+Jarrod Hadfield in the \code{MCMCglmm} package. 
 
 At the moment, providing the inbreeding level of individuals or the base
 population has not been implemented. However, this argument is a placeholder

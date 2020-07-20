@@ -6,14 +6,31 @@
 \alias{plot.proLik}
 \title{Profile Likelihoods}
 \usage{
-proLik(full.model, component, G = TRUE, negative = FALSE,
-  nsample.units = 3, nse = 3, alpha = 0.05, tolerance = 0.001,
-  parallel = FALSE, ncores = getOption("mc.cores", 2L))
+proLik(
+  full.model,
+  component,
+  G = TRUE,
+  negative = FALSE,
+  nsample.units = 3,
+  nse = 3,
+  alpha = 0.05,
+  tolerance = 0.001,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L)
+)
 
 \method{is}{proLik}(x)
 
-\method{plot}{proLik}(x, CL = TRUE, alpha = NULL, type = "l",
-  main = NULL, xlab = NULL, ylab = NULL, ...)
+\method{plot}{proLik}(
+  x,
+  CL = TRUE,
+  alpha = NULL,
+  type = "l",
+  main = NULL,
+  xlab = NULL,
+  ylab = NULL,
+  ...
+)
 }
 \arguments{
 \item{full.model}{An \code{asreml} model object}

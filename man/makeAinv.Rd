@@ -7,14 +7,35 @@
 \alias{makeGGAinv}
 \title{Creates the inverse additive genetic relationship matrix}
 \usage{
-makeAinv(pedigree, f = NULL, ggroups = NULL, fuzz = NULL,
-  gOnTop = FALSE, det = TRUE, ...)
+makeAinv(
+  pedigree,
+  f = NULL,
+  ggroups = NULL,
+  fuzz = NULL,
+  gOnTop = FALSE,
+  det = TRUE,
+  ...
+)
 
-\method{makeAinv}{default}(pedigree, f = NULL, ggroups = NULL,
-  fuzz = NULL, gOnTop = FALSE, det = TRUE, ...)
+\method{makeAinv}{default}(
+  pedigree,
+  f = NULL,
+  ggroups = NULL,
+  fuzz = NULL,
+  gOnTop = FALSE,
+  det = TRUE,
+  ...
+)
 
-\method{makeAinv}{fuzzy}(pedigree, f = NULL, ggroups = NULL, fuzz,
-  gOnTop = FALSE, det = TRUE, ...)
+\method{makeAinv}{fuzzy}(
+  pedigree,
+  f = NULL,
+  ggroups = NULL,
+  fuzz,
+  gOnTop = FALSE,
+  det = TRUE,
+  ...
+)
 
 makeGGAinv(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...)
 }

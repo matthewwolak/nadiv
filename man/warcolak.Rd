@@ -4,7 +4,9 @@
 \name{warcolak}
 \alias{warcolak}
 \title{Pedigree and phenotypic values for a mythical population of Warcolaks}
-\format{An object of class \code{data.frame} with 5400 rows and 13 columns.}
+\format{
+An object of class \code{data.frame} with 5400 rows and 13 columns.
+}
 \usage{
 warcolak
 }

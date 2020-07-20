@@ -4,7 +4,9 @@
 \name{FG90}
 \alias{FG90}
 \title{Pedigree, adapted from Table 1 in Fernando & Grossman (1990)}
-\format{An object of class \code{data.frame} with 8 rows and 4 columns.}
+\format{
+An object of class \code{data.frame} with 8 rows and 4 columns.
+}
 \source{
 Fernando, R.L. & M. Grossman. 1990. Genetic evaluation with
 autosomal and X-chromosomal inheritance. Theoretical and Applied Genetics

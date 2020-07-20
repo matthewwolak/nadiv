@@ -4,7 +4,9 @@
 \name{Mrode2}
 \alias{Mrode2}
 \title{Pedigree from Table 2.1 of Mrode (2005)}
-\format{An object of class \code{data.frame} with 6 rows and 3 columns.}
+\format{
+An object of class \code{data.frame} with 6 rows and 3 columns.
+}
 \source{
 Mrode, R.A. 2005. Linear Models for the Prediction of Animal
 Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.

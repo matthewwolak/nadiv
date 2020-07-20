@@ -6,14 +6,29 @@
 \alias{geneDrop.numPed}
 \title{Functions to conduct gene dropping through a pedigree}
 \usage{
-geneDrop(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores",
-  2L), ...)
+geneDrop(
+  pedigree,
+  N,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L),
+  ...
+)
 
-\method{geneDrop}{default}(pedigree, N, parallel = FALSE,
-  ncores = getOption("mc.cores", 2L), ...)
+\method{geneDrop}{default}(
+  pedigree,
+  N,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L),
+  ...
+)
 
-\method{geneDrop}{numPed}(pedigree, N, parallel = FALSE,
-  ncores = getOption("mc.cores", 2L), ...)
+\method{geneDrop}{numPed}(
+  pedigree,
+  N,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L),
+  ...
+)
 }
 \arguments{
 \item{pedigree}{A pedigree with columns organized: ID, Dam, Sire.}

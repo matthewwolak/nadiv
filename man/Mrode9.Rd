@@ -4,7 +4,9 @@
 \name{Mrode9}
 \alias{Mrode9}
 \title{Pedigree, adapted from example 9.1 of Mrode (2005)}
-\format{An object of class \code{data.frame} with 12 rows and 3 columns.}
+\format{
+An object of class \code{data.frame} with 12 rows and 3 columns.
+}
 \source{
 Mrode, R.A. 2005. Linear Models for the Prediction of Animal
 Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
@@ -14,6 +16,9 @@ Mrode9
 }
 \description{
 An example pedigree
+}
+\details{
+
 }
 \examples{
   data(Mrode9)
