@@ -16,11 +16,12 @@ void minvw(
         int *n,
         double *xMinv,
 	int *iMinv,
-	int *pMinv	
+	int *pMinv,
+	double *logDet	
 ){         
 
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
-  double  vi2, detM;
+  double  vi2, detL;
   double  *u = new double[n[0]];
   double  *v = new double[n[0]];
   double  *h = new double[n[0]];
@@ -31,7 +32,7 @@ void minvw(
     h[k] = 0.0;      
   }
 
-  detM = 0.0;  // determinant of M
+  detL = 1.0;  // determinant of LL'=M (log(detL) + log(detL) = log(det(M))
     
   for(k = 0; k < n[0]; k++){  // iterate through each individual k 
 
@@ -96,7 +97,7 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
     ////////////////////////////////////////
     // Now add contributions to M-inverse
     vi2 = v[k] * v[k];
-    detM += vi2;
+    detL *= v[k];
     
     sk = sire[k];
     dk = dam[k];
@@ -180,7 +181,7 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
         
   }  // end for k
 
-Rprintf("\n detM=%6.5f | log(detM)=%6.5f", detM, log(detM));
+  logDet[0] += log(detL) + log(detL);
 
   delete[] h;
   delete[] v;

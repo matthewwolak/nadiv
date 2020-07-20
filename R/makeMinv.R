@@ -88,8 +88,9 @@ makeMinv <- function(pedigree, ...){
             as.integer(N),   					#n
             as.double(rep(0, length(Minv@i))),  			#xMinv
 	    as.integer(Minv@i), 				#iMinv
-	    as.integer(Minv@p)) 				#pMinv
+	    as.integer(Minv@p), 				#pMinv
 #	    as.integer(length(Minv@i))) 			#nzmaxMinv
+	    as.double(rep(0, 1)))				#logDet of M
   Minv <- as(Minv, "dsCMatrix")
   Minv@x <- Cout[[6]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
@@ -97,13 +98,12 @@ makeMinv <- function(pedigree, ...){
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
   f <- Cout[[3]][t(fsOrd)@perm][1:N]
   dii <- Cout[[4]][t(fsOrd)@perm][1:N]
-  logDet <- -1*determinant(Minv, logarithm = TRUE)$modulus[1]
 
  return(list(Minv = Minv,
 	listAinv = sm2list(Minv, rownames = rownames(Minv),
 	  colnames = c("row", "column", "Ainv")),
 	f = f,
-	logDet = logDet,
+	logDet = Cout[[9]],
 	dii = dii))
 }
 
