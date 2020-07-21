@@ -100,8 +100,8 @@ makeMinv <- function(pedigree, ...){
   dii <- Cout[[4]][t(fsOrd)@perm][1:N]
 
  return(list(Minv = Minv,
-	listAinv = sm2list(Minv, rownames = rownames(Minv),
-	  colnames = c("row", "column", "Ainv")),
+	listMinv = sm2list(Minv, rownames = rownames(Minv),
+	  colnames = c("row", "column", "Minv")),
 	f = f,
 	logDet = Cout[[9]],
 	dii = dii))
