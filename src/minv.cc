@@ -22,7 +22,7 @@ void minv(
 ){         
 
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
-  double  vi2, detL;
+  double  vi2, detM;
   double  *u = new double[n[0]];
   double  *h = new double[n[0]];
   
@@ -31,7 +31,7 @@ void minv(
     h[k] = 0.0;      
   }
 
-  detL = 1.0;  // determinant of LL'=M (log(detL) + log(detL) = log(det(M))
+  detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
     
   for(k = 0; k < n[0]; k++){  // iterate through each individual k 
 
@@ -96,7 +96,7 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
     ////////////////////////////////////////
     // Now add contributions to M-inverse
     vi2 = v[k] * v[k];
-    detL *= v[k];
+    detM *= vi2;
     
     sk = sire[k];
     dk = dam[k];
@@ -182,7 +182,7 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
   // now replace v with v-squared to be `dii` to return to R
   for(k = 0; k < n[0]; k++) v[k] *= v[k];
   // Calculate log determinant of M (needed for REML)    
-  logDet[0] += log(detL) + log(detL);
+  logDet[0] += log(detM);
 
   delete[] h;
   delete[] u;
@@ -213,7 +213,7 @@ void minvw(
 ){         
 
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
-  double  vi2, detL;
+  double  vi2, detM;
   double  *u = new double[n[0]];
   double  *h = new double[n[0]];
   
@@ -222,7 +222,7 @@ void minvw(
     h[k] = 0.0;      
   }
 
-  detL = 1.0;  // determinant of LL'=M (log(detL) + log(detL) = log(det(M))
+  detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
     
   for(k = 0; k < n[0]; k++){  // iterate through each individual k 
 
@@ -284,7 +284,7 @@ void minvw(
     ////////////////////////////////////////
     // Now add contributions to M-inverse
     vi2 = v[k] * v[k];
-    detL *= v[k];
+    detL *= vi2;
     
     sk = sire[k];
     dk = dam[k];
@@ -371,7 +371,7 @@ void minvw(
   // now replace v with v-squared to be `dii` to return to R
   for(k = 0; k < n[0]; k++) v[k] *= v[k];
   // Calculate log determinant of M (needed for REML)    
-  logDet[0] += log(detL) + log(detL);
+  logDet[0] += log(detM);
 
   delete[] h;
   delete[] u;
