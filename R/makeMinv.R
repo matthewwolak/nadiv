@@ -7,9 +7,10 @@
 #' Missing parents (e.g., base population) should be denoted by either 'NA',
 #' '0', or '*'.
 #' 
-#' The function implements an adaptation of the Meuwissen and Luo (1992)
-#' algorithm (particularly, following the description of the algorithm in
-#' Mrode 2005).
+#' Note the assumption under the infinitesimal model, that mutation has essentially
+#' zero probability of affecting an inbred locus (hence removing inbred
+#' identity-by-descent), however, mutations may themselves be subject to
+#' inbreeding (Wray 1990).
 #' 
 #' @aliases makeMinv
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
@@ -23,7 +24,9 @@
 #'       inverse of the (additive) mutational effects relationship matrix.
 #'       \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
 #'       column from the pedigree.}
-#'     \item{f }{the individual coefficients of inbreeding for each individual 
+#'     \item{h }{the amount by which segregtation variance is reduced by
+#'       inbreeding. Similar to the individual coefficients of inbreeding (f)
+#'       derived during the construction of the inverse numerator relatedness matrix.
 #'       in the pedigree (matches the order of the first/ID column of the
 #'       pedigree).}
 #'     \item{logDet }{the log determinant of the M matrix}
@@ -74,11 +77,11 @@ makeMinv <- function(pedigree, ...){
   Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
   #TODO First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
+  h <- c(rep(0, N), -1)
   Cout <- .C("minv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(f),					#f
+	    as.double(h),					#h (f)
             as.double(rep(0, N)),  				#dii/v
             as.integer(N),   					#n
             as.double(rep(0, length(Minv@i))),  			#xMinv
@@ -90,13 +93,13 @@ makeMinv <- function(pedigree, ...){
   fsOrd <- as(as.integer(renPed), "pMatrix")
   Minv <- as(crossprod(fsOrd, Minv) %*% fsOrd, "dgCMatrix")
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-  f <- Cout[[3]][t(fsOrd)@perm][1:N]
+  h <- Cout[[3]][t(fsOrd)@perm][1:N]
   dii <- Cout[[4]][t(fsOrd)@perm][1:N]
 
  return(list(Minv = Minv,
 	listMinv = sm2list(Minv, rownames = rownames(Minv),
 	  colnames = c("row", "column", "Minv")),
-	f = f,
+	h = h,
 	logDet = Cout[[9]],
 	dii = dii))
 }

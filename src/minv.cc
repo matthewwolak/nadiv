@@ -12,7 +12,7 @@ extern "C"{
 void minv(
         int *dam,       
         int *sire,         
-        double *f,     
+        double *h,     // essentially coeff. of inbreeding (f)     
 	double *v,     // ultimately `dii`, but starts as sqrt(dii)=v
         int *n,
         double *xMinv,
@@ -24,12 +24,8 @@ void minv(
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
   double  vi2, detM;
   double  *u = new double[n[0]];
-  double  *h = new double[n[0]];
   
-  for(k = 0; k < n[0]; k++){    // set u and h to zero
-    u[k] = 0.0;      
-    h[k] = 0.0;      
-  }
+  for(k = 0; k < n[0]; k++) u[k] = 0.0;      // initialize u to zero
 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
     
@@ -88,10 +84,6 @@ void minv(
 
     }  // end for j
     
-Rprintf("\n\t k=%i", k);    
-    for(i = 0; i < n[0]; i++){
-Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i]);
-    }
 
     ////////////////////////////////////////
     // Now add contributions to M-inverse
@@ -184,7 +176,6 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
   // Calculate log determinant of M (needed for REML)    
   logDet[0] += log(detM);
 
-  delete[] h;
   delete[] u;
 }
 }
@@ -203,7 +194,7 @@ extern "C"{
 void minvw(
         int *dam,       
         int *sire,         
-        double *f,     
+        double *h,     // essentially coeff. of inbreeding (f)
 	double *v,     // ultimately `dii`, but starts as sqrt(dii)=v
         int *n,
         double *xMinv,
@@ -215,12 +206,8 @@ void minvw(
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
   double  vi2, detM;
   double  *u = new double[n[0]];
-  double  *h = new double[n[0]];
   
-  for(k = 0; k < n[0]; k++){    // set u and h to zero
-    u[k] = 0.0;      
-    h[k] = 0.0;      
-  }
+  for(k = 0; k < n[0]; k++) u[k] = 0.0;        // initialize u to zero
 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
     
@@ -284,7 +271,7 @@ void minvw(
     ////////////////////////////////////////
     // Now add contributions to M-inverse
     vi2 = v[k] * v[k];
-    detL *= vi2;
+    detM *= vi2;
     
     sk = sire[k];
     dk = dam[k];
@@ -373,7 +360,6 @@ void minvw(
   // Calculate log determinant of M (needed for REML)    
   logDet[0] += log(detM);
 
-  delete[] h;
   delete[] u;
 }
 }
