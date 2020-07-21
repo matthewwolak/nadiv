@@ -18,7 +18,7 @@
 #' population has not been implemented. However, this argument is a placeholder
 #' for now.
 #' 
-#' @aliases makeTinv makeTinv.default makeTinv.numPed makeDiiF makeDiiF2
+#' @aliases makeTinv makeTinv.default makeTinv.numPed makeDiiF
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param f A numeric indicating the level of inbreeding. See Details
 #' @param \dots Arguments to be passed to methods
