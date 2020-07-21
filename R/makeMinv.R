@@ -1,13 +1,13 @@
-#' Creates the inverse (additive) mutational effects relationship matrix
+#' Create the inverse (additive) mutational effects relationship matrix
 #' 
-#' This returns the inverse of the numerator relationship matrix (inverse
-#' additive genetic relatedness matrix). It can also be used to obtain
-#' coefficients of inbreeding for the pedigreed population.
+#' Returns the inverse of the (additive) mutational effects relationship matrix.
+#' It can also be used to obtain components needed for the calculations in the
+#' underlying algorithm.
 #' 
 #' Missing parents (e.g., base population) should be denoted by either 'NA',
 #' '0', or '*'.
 #' 
-#' The functions implement an adaptation of the Meuwissen and Luo (1992)
+#' The function implements an adaptation of the Meuwissen and Luo (1992)
 #' algorithm (particularly, following the description of the algorithm in
 #' Mrode 2005).
 #' 
@@ -72,8 +72,7 @@ makeMinv <- function(pedigree, ...){
     dimnames = list(as.character(nPed[, 1]), NULL))
 
   Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
-  # 1: Adds Minv elements in same for loop as calculation of f
-  #TODO 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
+  #TODO First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   nPed[nPed == -998] <- N + 1
   f <- c(rep(0, N), -1)
   Cout <- .C("minv", PACKAGE = "nadiv",
