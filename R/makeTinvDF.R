@@ -125,13 +125,15 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
   nPed <- numPed(pedigree[renPed, ])
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
+  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  f <- c(f, -1)
   Cout <- .C("fcoeff", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 				#dam
-	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(f),					#f
-            as.double(rep(0, N)),  				#dii
-            as.integer(N))   					#n
+	    as.integer(nPed[, 2] - 1), 			#dam
+	    as.integer(nPed[, 3] - 1),  		#sire
+	    as.double(f),				#f
+            as.double(rep(0, N)),  			#dii
+            as.integer(N),   				#n
+	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
   dii <- Cout[[4]][t(fsOrd)@perm]
@@ -151,13 +153,15 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
   nPed <- ronPed(pedigree, renPed)
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
+  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  f <- c(f, -1)
   Cout <- .C("fcoeff", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
-            as.integer(N))   					#n
+            as.integer(N),   					#n
+	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
   dii <- Cout[[4]][t(fsOrd)@perm]
