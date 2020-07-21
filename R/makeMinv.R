@@ -9,8 +9,7 @@
 #' 
 #' The functions implement an adaptation of the Meuwissen and Luo (1992)
 #' algorithm (particularly, following the description of the algorithm in
-#' Mrode 2005) with some code borrowed from the \code{inverseA} function by
-#' Jarrod Hadfield in the \code{MCMCglmm} package.
+#' Mrode 2005).
 #' 
 #' @aliases makeMinv
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
@@ -34,20 +33,17 @@
 #'       Casellas and Medrano (2008) algorithms use \code{v=sqrt(dii)}.} 
 #'   }
 #' @author \email{matthewwolak@@gmail.com}
-#' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
-#' an animal model. Genetics Selection Evolution 41:42.
-#' 
-#' Meuwissen, T.H.E & Luo, Z. 1992. Computing inbreeding coefficients in large
-#' populations. Genetics, Selection, Evolution. 24:305-313.
+#' @references Casellas, J. and J.F. Medrano. 2008. Within-generation mutation
+#' variance for litter size in inbred mice. Genetics. 179:2147-2155. 
+#'
+#' Meuwissen, T.H.E & Luo, Z. 1992. Computing inbreeding
+#' coefficients in large populations. Genetics, Selection, Evolution. 24:305-313.
 #' 
 #' Mrode, R.A. 2005. Linear Models for the Prediction of Animal Breeding
 #' Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 #' 
-#' Quaas, R.L. 1988. Additive genetic model with groups and relationships.
-#' Journal of Dairy Science. 71:1338-1345.
-#' 
-#' VanRaden, P.M. 1992. Accounting for inbreeding and crossbreeding in genetic
-#' evaluation of large populations. Journal of Dairy Science. 75:3136-3144.
+#' Wray, N.A. 1990. Accounting for mutation effects in the additive genetic
+#' variance-covariance matrix and its inverse. Biometrics. 46:177-186.
 #' @examples
 #' 
 #'  ##  Example pedigree from Wray 1990
@@ -84,12 +80,11 @@ makeMinv <- function(pedigree, ...){
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
-            as.double(rep(0, N)),  				#dii
+            as.double(rep(0, N)),  				#dii/v
             as.integer(N),   					#n
             as.double(rep(0, length(Minv@i))),  			#xMinv
 	    as.integer(Minv@i), 				#iMinv
 	    as.integer(Minv@p), 				#pMinv
-#	    as.integer(length(Minv@i))) 			#nzmaxMinv
 	    as.double(rep(0, 1)))				#logDet of M
   Minv <- as(Minv, "dsCMatrix")
   Minv@x <- Cout[[6]]
