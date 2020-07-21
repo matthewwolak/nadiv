@@ -88,11 +88,9 @@ makeMinv <- function(pedigree, ...){
     p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
     index1 = FALSE, dims = c(N, N), symmetric = FALSE,
     dimnames = list(as.character(nPed[, 1]), NULL))
-
   Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
-  #TODO First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
+
   nPed[nPed == -998] <- N + 1
-  h <- c(rep(0, N), -1)
   # Allow for switching to Wray (1990) algorithm that uses `theta`
   ## Must provide named argument `theta` with a numeric value
   new_args <- list(...)
@@ -101,7 +99,7 @@ makeMinv <- function(pedigree, ...){
   Cout <- .C("minv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(h),					#h (f)
+	    as.double(rep(0, N)),				#h ("f-coeff")
             as.double(rep(0, N)),  				#dii/v
             as.integer(N),   					#n
             as.double(rep(0, length(Minv@i))),  			#xMinv

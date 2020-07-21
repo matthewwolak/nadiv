@@ -42,8 +42,6 @@ void minv(
       q = sire[k];
     }
   
-  // TODO default values for u and h so when parent missing yields correct
-  // probably make u and h n[0]+1 and assign position n[0]=0 for all but last case
     if(p != n[0] && q != n[0]){  
       v[k] = sqrt(0.25 * (u[p] + u[q]) - 0.5 * (h[p] + h[q]) + theta[0]);
     }
@@ -70,7 +68,6 @@ void minv(
         }
 
         if(p != n[0] && q != n[0]){
-          //TODO / FIXME check to see if v below adds to element or replaces?!
           if(p >= k){
             v[j] = 0.5 * (v[p] + v[q]);
             h[j] += 0.5 * v[p] * v[q];
