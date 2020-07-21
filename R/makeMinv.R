@@ -73,11 +73,7 @@
 #'    Mwray <- makeMinv(Wray90[, 1:3], theta = 10.0)$Minv # compare to Wray p.184
 #' @export
 makeMinv <- function(pedigree, ...){
-#TODO / FIXME; turned off for now
-  renPed <- seq(nrow(pedigree))
-#  renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3],
-#    na.last = FALSE)
-  nPed <- numPed(pedigree[renPed, ])
+  nPed <- numPed(pedigree)
   N <- nrow(nPed)
   dnmiss <- which(nPed[, 2] != -998)
   snmiss <- which(nPed[, 3] != -998)
@@ -107,13 +103,13 @@ makeMinv <- function(pedigree, ...){
 	    as.integer(Minv@p), 				#pMinv
 	    as.double(0),	     				#logDet of M
 	    as.double(theta))					#for Wray90
+
   Minv <- as(Minv, "dsCMatrix")
   Minv@x <- Cout[[6]]
-  fsOrd <- as(as.integer(renPed), "pMatrix")
-  Minv <- as(crossprod(fsOrd, Minv) %*% fsOrd, "dgCMatrix")
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-  h <- Cout[[3]][t(fsOrd)@perm][1:N]
-  dii <- Cout[[4]][t(fsOrd)@perm][1:N]
+    Minv <- as(Minv, "dgCMatrix")
+  h <- Cout[[3]]
+  dii <- Cout[[4]]
 
  return(list(Minv = Minv,
 	listMinv = sm2list(Minv, rownames = rownames(Minv),
