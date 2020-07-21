@@ -12,6 +12,19 @@
 #' identity-by-descent), however, mutations may themselves be subject to
 #' inbreeding (Wray 1990).
 #' 
+#' By default, the algorithm described in Casellas and Medrano (2008) is
+#' implemented here, in which the inverse-M is separate from the typical inverse
+#' relatedness matrix (inverse-A). Casellas and Medrano's algorithm allows
+#' separate partitioning of additive genetic variance attributed to inheritance
+#' of allelic variation present in the base population (inverse-A) from
+#' additive genetic variance arising from mutation and subsequent sharing of
+#' mutant alleles identical-by-descent. Alternatively, Wray (1990) formulates
+#' an algorithm which combines both of these processese (i.e., the A-inverse with
+#' the M-inverse matrices). If the Wray algorithm is desired, this can be
+#' implemented by specifying a numeric value to an argument named \code{theta}.
+#' The value used for \code{theta} should be as described in Wray (1990). See
+#' examples below for use of this argument.
+#'
 #' @aliases makeMinv
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
 #' @param \dots Arguments to be passed to methods
@@ -54,8 +67,10 @@
 #'	dam = c(NA, NA, 1, 1, 4, 4, 6, 7),
 #'	sire = c(NA, NA, 2, 2, 3, 2, 5, 5),
 #'	time = c(0, 0, 1, 1, 2, 2, 3, 4))
-#'    Mout <- makeMinv(Wray90)
-#' 
+#'  #### Implement Casellas & Medrano (2008) algorithm
+#'    Mout <- makeMinv(Wray90[, 1:3])
+#'  #### Wray (1990) algorithm with extra argument `theta`
+#'    Mwray <- makeMinv(Wray90[, 1:3], theta = 10.0)$Minv # compare to Wray p.184
 #' @export
 makeMinv <- function(pedigree, ...){
 #TODO / FIXME; turned off for now
@@ -78,6 +93,11 @@ makeMinv <- function(pedigree, ...){
   #TODO First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   nPed[nPed == -998] <- N + 1
   h <- c(rep(0, N), -1)
+  # Allow for switching to Wray (1990) algorithm that uses `theta`
+  ## Must provide named argument `theta` with a numeric value
+  new_args <- list(...)
+  if("theta" %in% names(new_args)) theta <- new_args$theta else theta <- 1.0
+
   Cout <- .C("minv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
@@ -87,7 +107,8 @@ makeMinv <- function(pedigree, ...){
             as.double(rep(0, length(Minv@i))),  			#xMinv
 	    as.integer(Minv@i), 				#iMinv
 	    as.integer(Minv@p), 				#pMinv
-	    as.double(rep(0, 1)))				#logDet of M
+	    as.double(0),	     				#logDet of M
+	    as.double(theta))					#for Wray90
   Minv <- as(Minv, "dsCMatrix")
   Minv@x <- Cout[[6]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
