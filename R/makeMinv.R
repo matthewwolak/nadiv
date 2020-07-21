@@ -20,7 +20,7 @@
 #'   \describe{
 #'     \item{Minv }{the inverse of the (additive) mutational effects
 #'       relationship matrix in sparse matrix form}
-#'     \item{listAinv }{the three column list of the non-zero elements for the 
+#'     \item{listMinv }{the three column list of the non-zero elements for the 
 #'       inverse of the (additive) mutational effects relationship matrix.
 #'       \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
 #'       column from the pedigree.}
@@ -30,7 +30,8 @@
 #'     \item{logDet }{the log determinant of the M matrix}
 #'     \item{dii }{the (non-zero) elements of the diagonal D matrix of the M=TDT'
 #'       decomposition. Contains the variance of Mendelian sampling. Matches
-#'       the order of the first/ID column of the pedigree.} 
+#'       the order of the first/ID column of the pedigree. Note Wray (1990) and
+#'       Casellas and Medrano (2008) algorithms use \code{v=sqrt(dii)}.} 
 #'   }
 #' @author \email{matthewwolak@@gmail.com}
 #' @references Fikse, F. 2009. Fuzzy classification of phantom parent groups in
@@ -54,8 +55,7 @@
 #'	dam = c(NA, NA, 1, 1, 4, 4, 6, 7),
 #'	sire = c(NA, NA, 2, 2, 3, 2, 5, 5),
 #'	time = c(0, 0, 1, 1, 2, 2, 3, 4))
-#'    makeMinv(Mrode2)
-#'  
+#'    Mout <- makeMinv(Wray90)
 #' 
 #' @export
 makeMinv <- function(pedigree, ...){

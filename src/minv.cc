@@ -13,7 +13,7 @@ void minv(
         int *dam,       
         int *sire,         
         double *f,     
-	double *dii,
+	double *v,     // ultimately `dii`, but starts as sqrt(dii)=v
         int *n,
         double *xMinv,
 	int *iMinv,
@@ -24,12 +24,10 @@ void minv(
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
   double  vi2, detL;
   double  *u = new double[n[0]];
-  double  *v = new double[n[0]];
   double  *h = new double[n[0]];
   
-  for(k = 0; k < n[0]; k++){    // set u, v, and to zero
+  for(k = 0; k < n[0]; k++){    // set u and h to zero
     u[k] = 0.0;      
-    v[k] = 0.0;      
     h[k] = 0.0;      
   }
 
@@ -177,15 +175,16 @@ Rprintf("\n u[%i]=%6.3f | v[%i]=%6.3f | h[%i]=%6.3f", i, u[i], i, v[i], i, h[i])
          }
        }  // end if dam KNOWN
 
-
- 
-        
+   
   }  // end for k
 
+
+  // now replace v with v-squared to be `dii` to return to R
+  for(k = 0; k < n[0]; k++) v[k] *= v[k];
+  // Calculate log determinant of M (needed for REML)    
   logDet[0] += log(detL) + log(detL);
 
   delete[] h;
-  delete[] v;
   delete[] u;
 }
 }
@@ -205,7 +204,7 @@ void minvw(
         int *dam,       
         int *sire,         
         double *f,     
-	double *dii,
+	double *v,     // ultimately `dii`, but starts as sqrt(dii)=v
         int *n,
         double *xMinv,
 	int *iMinv,
@@ -216,12 +215,10 @@ void minvw(
   int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
   double  vi2, detL;
   double  *u = new double[n[0]];
-  double  *v = new double[n[0]];
   double  *h = new double[n[0]];
   
-  for(k = 0; k < n[0]; k++){    // set u, v, and to zero
+  for(k = 0; k < n[0]; k++){    // set u and h to zero
     u[k] = 0.0;      
-    v[k] = 0.0;      
     h[k] = 0.0;      
   }
 
@@ -371,10 +368,12 @@ void minvw(
         
   }  // end for k
 
+  // now replace v with v-squared to be `dii` to return to R
+  for(k = 0; k < n[0]; k++) v[k] *= v[k];
+  // Calculate log determinant of M (needed for REML)    
   logDet[0] += log(detL) + log(detL);
 
   delete[] h;
-  delete[] v;
   delete[] u;
 }
 }
