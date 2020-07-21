@@ -5,7 +5,6 @@
 \alias{makeTinv.default}
 \alias{makeTinv.numPed}
 \alias{makeDiiF}
-\alias{makeDiiF2}
 \alias{makeDiiF.default}
 \alias{makeDiiF.numPed}
 \title{Creates components of the additive genetic relationship matrix and its inverse}
