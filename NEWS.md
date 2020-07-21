@@ -1,5 +1,7 @@
 # 2.16.3.0
 ## NEW
+  * `makeMinv()` creates the inverse of the (additive) mutational effects relatedness matrix.
+  
 ## Small changes
 
 
