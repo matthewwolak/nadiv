@@ -80,7 +80,7 @@ makeMinv <- function(pedigree, ...){
   #TODO 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   nPed[nPed == -998] <- N + 1
   f <- c(rep(0, N), -1)
-  Cout <- .C("minvw", PACKAGE = "nadiv",
+  Cout <- .C("minv", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f

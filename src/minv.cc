@@ -50,10 +50,10 @@ void minv(
   // TODO default values for u and h so when parent missing yields correct
   // probably make u and h n[0]+1 and assign position n[0]=0 for all but last case
     if(p != n[0] && q != n[0]){  
-      v[k] = sqrt(0.25 * (u[p] + u[q]) - 0.5 * (h[p] + h[q]) + 10);
+      v[k] = sqrt(0.25 * (u[p] + u[q]) - 0.5 * (h[p] + h[q]) + 1);
     }
     if(p < n[0] && q == n[0]){
-      v[k] = sqrt(0.5 + 0.25*u[p] - 0.5*h[p] + 10);
+      v[k] = sqrt(0.25*u[p] - 0.5*h[p] + 0.5);
     }
     if(p == n[0]) v[k] = 1.0; // because p <= q then if p=n[0]=missing ID THEN so will q
 
