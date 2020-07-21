@@ -22,7 +22,7 @@ void minv(
 	double *theta	
 ){         
 
-  int     i, j, k, m, p, q, sk, dk, lb, step, istart, it;
+  int     j, k, m, p, q, sk, dk, lb, step, istart, it;
   double  vi2, detM;
   double  *u = new double[n[0]];
   
@@ -73,7 +73,7 @@ void minv(
             h[j] += 0.5 * v[p] * v[q];
           }
           if(p < k && k <= q) v[j] = 0.5 * v[q];
-          if( q < k) v[j] = 0.0;
+          if(q < k) v[j] = 0.0;
         }  // end if p and q BOTH known    
         if(p != n[0] && q == n[0]){
           if(k <= p) v[j] = 0.5 * v[p];
