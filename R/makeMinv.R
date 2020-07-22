@@ -92,7 +92,7 @@ makeMinv <- function(pedigree, ...){
   new_args <- list(...)
   if("theta" %in% names(new_args)) theta <- new_args$theta else theta <- 1.0
 
-  Cout <- .C("minv", PACKAGE = "nadiv",
+  Cout <- .C("minvq", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(rep(0, N)),				#h ("f-coeff")
@@ -121,6 +121,7 @@ makeMinv <- function(pedigree, ...){
 
 
 
+#' @rdname makeMinv
 #' @export
 makeMinvML <- function(pedigree, ...){
   nPed <- numPed(pedigree)
@@ -142,7 +143,7 @@ makeMinvML <- function(pedigree, ...){
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(rep(0, N)),				#h ("f-coeff")
-            as.double(rep(0, N)),  				#dii/v
+            as.double(rep(0, N)),  				#dii
             as.integer(N),   					#n
             as.double(rep(0, length(Minv@i))),  			#xMinv
 	    as.integer(Minv@i), 				#iMinv

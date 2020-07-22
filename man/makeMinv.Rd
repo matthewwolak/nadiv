@@ -2,9 +2,12 @@
 % Please edit documentation in R/makeMinv.R
 \name{makeMinv}
 \alias{makeMinv}
+\alias{makeMinvML}
 \title{Create the inverse (additive) mutational effects relationship matrix}
 \usage{
 makeMinv(pedigree, ...)
+
+makeMinvML(pedigree, ...)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
