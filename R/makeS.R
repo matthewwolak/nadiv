@@ -65,6 +65,10 @@ makeS <- function(pedigree, heterogametic,
 	returnS = FALSE){
 
     if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
+    if(!heterogametic %in% pedigree[, 4]){
+      stop(cat("Error: value given to 'heterogametic' argument (", heterogametic,
+        ") not a value in the 'Sex' column of the pedigree\n"))
+    }
     nPed <- numPed(pedigree[, 1:3])
 
     damsex <- pedigree[unique(nPed[, 2])[-1], 4]
