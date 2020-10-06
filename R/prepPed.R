@@ -155,9 +155,23 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
    stop("Check for individuals that appear as their own ancestor")
  }
 
- ped_fixed_ord <- ped_fixed[order(sapply(seq(npf),
-     FUN = function(x) max(Cout[[3]][x], Cout[[4]][x]))), ]  #<-- use maximum
-# ped_fixed_ord <- ped_fixed[order(Cout[[3]], Cout[[4]]), ]
+  # Order by number of dam/sire paths to dam/sire founder:
+  ## first by parent paths wit MAX then by parent with MIN
+  ped_fixed_ord <- ped_fixed[order(pmax.int(Cout[[3]], Cout[[4]]),
+  				    pmin.int(Cout[[3]], Cout[[4]])), ]
+  				    
+  # Make this into newly oredered numPed (replace existing object "in place")
+  nPed_fixed[] <- numPed(ped_fixed_ord, check = FALSE)
+  generation <- rep(-1, npf)  
+    generation[which(nPed_fixed[, 2] == -998 & nPed_fixed[, 3] == -998)] <- 0
+   
+  Cout <- .C("ga", PACKAGE = "nadiv",
+	as.integer(nPed_fixed[, 2] - 1),
+	as.integer(nPed_fixed[, 3] - 1),
+        as.integer(generation),
+	as.integer(n))   
+ generation[] <- Cout[[3]]    				    
+ ped_fixed_ord <- ped_fixed_ord[order(generation), ]
  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]))#, silent = TRUE)
 # if(class(itwork) == "try-error"){
 #   G <- Matrix(FALSE, npf, npf, sparse = TRUE)

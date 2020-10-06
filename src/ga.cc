@@ -9,23 +9,36 @@ void ga(
 	int *n
 ){         
 
-  int     k, kdam, ksire;
+  int     k, kdam, ksire, nmiss, cnt;
 
-  for(k = 0; k < n[0]; k++){
-     kdam = dam[k];
-     ksire = sire[k];
-     if((kdam != -999) && (ksire != -999)){
-        generation[k] = max(generation[kdam], generation[ksire]) + 1;
-     }
-     else{
-        if((kdam != -999)){
-           generation[k] = generation[kdam] + 1;
-        }
-        if((ksire != -999)){
-           generation[k] = generation[ksire] + 1;
-        }
-     }
-  }
+  nmiss = 1;  // initialize so starts while
+  cnt = 0;
+  while((nmiss > 0) && (cnt < n[0])){
+    nmiss = 0;  // set fresh each time through
+    for(k = 0; k < n[0]; k++){
+       kdam = dam[k];
+       ksire = sire[k];
+       if((kdam != -999) && (ksire != -999)){
+          if((generation[kdam] != -1) && (generation[ksire] != -1)){
+            generation[k] = max(generation[kdam], generation[ksire]) + 1;
+          } else nmiss++;  
+       }
+       else{
+          if((kdam != -999)){
+            if((generation[kdam] != -1)){
+              generation[k] = generation[kdam] + 1;
+            } else nmiss++;
+          }
+          if((ksire != -999)){
+            if((generation[ksire] != -1)){
+              generation[k] = generation[ksire] + 1;
+            } else nmiss++;
+          }
+       }  // end if/else
+    }  // end for k
+    cnt++;
+Rprintf("\nnmiss=%i cnt=%i", nmiss, cnt);    
+  }  // end while
         
 }
 }
