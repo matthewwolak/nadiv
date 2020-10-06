@@ -37,7 +37,7 @@ void ga(
        }  // end if/else
     }  // end for k
     cnt++;
-Rprintf("\nnmiss=%i cnt=%i", nmiss, cnt);    
+//Rprintf("\nnmiss=%i cnt=%i", nmiss, cnt);    
   }  // end while
         
 }
