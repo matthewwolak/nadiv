@@ -169,7 +169,7 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
 	as.integer(nPed_fixed[, 2] - 1),
 	as.integer(nPed_fixed[, 3] - 1),
         as.integer(generation),
-	as.integer(n))   
+	as.integer(npf))   
  generation[] <- Cout[[3]]    				    
  ped_fixed_ord <- ped_fixed_ord[order(generation), ]
  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]))#, silent = TRUE)
