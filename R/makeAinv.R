@@ -200,7 +200,12 @@ makeAinv <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = F
 #' @method makeAinv default
 #' @rdname makeAinv
 #' @export
-makeAinv.default <- function(pedigree, f = NULL, ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = TRUE, ...){
+makeAinv.default <- function(pedigree, f = NULL,
+  ggroups = NULL, fuzz = NULL, gOnTop = FALSE, det = TRUE, ...){
+  clnms <- names(match.call())
+  if("groups" %in% clnms){
+    stop("Found argument 'groups', only use correct argument name 'ggroups'")
+  }    
   if(is.null(ggroups)){
      ptype <- "O"
      renPed <- order(genAssign(pedigree), pedigree[, 2], pedigree[, 3], na.last = FALSE)
