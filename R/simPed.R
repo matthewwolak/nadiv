@@ -15,7 +15,7 @@
 #' @param n Number of offspring per mating (must be > or = 2)
 #' @param uniqueDname Logical indicating if dams should have unique names
 #'   within sire families or throughout the entire pedigree
-#' @param prefix Optional prefix to every identity
+#' @param prefix Optional prefix to add to every identity
 #'
 #' @return A \code{data.frame} with columns corresponding to: id, dam, sire,
 #'   and sex. Sex is "M" for males and "F" for females.
