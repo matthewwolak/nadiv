@@ -29,9 +29,10 @@ makeTinv(pedigree, ...)
 
 \item{\dots}{Arguments to be passed to methods}
 
-\item{genCol}{An integer value indicating the first \code{n} generations for
-which to create the matrix (corresponding to columns of the lower triangle
-\code{T} matrix). The first generation starts at 0, default is all generations.}
+\item{genCol}{An integer value indicating the generation up to which the
+\code{T} matrix is to be created (corresponding to columns of the lower
+triangle \code{T} matrix). The first generation is numbered 0, default is
+all generations.}
 
 \item{f}{A numeric indicating the level of inbreeding. See Details}
 }
