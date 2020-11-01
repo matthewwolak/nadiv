@@ -2,6 +2,9 @@
 % Please edit documentation in R/makeTinvDF.R
 \name{makeTinv}
 \alias{makeTinv}
+\alias{makeT}
+\alias{makeT.default}
+\alias{makeT.numPed}
 \alias{makeTinv.default}
 \alias{makeTinv.numPed}
 \alias{makeDiiF}
@@ -15,6 +18,8 @@ makeTinv(pedigree, ...)
 
 \method{makeTinv}{numPed}(pedigree, ...)
 
+\method{makeT}{default}(pedigree, genCol = NULL, ...)
+
 \method{makeDiiF}{default}(pedigree, f = NULL, ...)
 
 \method{makeDiiF}{numPed}(pedigree, f = NULL, ...)
@@ -23,6 +28,10 @@ makeTinv(pedigree, ...)
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
 
 \item{\dots}{Arguments to be passed to methods}
+
+\item{genCol}{An integer value indicating the first \code{n} generations for
+which to create the matrix (corresponding to columns of the lower triangle
+\code{T} matrix). The first generation starts at 0, default is all generations.}
 
 \item{f}{A numeric indicating the level of inbreeding. See Details}
 }
