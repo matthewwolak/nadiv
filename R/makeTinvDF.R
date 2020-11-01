@@ -21,9 +21,10 @@
 #' @aliases makeT makeT.default makeT.numPed
 #'   makeTinv makeTinv.default makeTinv.numPed makeDiiF
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
-#' @param genCol An integer value indicating the first \code{n} generations for
-#'   which to create the matrix (corresponding to columns of the lower triangle
-#'   \code{T} matrix). The first generation starts at 0, default is all generations.
+#' @param genCol An integer value indicating the generation up to which the
+#'   \code{T} matrix is to be created (corresponding to columns of the lower
+#'   triangle \code{T} matrix). The first generation is numbered 0, default is
+#'   all generations.
 #' @param f A numeric indicating the level of inbreeding. See Details
 #' @param \dots Arguments to be passed to methods
 #'
@@ -138,60 +139,23 @@ makeT.default <- function(pedigree, genCol = NULL, ...){
   # size of rectangle that is rest of ncols below upper trianglular portion
   nrect <- (N - ncol) * ncol
 
-  iTrow <- c(seq(n0), rep(-1, (nlt - n0) + nrect))
-  xTrow <- c(rep(1, n0), rep(0, (nlt - n0) + nrect))
-  pTrow <- c((1:n0), rep(n0 + 1, N - n0 + 1)) #FIXME add back -1 after `(1:ncol)`
 
-  #XXX FIXME put in c++
-  for(c in seq(n0 + 1, N, 1)){
-    pc <- pTrow[c]
-    d <- nPed[c, 2]  
-    s <- nPed[c, 3]
-    cnt <- 0
-    if(d != -998){
-      for(r in seq(pTrow[d], pTrow[d+1]-1, 1)){
-        iTrow[pc+cnt] <- iTrow[r]
-        xTrow[pc+cnt] <- 0.5 * xTrow[r]
-        cnt <- cnt + 1
-      }
-    }
-    cnt2 <- 0
-    if(s != -998){
-      for(r in seq(pTrow[s], pTrow[s+1]-1, 1)){
-        siTrowr <- iTrow[r]
-        used <- 0
-        for(o in seq(0, cnt, 1)){
-          if(iTrow[pc+o] == siTrowr){
-            used <- 1
-            xTrow[pc+o] <- 0.5 * xTrow[r]
-            break
-          }  #<-- end if
-        }  #<-- end for o
-        if(used == 0){
-          iTrow[pc+cnt+cnt2] <- siTrowr
-          xTrow[pc+cnt+cnt2] <- 0.5 * xTrow[r]
-          cnt2 <- cnt2 + 1
-        }  #<-- end if
-      }  #<-- end for r        
-    }  #<-- end if s
-    
-    # if part of the diagonal is in the subset, add a 1 on the diagonal
-    if(c <= ncol){
-      iTrow[pc + cnt + cnt2] <- c
-      xTrow[pc + cnt + cnt2] <- 1.0
-      pTrow[c + 1] <- pc + cnt + cnt2 + 1
-    } else{
-        ## otherwise "c" individual does not get a 1 on the diagonal
-        pTrow[c + 1] <- pc + cnt + cnt2
-      }
-      
-  }  #<-- end for c
-  nnz <- pTrow[N + 1] - 1
-  #XXX FIXME END what to put in c++
+  Cout <- .C("Trow", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+            as.double(c(rep(1.0, n0),
+              rep(0.0, (nlt - n0) + nrect))),  		        #xTrow
+	    as.integer(c(seq(n0),
+	      rep(0, (nlt - n0) + nrect)) - 1),			#iTrow
+	    as.integer(c((1:n0),
+	      rep(n0 + 1, N - n0 + 1)) - 1), 			#pTrow
+            as.integer(c(N, ncol, n0)))				#N, ncol, n0
 
-  Trow <- sparseMatrix(i = as.integer(iTrow[1:nnz] - 1),
-    p = as.integer(pTrow - 1),
-    x = as.double(xTrow[1:nnz]),
+
+  nnz <- Cout[[5]][N+1]
+  Trow <- sparseMatrix(i = as.integer(Cout[[4]][1:nnz]),
+    p = as.integer(Cout[[5]]),
+    x = as.double(Cout[[3]][1:nnz]),
     index1 = FALSE, dims = c(ncol, N), symmetric = FALSE,
     dimnames = list(NULL, NULL))
 
@@ -208,7 +172,7 @@ makeT.default <- function(pedigree, genCol = NULL, ...){
             dimnames = list(NULL, NULL))),
         fsOrd))[, gen <= genCol]
     }          
- T     
+ return(T)
 }
 
 
