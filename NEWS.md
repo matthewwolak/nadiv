@@ -1,6 +1,7 @@
 # 2.16.3.0
 ## NEW
   * `makeMinv()` creates the inverse of the (additive) mutational effects relatedness matrix.
+  * `makeT()` creates the lower triangle of the cholesky factor of the additive genetic numerator relatedness matrix.
   
 ## Small changes
 
