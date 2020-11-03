@@ -236,3 +236,195 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
  return(ped_out)
 }
 
+
+
+
+
+
+
+
+
+################################################################################
+#' Middle Class Neighborhood pedigree construction
+#' 
+#' Simulates a pedigree for the \dQuote{middle class neighborhood} mating design
+#' (Shabalina, Yampolsky, and Kondrashov 1997).
+#' 
+#' This creates a pedigree following a breeding design which maintains equal
+#' contributions to the next generation by each family in the design. It
+#' effectively removes the effect of natural selection which makes it amenable
+#' to quantify the contribution of mutations to phenotypic variance over the
+#' course of the breeding design.
+#'
+#' For a starting pedigree template (\code{pedTemp}), the last generation is used
+#' as parents to begin the breeding design for the next \code{g} generations.
+#' The number of families in the last generation of the template pedigree
+#' (\code{pedTemp}) will be the number of families in each generation.
+#'
+#' Alternatively, if no template pedigree is provided (\code{pedTemp=NULL}),
+#' \code{Nfam} number of families will be produced in the first generation from
+#' \code{Nfam} unique sire and \code{Nfam} unique dams.
+#'
+#' Either \code{pedTemp} or \code{Nfam} must be \code{NULL}, but not both.
+#' 
+#' @param pedTemp A \code{data.frame} pedigree of a template pedigree from which
+#'   the middle class neighborhood design should continue. If \code{NULL}, a new
+#'   pedigree will be created with \code{Nfam} families.
+#' @param g Integer number of generations to produce from the middle class
+#'   neighborhood design
+#' @param Nfam Integer number of families with which to start a new pedigree
+#'   following the middle class neighborhood design. 
+#' @param noff Integer number of full-sib offspring produced by each family
+#'   (must be >=2).
+#'
+#' @return A \code{data.frame} with columns corresponding to: id, dam, sire, sex,
+#'   and generation. Sex is \code{M} for males and \code{F} for females. The
+#'   first generation produced in the middle class neighborhood scheme is assigned
+#'   a value of \dQuote{1}, with their parents being assigned to generation
+#'   \code{0}. If \code{pedTemp} was provided, the generations from this pedigree
+#'   will be denoted with negative integers.
+#' @author \email{matthewwolak@@gmail.com}
+#' @seealso \code{\link{simPedHS}}, \code{\link{simPedDFC}}
+#' @references Shabalina, S.A, L.Y. Yampolsky, and A.S. Kondrashov. 1997. Rapid
+#' decline of fitness in panmictic populations of Drosophila melanogaster
+#' maintained under relaxed natural selection. Proc. Natl. Acad. Sci. USA.
+#' 94:13034-13039.
+#' @examples
+#'  # No template pedigree provided - start from scrtach
+#'   mcn1 <- simPedMCN(pedTemp = NULL, g = 3, Nfam = 4, noff = 2)
+#' 
+#'  # Provide a template pedigree (half-sib design)
+#'   hsped <- simPedHS(s = 2, d = 2, n = 4)
+#'   mcnHS <- simPedMCN(pedTemp = hsped, g = 3)
+#' @export
+simPedMCN <- function(pedTemp, g, Nfam = NULL, noff = 2)
+{
+
+  temp <- !is.null(pedTemp)
+  if(temp && !is.null(Nfam)) warning("When `pedTemp` provided, `Nfam` is ignored")
+  if(!temp && is.null(Nfam)){
+    stop("Must provide argument to either `pedTemp` or `Nfam` (but not both)")
+  }
+  if(noff < 2) stop("'noff' must be >= 2")
+  
+  if(temp){
+    #Find last generation from `pedTemp`
+    pedTemp$gen <- genAssign(pedTemp)
+    # Create head of a new pedigree for this generation
+    pedSt <- pedTemp[which(pedTemp$gen == max(pedTemp$gen)), ]
+      names(pedSt)[1:3] <- c("id", "dam", "sire")  #<-- standardize within function
+    # Determine number of unique families
+    Nfam <- sum(!is.na(unique(paste(as.character(pedSt[, 2]),
+      as.character(pedSt[, 3]), sep = "_"))))
+    # Figure out if a "sex" column is present in pedTemp
+    sexCol <- NULL
+    if(ncol(pedTemp) > 3){
+      dmatch <- match(pedSt$dam, pedTemp[, 1])
+      smatch <- match(pedSt$sire, pedTemp[, 1])
+      for(c in 4:ncol(pedTemp)){
+        nUniqDcVals <- length(unique(pedTemp[dmatch, c]))
+        nUniqScVals <- length(unique(pedTemp[smatch, c]))
+        if((nUniqDcVals == 1) & (nUniqScVals == 1)){
+          if(unique(pedTemp[dmatch, c]) != unique(pedTemp[smatch, c])){
+            sexCol <- c
+            break
+          }
+        }  # end if 1 unique value each
+      }  # end for c 
+
+      if(is.null(sexCol)) pedSt$sex <- NA else{
+        pedSt <- pedSt[, c(1:3, sexCol)]
+          names(pedSt[, 4]) <- "sex"  #<-- standardize within function
+      }  
+    } else{ 
+        pedSt$sex <- NA
+        # Arbitrarily assign first ~half Male and remainder Female
+        tmpi <- floor(0.5 * nrow(pedSt))
+        pedSt$sex[1:tmpi] <- "M"
+        pedSt$sex[(1+tmpi):nrow(pedSt)] <- "F"        
+      }  
+  } else{
+      pedSt <- data.frame(id = c(paste0("s", seq(Nfam)), paste0("d", seq(Nfam))),
+        dam = NA, sire = NA,
+        sex = rep(c("M", "F"), each = Nfam))
+    }  #<-- end if/else temp
+
+  ######################################################
+  # Figure out total number of new individuals to create
+  N <- noff * Nfam * g  
+  ped <- data.frame(id = c(as.character(pedSt$id),
+      paste(paste0("mcn", rep(seq(Nfam * g), each = noff)),
+      rep(seq(noff), Nfam * g), sep = "_")),
+    dam = c(as.character(pedSt$dam), rep(NA, N)),
+    sire = c(as.character(pedSt$sire), rep(NA, N)),
+    sex = c(as.character(pedSt$sex), rep(c("M", "F"), length.out = N)),
+    gen = c(rep(0, nrow(pedSt)), rep(seq(g), each = noff * Nfam)))
+  
+  parentDS <- paste0(as.character(ped$dam), as.character(ped$sire))
+    parentDS[which(ped$gen > 0)] <- NA
+  dpool <- spool <- rep(NA, Nfam) 
+  iparents <- matrix(NA, nrow = Nfam, ncol = 2)
+      
+  st <- nrow(pedSt) + 1; end <- st - 1 + noff * Nfam  
+  for(i in seq(g)){
+    # pick individuals to be dams or sires (`dpool` or `spool`) for generation i
+    cnt <- 1
+    for(u in unique(parentDS[which(ped$gen == (i-1))])){
+      uM <- ped$id[which((pDSinU <- parentDS %in% u) & ped$sex == "M")]
+        if((luM <- length(uM)) == 0){
+          stop(paste("Not every family in generation", i-1,
+            "has a male"))                 
+        }
+      uF <- ped$id[which(pDSinU & ped$sex == "F")]
+        if((luF <- length(uF)) == 0){
+          stop(paste("Not every family in generation", i-1,
+            "has a female"))                 
+        }
+      # Funny thing with sample below, because sample(1 integer) invokes sample.int  
+      spool[cnt] <- uM[sample(x = luM, size = 1)]
+      dpool[cnt] <- uF[sample(x = luF, size = 1)]
+      cnt <- cnt + 1
+    }  #<-- end for u
+    
+    # create mating pairs
+    ## Since went by unique family in previous generation,
+    ### brother and sister should reside at same index of dpool and spool
+    usedSindex <- c()
+    for(u in 1:Nfam){
+      # randomly choose male (avoiding brother of the dam)
+      usire <- sample(spool[-c(u, usedSindex)], size = 1)
+        usedSindex <- c(usedSindex, which(spool == usire))
+      iparents[u, 1:2] <- c(dpool[u], usire)
+    }
+
+    # stick mating pairs into pedigree (repeat for noff per family) for i generation
+    ped[st:end, c("dam", "sire")] <- matrix(rep(c(iparents), each = noff), ncol = 2)
+      # update `parentDS` too
+      parentDS[st:end] <- paste0(as.character(ped$dam[st:end]),
+        as.character(ped$sire[st:end]))
+        
+    # move indices
+    st <- end + 1
+    end <- st - 1 + noff * Nfam 
+  }  #<-- end for i
+  
+  #############################################
+  # stitch graft ped onto remainder of pedTemp
+  if(temp){
+    pedHd <- pedTemp[which(pedTemp$gen < max(pedTemp$gen)), 1:3]
+      names(pedSt)[1:3] <- c("id", "dam", "sire")  #<-- standardize within function
+    if(is.null(sexCol)){
+      pedHd$sex <- NA
+      pedHd$sex[which(pedHd$id %in% pedTemp[, 2])] <- "F"
+      pedHd$sex[which(pedHd$id %in% pedTemp[, 3])] <- "M"
+    } else{
+        pedHd$sex <- pedTemp[which(pedTemp$gen < max(pedTemp$gen)), sexCol]
+      }  #<-- end if/else 3 columns in pedTemp
+    pedHd$gen <- pedTemp$gen[which(pedTemp$gen < max(pedTemp$gen))] - max(pedTemp$gen)
+    # Add head of pedTemp to top of ped
+    ped <- rbind(pedHd, ped)
+  }  #<-- end if a template pedigree supplied
+  
+ return(ped)
+} 
+
