@@ -390,12 +390,18 @@ simPedMCN <- function(pedTemp, g, Nfam = NULL, noff = 2)
     ## Since went by unique family in previous generation,
     ### brother and sister should reside at same index of dpool and spool
     usedSindex <- c()
-    for(u in 1:Nfam){
-      # randomly choose male (avoiding brother of the dam)
-      usire <- sample(spool[-c(u, usedSindex)], size = 1)
-        usedSindex <- c(usedSindex, which(spool == usire))
-      iparents[u, 1:2] <- c(dpool[u], usire)
-    }
+    if(Nfam > 2){  
+      for(u in 1:(Nfam-2)){  # leave 2 so don't end with sibling as only sire left
+        # randomly choose male (avoiding brother of the dam)
+        usire <- sample(spool[-c(u, usedSindex)], size = 1)
+          usedSindex <- c(usedSindex, which(spool == usire))
+        iparents[u, 1:2] <- c(dpool[u], usire)
+      }
+      uleft <- seq(Nfam)[-usedSindex]
+      u2 <- c(Nfam - 1, Nfam)
+      if(uleft[1] == u2[1] | uleft[2] == u2[2]) uleft <- rev(uleft)
+      iparents[u2, 1:2] <- cbind(dpool[u2], spool[uleft])
+    } else iparents[, 1:2] <- cbind(dpool, rev(spool))
 
     # stick mating pairs into pedigree (repeat for noff per family) for i generation
     ped[st:end, c("dam", "sire")] <- matrix(rep(c(iparents), each = noff), ncol = 2)
