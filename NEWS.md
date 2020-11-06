@@ -4,7 +4,8 @@
   * `makeT()` creates the lower triangle of the cholesky factor of the additive genetic numerator relatedness matrix.
   
 ## Small changes
-
+  * update `ggcontrib()` to internally use `makeT()` to directly create a subset of the __T__ matrix (which the subset is __Q__ for the special setup for genetic groups).
+    * replaces method that created entire __T-inverse__ then invert it to obtain entire __T__ before subsetting all that is needed for __Q__
 
 # 2.16.2.0 Released to CRAN 20 October 2019
 ## NEW
