@@ -232,19 +232,12 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
       Qb <- as(fuzz, "dgCMatrix")
       pp <- which(na2)            #<-- phantom parents
       oid <- which(!na2)          #<-- observed individuals
-    }
-  # End strictly fuzzy classification section  
+      N <- dim(nPed)[1]
+      maxcnt <- 2*length(oid) + N
+      Tinv.row <- Tinv.x <- rep(0, maxcnt)
+      Tinv.col <- rep(0, N+1)
 
-    N <- dim(nPed)[1]
-    if(is.null(fuzz)){
-      dnmiss <- which(nPed[, 2] != -998)
-      snmiss <- which(nPed[, 3] != -998)
-      maxcnt <- (length(dnmiss) + length(snmiss) + N)
-    } else maxcnt <- 2*length(oid) + N
-    Tinv.row <- Tinv.x <- rep(0, maxcnt)
-    Tinv.col <- rep(0, N+1)
-
-    Cout <- .C("reT", PACKAGE = "nadiv",
+      Cout <- .C("reT", PACKAGE = "nadiv",
 	as.integer(nPed[, 2] - 1),
 	as.integer(nPed[, 3] - 1),
         as.integer(Tinv.row),
@@ -254,23 +247,30 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
 	as.integer(N),
 	as.double(c(0.5, 0.5, 1.0, 1.0))) #maternal, paternal, self, diagonal
 
-  if(ptype == "A" | ptype == "F"){
-    Tinv <- t(sparseMatrix(i = Cout[[3]][1:Cout[[6]]], p = Cout[[4]], x = Cout[[5]][1:Cout[[6]]],
+      Tinv <- t(sparseMatrix(i = Cout[[3]][1:Cout[[6]]],
+        p = Cout[[4]], x = Cout[[5]][1:Cout[[6]]],
 	dims = c(N, N),
 	dimnames = list(as.character(pedigree[, 1]), as.character(pedigree[, 1])),
-	symmetric = FALSE, index1 = FALSE))
-  } else{
-      Tinv <- t(sparseMatrix(i = Cout[[3]][1:Cout[[6]]], p = Cout[[4]], x = Cout[[5]][1:Cout[[6]]],
-	dims = c(N, N),
-	dimnames = list(as.character(pedalt[, 1]), as.character(pedalt[, 1])),
-	symmetric = FALSE, index1 = FALSE))
-    }
+	symmetric = FALSE, index1 = FALSE))    }
+  # End strictly fuzzy classification section  
+
+
+
+  if(ptype == "A"){
+    T <- makeT(pedigree, genCol = 0)
+    T@Dimnames <- list(as.character(pedigree[, 1]),
+      as.character(pedigree[1:T@Dim[2L], 1]))
+
+  } 
+  if(ptype == "D" | ptype == "R"){
+    suppressWarnings(T <- makeT(pedalt, genCol = 0))
+    T@Dimnames <- list(as.character(pedalt[, 1]),
+      as.character(pedalt[1:T@Dim[2L], 1]))
+  }
 
 
   if(is.null(fuzz)){
-    T <- as(solve(Tinv), "dgCMatrix")
-    T@Dimnames <- Tinv@Dimnames
-   return(as(T[-c(nggroups), nggroups], output))
+    return(as(T[-c(nggroups), nggroups], output))
   } else{
       Q <- as(solve(Tinv[oid, oid]), "dgCMatrix") %*% (-1*Tinv[oid, pp]) %*% Qb
       Q@Dimnames <- list(Tinv@Dimnames[[1]][oid], Qb@Dimnames[[2]])
