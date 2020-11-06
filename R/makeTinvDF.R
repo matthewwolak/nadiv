@@ -149,7 +149,7 @@ makeT.default <- function(pedigree, genCol = NULL, ...){
 	      rep(0, (nlt - n0) + nrect)) - 1),			#iTrow
 	    as.integer(c((1:n0),
 	      rep(n0 + 1, N - n0 + 1)) - 1), 			#pTrow
-            as.integer(c(N, ncol, n0)))				#N, ncol, n0
+            as.integer(c(ncol, n0, N)))				
 
 
   nnz <- Cout[[5]][N+1]
