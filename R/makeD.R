@@ -140,12 +140,11 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
                 as.integer(rep(0, N)),                  
 		as.integer(0))	                        
 
-     D <- Matrix(0, N, N, sparse = TRUE,
-		dimnames = list(as.character(pedigree[, 1]), NULL))
-     D@uplo <- "U"
-     D@i <- Cout[[8]][1:Cout[[10]]]
-     D@p <- c(Cout[[9]], Cout[[10]])
-     D@x <- Cout[[7]][1:Cout[[10]]]
+     D <- sparseMatrix(i = Cout[[8]][1:Cout[[10]]],
+     		p = c(Cout[[9]], Cout[[10]]),
+     		x = Cout[[7]][1:Cout[[10]]],
+     		dims = c(N, N),	dimnames = list(as.character(pedigree[, 1]), NULL),
+     		symmetric = TRUE, index1 = FALSE)
      diag(D) <- 2 - dA
 
      if(!returnA) A <- NULL
@@ -174,13 +173,12 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 		FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE,
 		mc.cores = ncores, mc.cleanup = TRUE)
   
-        D <- Matrix(0, N, N, sparse = TRUE,
-		dimnames = list(as.character(pedigree[, 1]), NULL))
-        D@uplo <- "U"
-        D@i <- A@i
-        D@p <- A@p
+        D <- sparseMatrix(i = A@i,
+     		p = A@p,
+     		x = Dijs,
+     		dims = c(N, N),	dimnames = list(as.character(pedigree[, 1]), NULL),
+     		symmetric = TRUE, index1 = FALSE)
         if(!returnA) A <- NULL
-        D@x <- Dijs
         D <- drop0(D)
         diag(D) <- 2 - dA
 

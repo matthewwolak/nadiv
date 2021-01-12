@@ -4,6 +4,8 @@
   * `makeT()` creates the lower triangle of the cholesky factor of the additive genetic numerator relatedness matrix.
   
 ## Small changes
+  * update way create matrices to make 'dsCMatrix' from `sparseMatrix()` instead of `Matrix()`
+    * fixes error caused by change in Matrix package 1.3-0
   * update `ggcontrib()` to internally use `makeT()` to directly create a subset of the __T__ matrix (which the subset is __Q__ for the special setup for genetic groups).
     * replaces method that created entire __T-inverse__ then invert it to obtain entire __T__ before subsetting all that is needed for __Q__
 
