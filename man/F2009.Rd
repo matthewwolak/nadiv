@@ -3,22 +3,8 @@
 \docType{data}
 \name{F2009}
 \alias{F2009}
-\title{Pedigree, adapted from Fikse 2009}
+\title{Pedigree adapted from Fikse 2009 with genetic groups and fuzzy classification}
 \format{
-An object of class \code{data.frame} with 16 rows and 11 columns.
-}
-\source{
-Fikse, F. 2009. Fuzzy classification of phantom parent groups in an
-  animal model. Genetics Selection Evolution 41:42.
-}
-\usage{
-F2009
-}
-\description{
-An example pedigree with genetic groups and fuzzy classification of genetic
-groups.
-}
-\details{
 A \code{data.frame} with 16 observations on the following 11 variables:
   \describe{
     \item{id }{a factor with levels indicating the unique individuals 
@@ -42,6 +28,16 @@ A \code{data.frame} with 16 observations on the following 11 variables:
     \item{g3 }{a numeric vector with probabilities of group \code{g3}
       membership for each phantom parent}
   }
+}
+\source{
+Fikse, F. 2009. Fuzzy classification of phantom parent groups in an
+  animal model. Genetics Selection Evolution 41:42.
+}
+\usage{
+F2009
+}
+\description{
+Pedigree adapted from Fikse 2009 with genetic groups and fuzzy classification
 }
 \examples{
   data(F2009)

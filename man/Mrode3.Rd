@@ -3,21 +3,8 @@
 \docType{data}
 \name{Mrode3}
 \alias{Mrode3}
-\title{Pedigree, from chapter 3 of Mrode (2005)}
+\title{Pedigree, from chapter 3 of Mrode (2005) with genetc groups and a trait column}
 \format{
-An object of class \code{data.frame} with 10 rows and 7 columns.
-}
-\source{
-Mrode, R.A. 2005. Linear Models for the Prediction of Animal
-Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
-}
-\usage{
-Mrode3
-}
-\description{
-An example pedigree with genetic groups and a data column
-}
-\details{
 A \code{data.frame} with 10 observations on the following 8 variables:
   \describe{
     \item{calf }{a factor with levels indicating the unique genetic groups 
@@ -32,6 +19,16 @@ A \code{data.frame} with 10 observations on the following 8 variables:
     \item{WWG }{a numeric vector of pre-weaning weight gain (kg) for five 
       beef calves}
   }
+}
+\source{
+Mrode, R.A. 2005. Linear Models for the Prediction of Animal
+Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
+}
+\usage{
+Mrode3
+}
+\description{
+Pedigree, from chapter 3 of Mrode (2005) with genetc groups and a trait column
 }
 \examples{
   data(Mrode3)

@@ -5,7 +5,12 @@
 \alias{Mrode2}
 \title{Pedigree from Table 2.1 of Mrode (2005)}
 \format{
-An object of class \code{data.frame} with 6 rows and 3 columns.
+A \code{data.frame} with 6 observations on the following 3 variables:
+  \describe{
+    \item{id }{a numeric vector}
+    \item{dam }{a numeric vector}
+    \item{sire }{a numeric vector}
+  }
 }
 \source{
 Mrode, R.A. 2005. Linear Models for the Prediction of Animal
@@ -15,15 +20,7 @@ Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 Mrode2
 }
 \description{
-An example pedigree
-}
-\details{
-A \code{data.frame} with 6 observations on the following 3 variables:
-  \describe{
-    \item{id }{a numeric vector}
-    \item{dam }{a numeric vector}
-    \item{sire }{a numeric vector}
-  }
+Pedigree from Table 2.1 of Mrode (2005)
 }
 \examples{
   str(Mrode2)

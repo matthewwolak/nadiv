@@ -3,21 +3,8 @@
 \docType{data}
 \name{Q1988}
 \alias{Q1988}
-\title{Pedigree, adapted from Quaas (1988) equation [5]}
+\title{Pedigree with genetic groups adapted from Quaas (1988) equation [5]}
 \format{
-An object of class \code{data.frame} with 11 rows and 8 columns.
-}
-\source{
-Quaas, R.L. 1988. Additive genetic model with groups and
-relationships. Journal of Dairy Science 71:1338-1345.
-}
-\usage{
-Q1988
-}
-\description{
-An example pedigree with genetic groups
-}
-\details{
 A \code{data.frame} with 11 observations on the following 8 variables:
   \describe{
     \item{id }{a factor with levels indicating the unique individuals 
@@ -35,6 +22,16 @@ A \code{data.frame} with 11 observations on the following 8 variables:
     \item{group }{a factor of genetic groups to which each phantom parent
       belongs}
   }
+}
+\source{
+Quaas, R.L. 1988. Additive genetic model with groups and
+relationships. Journal of Dairy Science 71:1338-1345.
+}
+\usage{
+Q1988
+}
+\description{
+Pedigree with genetic groups adapted from Quaas (1988) equation [5]
 }
 \examples{
   data(Q1988)

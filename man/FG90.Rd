@@ -5,7 +5,14 @@
 \alias{FG90}
 \title{Pedigree, adapted from Table 1 in Fernando & Grossman (1990)}
 \format{
-An object of class \code{data.frame} with 8 rows and 4 columns.
+A \code{data.frame} with 8 observations on the following 4 variables:
+  \describe{
+    \item{id }{a factor with levels \code{1} \code{2} \code{3} \code{4} 
+      \code{5} \code{6} \code{7} \code{8}}
+    \item{dam }{a factor with levels \code{2} \code{4} \code{6}}
+    \item{sire }{a factor with levels \code{1} \code{3} \code{5}}
+    \item{sex }{a factor with levels \code{0} \code{1}}
+  }
 }
 \source{
 Fernando, R.L. & M. Grossman. 1990. Genetic evaluation with
@@ -16,17 +23,7 @@ autosomal and X-chromosomal inheritance. Theoretical and Applied Genetics
 FG90
 }
 \description{
-An example pedigree
-}
-\details{
-A \code{data.frame} with 8 observations on the following 4 variables:
-  \describe{
-    \item{id }{a factor with levels \code{1} \code{2} \code{3} \code{4} 
-      \code{5} \code{6} \code{7} \code{8}}
-    \item{dam }{a factor with levels \code{2} \code{4} \code{6}}
-    \item{sire }{a factor with levels \code{1} \code{3} \code{5}}
-    \item{sex }{a factor with levels \code{0} \code{1}}
-  }
+Pedigree, adapted from Table 1 in Fernando & Grossman (1990)
 }
 \examples{
   data(FG90)

@@ -5,7 +5,32 @@
 \alias{warcolak}
 \title{Pedigree and phenotypic values for a mythical population of Warcolaks}
 \format{
-An object of class \code{data.frame} with 5400 rows and 13 columns.
+A \code{data.frame} with 5400 observations on the following 13 variables:
+  \describe{
+    \item{ID }{a factor specifying 5400 unique individual identities}
+    \item{Dam }{a factor specifying the unique Dam for each individual}
+    \item{Sire }{a factor specifying the unique Sire for each individual}
+    \item{sex }{a factor specifying \dQuote{M} if the individual is a male 
+      and \dQuote{F} if it is a female}
+    \item{trait1 }{a numeric vector of phenotypic values: see 
+      \sQuote{Details}}
+    \item{trait2 }{a numeric vector of phenotypic values: see 
+      \sQuote{Details}}
+    \item{t1_a }{a numeric vector of the autosomal additive genetic effects 
+      underlying \sQuote{trait1}}
+    \item{t2_a }{a numeric vector of the autosomal additive genetic effects 
+      underlying \sQuote{trait2}}
+    \item{t2_s }{a numeric vector of the sex-chromosomal additive genetic 
+      effects underlying \sQuote{trait2}}
+    \item{t1_d }{a numeric vector of the autosomal dominance genetic effects 
+      underlying \sQuote{trait1}}
+    \item{t2_d }{a numeric vector of the autosomal dominance genetic effects 
+      underlying \sQuote{trait2}}
+    \item{t2_r }{a numeric vector of the residual (environmental) effects 
+      underlying \sQuote{trait1}}
+    \item{t2_r }{a numeric vector of the residual (environmental) effects 
+      underlying \sQuote{trait2}}
+  }
 }
 \usage{
 warcolak
@@ -44,33 +69,6 @@ The actual variance in random effects will vary slightly from the amount
 specified in the simulation, because of Monte Carlo error. Thus, the random
 effects have been included as separate columns in the dataset. See
 \code{examples} below for the code that generated the dataset.
-
-A \code{data.frame} with 5400 observations on the following 13 variables:
-  \describe{
-    \item{ID }{a factor specifying 5400 unique individual identities}
-    \item{Dam }{a factor specifying the unique Dam for each individual}
-    \item{Sire }{a factor specifying the unique Sire for each individual}
-    \item{sex }{a factor specifying \dQuote{M} if the individual is a male 
-      and \dQuote{F} if it is a female}
-    \item{trait1 }{a numeric vector of phenotypic values: see 
-      \sQuote{Details}}
-    \item{trait2 }{a numeric vector of phenotypic values: see 
-      \sQuote{Details}}
-    \item{t1_a }{a numeric vector of the autosomal additive genetic effects 
-      underlying \sQuote{trait1}}
-    \item{t2_a }{a numeric vector of the autosomal additive genetic effects 
-      underlying \sQuote{trait2}}
-    \item{t2_s }{a numeric vector of the sex-chromosomal additive genetic 
-      effects underlying \sQuote{trait2}}
-    \item{t1_d }{a numeric vector of the autosomal dominance genetic effects 
-      underlying \sQuote{trait1}}
-    \item{t2_d }{a numeric vector of the autosomal dominance genetic effects 
-      underlying \sQuote{trait2}}
-    \item{t2_r }{a numeric vector of the residual (environmental) effects 
-      underlying \sQuote{trait1}}
-    \item{t2_r }{a numeric vector of the residual (environmental) effects 
-      underlying \sQuote{trait2}}
-  }
 }
 \note{
 Before nadiv version 2.14.0, the \code{warcolak} dataset used a 0/1
