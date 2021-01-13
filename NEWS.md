@@ -64,7 +64,7 @@ makeDiiF(Mrode2)
   * Functions to construct sex-chromosomal dominance relatedness matrices
     * `makeSd()` and `makeSdsim()` 
         * These are similar to what `makeD()` and `makeDsim()` accomplish for autosomes
-        * The ouptut contains the **Sd** and **Sdsim** dominance relatedness matrices
+        * The output contains the **Sd** and **Sdsim** dominance relatedness matrices
         * The inverses of these can be obtained from **Sdinv** and **Sdsiminv** and used in a mixed model
 
 
@@ -100,7 +100,7 @@ example(makeAinv)      # runs the examples in the help documentation
 
   * Add the `makeAstarMult()` function to create the inverse numerator relationship matrix with genetic groups (and possibly also fuzzy classification of genetic groups) through matrix multiplication instead of using direct algorithms to set this up.
     * Uses `ggcontrib()` and `makeAinv()` to create **Q** and **A^-1** directly, then multiplies these in such a way as to obtain **Astar**.
-    * Examples using the two different types of pedigree formats and either with or without fuzzy classication can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
+    * Examples using the two different types of pedigree formats and either with or without fuzzy classification can be seen in the `makeAstarMult.Rd` help file or run them in `R` with the command:
 ```R
 ?makeAstarMult		# launches the help documentation
 example(makeAstarMult)	# runs the examples in the help documentation
@@ -212,7 +212,7 @@ as a minimum
 ## Small changes
    * removed 'asreml' from suggests in the package DESCRIPTION file.
    * changed `pcc()` return `FALSE` if the object (asreml) shows the log-likelihood did not converge
-   * added `silent = FALSE` agrument to `pcc()` so that the default can be changed to not show messages
+   * added `silent = FALSE` argument to `pcc()` so that the default can be changed to not show messages
      * helpful in simulations where a lot of output would be printed on screen
    * changed the signs associated with likelihood ratio test statistics, etc.
      * changed signs in `proLik()` so that profile likelihoods should be "valleys" (instead of "hills", as they were in versions previous to 2.13.3)
@@ -251,7 +251,7 @@ as a minimum
 # PREVIOUS (Incomplete below)
 # 2.9
 ## New
-   * enabled parallel processing (forking, so no Windows compatability) in:
+   * enabled parallel processing (forking, so no Windows compatibility) in:
      * `findDFC()`, `makeD()`, `makeDsim()`
 
 # 2.8

@@ -159,7 +159,7 @@
 
 
 
-#' Pedigree, from chapter 3 of Mrode (2005) with genetc groups and a trait column
+#' Pedigree, from chapter 3 of Mrode (2005) with genetic groups and a trait column
 #' 
 #' @format A \code{data.frame} with 10 observations on the following 8 variables:
 #'   \describe{
