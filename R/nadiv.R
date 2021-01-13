@@ -15,10 +15,6 @@
 #' @importFrom stats pchisq qchisq qnorm rnorm sd
 #' @import Matrix
 #' @author Matthew Wolak \email{matthewwolak@@gmail.com}
-#' @examples
-#' \dontrun{
-#'   
-#' }
 "_PACKAGE"
 
 

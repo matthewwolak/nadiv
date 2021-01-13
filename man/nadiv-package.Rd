@@ -14,11 +14,6 @@ models. Some functions have been created to be used in conjunction with the
 R package for ASReml software, which can be obtained upon purchase from
 VSN international (<http://www.vsni.co.uk/software/asreml>).
 }
-\examples{
-\dontrun{
-  
-}
-}
 \seealso{
 Useful links:
 \itemize{
