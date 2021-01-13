@@ -45,7 +45,6 @@
 #' @seealso \code{\link[nadiv]{genAssign}}, \code{\link[nadiv]{prunePed}}
 #' @examples
 #' 
-#' 
 #' # First create an unordered pedigree with (4) missing founders
 #'   warcolak_unsuitable <- warcolak[sample(seq(5, nrow(warcolak), 1),
 #' 	size = (nrow(warcolak) - 4), replace = FALSE), ]
@@ -60,6 +59,7 @@
 #' @export
 prepPed <- function(pedigree, gender = NULL, check = TRUE){
 
+ self <- FALSE
  if(check){      
    if(length(d0 <- which(pedigree[, 2] == 0)) > 0){
      pedigree[d0, 2] <- NA
