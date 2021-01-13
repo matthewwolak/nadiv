@@ -360,11 +360,27 @@ simPedMCN <- function(pedTemp, g, Nfam = NULL, noff = 2)
     sex = c(as.character(pedSt$sex), rep(c("M", "F"), length.out = N)),
     gen = c(rep(0, nrow(pedSt)), rep(seq(g), each = noff * Nfam)))
   
-  parentDS <- paste0(as.character(ped$dam), as.character(ped$sire))
-    parentDS[which(ped$gen > 0)] <- NA
+  parentDS <- rep(NA, nrow(ped))
+    # find which missing both parents
+    bthParNA <- (is.na(ped$dam) & is.na(ped$sire))
+    # assign unique parent pair ID to all individuals with atleast 1 parent known
+    parentDS[!bthParNA] <- paste0(as.character(ped$dam[!bthParNA]),
+      as.character(ped$sire[!bthParNA]))
+    # CHECK: if ALL 0 generation (base of `ped`) parents NA
+    ## if no pedigree given to function, give phantom parents, else STOP
+    if(all(is.na(parentDS[which(ped$gen == 0)]))){
+      if(temp){
+        stop("If `pedTemp` provided, all parents of the last generation cannot be NA")
+      }  
+      # `pedSt` created because !temp, sires and dams from 2-offspring families   
+      parentDS[which(ped$gen == 0)] <- paste0(rep(paste0("phtmD", seq(Nfam)), 2),
+        rep(paste0("phtmS", seq(Nfam)), 2))
+    }
   dpool <- spool <- rep(NA, Nfam) 
   iparents <- matrix(NA, nrow = Nfam, ncol = 2)
       
+      
+  ###### For LOOP through generations #########
   st <- nrow(pedSt) + 1; end <- st - 1 + noff * Nfam  
   for(i in seq(g)){
     # pick individuals to be dams or sires (`dpool` or `spool`) for generation i
