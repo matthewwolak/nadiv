@@ -23,7 +23,7 @@ a \code{list}:
       inverse of the (additive) mutational effects relationship matrix.
       \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
       column from the pedigree.}
-    \item{h }{the amount by which segregtation variance is reduced by
+    \item{h }{the amount by which segregation variance is reduced by
       inbreeding. Similar to the individual coefficients of inbreeding (f)
       derived during the construction of the inverse numerator relatedness matrix.
       in the pedigree (matches the order of the first/ID column of the
@@ -56,7 +56,7 @@ separate partitioning of additive genetic variance attributed to inheritance
 of allelic variation present in the base population (inverse-A) from
 additive genetic variance arising from mutation and subsequent sharing of
 mutant alleles identical-by-descent. Alternatively, Wray (1990) formulates
-an algorithm which combines both of these processese (i.e., the A-inverse with
+an algorithm which combines both of these processes (i.e., the A-inverse with
 the M-inverse matrices). If the Wray algorithm is desired, this can be
 implemented by specifying a numeric value to an argument named \code{theta}.
 The value used for \code{theta} should be as described in Wray (1990). See

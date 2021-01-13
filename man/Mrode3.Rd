@@ -3,7 +3,7 @@
 \docType{data}
 \name{Mrode3}
 \alias{Mrode3}
-\title{Pedigree, from chapter 3 of Mrode (2005) with genetc groups and a trait column}
+\title{Pedigree, from chapter 3 of Mrode (2005) with genetic groups and a trait column}
 \format{
 A \code{data.frame} with 10 observations on the following 8 variables:
   \describe{
@@ -28,7 +28,7 @@ Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 Mrode3
 }
 \description{
-Pedigree, from chapter 3 of Mrode (2005) with genetc groups and a trait column
+Pedigree, from chapter 3 of Mrode (2005) with genetic groups and a trait column
 }
 \examples{
   data(Mrode3)
