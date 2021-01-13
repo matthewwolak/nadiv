@@ -1,8 +1,8 @@
 # Test environments
-  - Ubuntu 18.10
-    - R 3.6.1 (2019-07-05) x86_64-pc-linux-gnu (64-bit)
+  - Ubuntu 20.04.1 LTS
+    - R version 4.0.3 (2020-10-10) x86_64-pc-linux-gnu (64-bit)
 
-  - win-builder (devel, release, and old version): http://win-builder.r-project.org/
+  - win-builder (devel, release, and old version): https://win-builder.r-project.org/
     - R version 3.5.3 (2019-03-11), platform: x86_64-w64-mingw32 (64-bit) 
     - R version 3.6.1 (2019-07-05), platform: x86_64-w64-mingw32 (64-bit) 
 
@@ -21,7 +21,7 @@ There were no ERRORs or WARNINGs.
 
   - No public repository is available for package 'asreml', however, availability (with web address) is noted in DESCRIPTION.
 
-  - All other WARNINGs and NOTEs currently listed under CRAN Package Check Results have been addressed with this update. 
+  - All ERRORs, WARNINGs, and NOTEs currently listed under CRAN Package Check Results have been addressed with this update. 
 
 
 # Downstream dependencies

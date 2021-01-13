@@ -3,8 +3,8 @@ Type: Package
 Title: (Non)Additive Genetic Relatedness Matrices
 Version: 2.17.0
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
-URL: http://github.com/matthewwolak/nadiv
-BugReports: http://github.com/matthewwolak/nadiv/issues
+URL: https://github.com/matthewwolak/nadiv
+BugReports: https://github.com/matthewwolak/nadiv/issues
 Depends: R (>= 3.2.0), Matrix
 Suggests: parallel
 Enhances: MCMCglmm, asreml
@@ -18,6 +18,6 @@ Description: Constructs (non)additive genetic relationship matrices, and their
     animal models. Some functions have been created to be used in conjunction
     with the R package 'asreml' for the 'ASReml' software, which can be
     obtained upon purchase from 'VSN' international 
-    (<http://www.vsni.co.uk/software/asreml>).
+    (<https://www.vsni.co.uk/software/asreml>).
 Encoding: UTF-8
 RoxygenNote: 7.1.1
