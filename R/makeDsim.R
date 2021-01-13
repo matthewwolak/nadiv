@@ -51,22 +51,22 @@
 #'   \describe{
 #'     \item{A,S }{the A or S matrix in sparse matrix form}
 #'     \item{D,Sd }{the approximate D or Sd matrix in sparse matrix form}
+#'     \item{logDetD,logDetSd }{the log determinant of the D or Sd matrix}
+#'     \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd
+#'       matrix in sparse matrix form}
+#'     \item{listDinv,listSdinv }{the three column form of the non-zero elements 
+#'       for the inverse of the approximate D matrix or the inverse of the
 #'       approximate Sd matrix}
-#'    \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd
-#'      matrix in sparse matrix form}
-#'    \item{listDinv,listSdinv }{the three column form of the non-zero elements 
-#'      for the inverse of the approximate D matrix or the inverse of the
-#'      approximate Sd matrix}
-#'    \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
-#'    \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or
-#'      simulated Sd matrix}
-#'    \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd
-#'      matrix in sparse matrix form}
-#'    \item{listDsim,listSdsim }{the three column form of the non-zero and
-#'      non-self elements for the simulated D or simulated Sd matrix}
-#'    \item{listDsiminv,listSdsiminv }{the three column form of the non-zero
-#'      elements for the inverse of the simulated D or the inverse of the 
-#'      simulated Sd matrix}
+#'     \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
+#'     \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or
+#'       simulated Sd matrix}
+#'     \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd
+#'       matrix in sparse matrix form}
+#'     \item{listDsim,listSdsim }{the three column form of the non-zero and
+#'       non-self elements for the simulated D or simulated Sd matrix}
+#'     \item{listDsiminv,listSdsiminv }{the three column form of the non-zero
+#'       elements for the inverse of the simulated D or the inverse of the 
+#'       simulated Sd matrix}
 #'   }
 #' @note This simulation can take a long time for large pedigrees (a few
 #'   thousand and higher) and large values of \code{N} (one thousand and 

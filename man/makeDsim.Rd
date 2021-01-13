@@ -59,7 +59,27 @@ heterogametic sex used in the "Sex" column of the pedigree}
 If \code{NULL} then the \dQuote{ngdc} model is assumed.}
 }
 \value{
-
+a \code{list}:
+  \describe{
+    \item{A,S }{the A or S matrix in sparse matrix form}
+    \item{D,Sd }{the approximate D or Sd matrix in sparse matrix form}
+    \item{logDetD,logDetSd }{the log determinant of the D or Sd matrix}
+    \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd
+      matrix in sparse matrix form}
+    \item{listDinv,listSdinv }{the three column form of the non-zero elements 
+      for the inverse of the approximate D matrix or the inverse of the
+      approximate Sd matrix}
+    \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
+    \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or
+      simulated Sd matrix}
+    \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd
+      matrix in sparse matrix form}
+    \item{listDsim,listSdsim }{the three column form of the non-zero and
+      non-self elements for the simulated D or simulated Sd matrix}
+    \item{listDsiminv,listSdsiminv }{the three column form of the non-zero
+      elements for the inverse of the simulated D or the inverse of the 
+      simulated Sd matrix}
+  }
 }
 \description{
 Alleles are explicitly traced through a pedigree to obtain coefficients of
