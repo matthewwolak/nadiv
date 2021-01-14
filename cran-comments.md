@@ -1,3 +1,7 @@
+# Resubmission
+  - On initial submission of `nadiv` v2.17.0, CRAN flagged 2 urls listed in the package documentation as being incorrect because they had been moved.
+    - The new and correct urls have now replaced the old links.
+    
 # Test environments
   - Ubuntu 20.04.1 LTS
     - R version 4.0.3 (2020-10-10) x86_64-pc-linux-gnu (64-bit)
