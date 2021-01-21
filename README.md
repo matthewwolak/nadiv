@@ -1,8 +1,7 @@
 # nadiv
 [![](https://www.r-pkg.org/badges/version/nadiv)](https://cran.r-project.org/package=nadiv)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/nadiv)](https://cranlogs.r-pkg.org/badges/grand-total/nadiv)
-[![DOI](https://zenodo.org/badge/33896065.svg)](https://zenodo.org/badge/latestdoi/33896065)
-
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.4455343.svg)](https://doi.org/10.5281/zenodo.4455343)
 
 
 R package that constructs (non)additive genetic relationship matrices, and their inverses, from a pedigree to be used in linear mixed effect models (A.K.A. the 'animal model'). Also includes other functions to facilitate the use of animal models. Some functions have been created to be used in conjunction with the R package for ASReml software.
