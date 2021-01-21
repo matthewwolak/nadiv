@@ -1,7 +1,7 @@
 # nadiv
 [![](https://www.r-pkg.org/badges/version/nadiv)](https://cran.r-project.org/package=nadiv)
 [![](https://cranlogs.r-pkg.org/badges/grand-total/nadiv)](https://cranlogs.r-pkg.org/badges/grand-total/nadiv)
-[![DOI](https://zenodo.org/badge/33896065.svg)](https://zenodo.org/badge/latestdoi/33896065)
+[![DOI](https://zenodo.org/badge/4455343.svg)](https://zenodo.org/badge/latestdoi/4455343)
 
 
 
