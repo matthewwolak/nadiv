@@ -1,9 +1,6 @@
-#' Pedigree, adapted from Fikse 2009
+#' Pedigree adapted from Fikse 2009 with genetic groups and fuzzy classification
 #' 
-#' An example pedigree with genetic groups and fuzzy classification of genetic
-#' groups.
-#' 
-#' A \code{data.frame} with 16 observations on the following 11 variables:
+#' @format A \code{data.frame} with 16 observations on the following 11 variables:
 #'   \describe{
 #'     \item{id }{a factor with levels indicating the unique individuals 
 #'       (including phantom parents) and genetic groups}
@@ -41,9 +38,7 @@
 
 #' Pedigree, adapted from Table 1 in Fernando & Grossman (1990)
 #' 
-#' An example pedigree
-#' 
-#' A \code{data.frame} with 8 observations on the following 4 variables:
+#' @format A \code{data.frame} with 8 observations on the following 4 variables:
 #'   \describe{
 #'     \item{id }{a factor with levels \code{1} \code{2} \code{3} \code{4} 
 #'       \code{5} \code{6} \code{7} \code{8}}
@@ -144,9 +139,7 @@
 
 #' Pedigree from Table 2.1 of Mrode (2005)
 #' 
-#' An example pedigree
-#' 
-#' A \code{data.frame} with 6 observations on the following 3 variables:
+#' @format A \code{data.frame} with 6 observations on the following 3 variables:
 #'   \describe{
 #'     \item{id }{a numeric vector}
 #'     \item{dam }{a numeric vector}
@@ -166,11 +159,9 @@
 
 
 
-#' Pedigree, from chapter 3 of Mrode (2005)
+#' Pedigree, from chapter 3 of Mrode (2005) with genetic groups and a trait column
 #' 
-#' An example pedigree with genetic groups and a data column
-#' 
-#' A \code{data.frame} with 10 observations on the following 8 variables:
+#' @format A \code{data.frame} with 10 observations on the following 8 variables:
 #'   \describe{
 #'     \item{calf }{a factor with levels indicating the unique genetic groups 
 #'       and individuals}
@@ -200,13 +191,11 @@
 
 #' Pedigree, adapted from example 9.1 of Mrode (2005)
 #' 
-#' An example pedigree
-#' 
-#' A \code{data.frame} with 12 observations on the following 3 variables:
+#' @format A \code{data.frame} with 12 observations on the following 3 variables:
 #'   \describe{
 #'     \item{pig }{a numeric vector}
 #'     \item{dam }{a numeric vector}
-#'     \item{sire {a numeric vector}
+#'     \item{sire }{a numeric vector}
 #'   }
 #'
 #' @docType data
@@ -222,11 +211,9 @@
 
 
 
-#' Pedigree, adapted from Quaas (1988) equation [5]
+#' Pedigree with genetic groups adapted from Quaas (1988) equation [5]
 #' 
-#' An example pedigree with genetic groups
-#' 
-#' A \code{data.frame} with 11 observations on the following 8 variables:
+#' @format A \code{data.frame} with 11 observations on the following 8 variables:
 #'   \describe{
 #'     \item{id }{a factor with levels indicating the unique individuals 
 #'       (including phantom parents) and genetic groups}
@@ -292,7 +279,7 @@
 #' effects have been included as separate columns in the dataset. See
 #' \code{examples} below for the code that generated the dataset.
 #'
-#' A \code{data.frame} with 5400 observations on the following 13 variables:
+#' @format A \code{data.frame} with 5400 observations on the following 13 variables:
 #'   \describe{
 #'     \item{ID }{a factor specifying 5400 unique individual identities}
 #'     \item{Dam }{a factor specifying the unique Dam for each individual}

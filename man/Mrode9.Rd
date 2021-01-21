@@ -4,7 +4,14 @@
 \name{Mrode9}
 \alias{Mrode9}
 \title{Pedigree, adapted from example 9.1 of Mrode (2005)}
-\format{An object of class \code{data.frame} with 12 rows and 3 columns.}
+\format{
+A \code{data.frame} with 12 observations on the following 3 variables:
+  \describe{
+    \item{pig }{a numeric vector}
+    \item{dam }{a numeric vector}
+    \item{sire }{a numeric vector}
+  }
+}
 \source{
 Mrode, R.A. 2005. Linear Models for the Prediction of Animal
 Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
@@ -13,7 +20,7 @@ Breeding Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 Mrode9
 }
 \description{
-An example pedigree
+Pedigree, adapted from example 9.1 of Mrode (2005)
 }
 \examples{
   data(Mrode9)

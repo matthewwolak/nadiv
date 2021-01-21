@@ -71,11 +71,11 @@ makeSdsim <- function(pedigree, heterogametic, N,
 	as.integer(rep(0, nSd)))      # [[10]] x slot of matrix
 
   nSd <- Cout[[9]][nhom+1]  # change to reflect actual number of non-zeroes
-  Sdsim <- Matrix(0, nhom, nhom, sparse = TRUE, dimnames = list(as.character(pedigree[homs, 1]), NULL))
-  Sdsim@uplo <- "U"
-  Sdsim@i <- Cout[[8]][1:nSd]
-  Sdsim@p <- Cout[[9]][1:(nhom+1)]
-  Sdsim@x <- Cout[[10]][1:nSd] / N
+  Sdsim <- sparseMatrix(i = Cout[[8]][1:nSd],
+    p = Cout[[9]][1:(nhom+1)],
+    x = Cout[[10]][1:nSd] / N,
+    dims = c(nhom, nhom), dimnames = list(as.character(pedigree[homs, 1]), NULL),
+    symmetric = TRUE, index1 = FALSE)
   diag(Sdsim) <- diag(approxSd$Sd)
   #TODO don't *have* to calculate diagonals in c++ ('sdsim.cc') because of above line
   ## But make sure doesn't mess up below combining of `lapproxSd` and `summary(Sdsim)`

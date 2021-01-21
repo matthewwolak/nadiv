@@ -96,8 +96,9 @@ makeDomEpi <- function(pedigree, output = c("AD", "DD", "both"),
 
   if(type == "both"){
     AD <- Dout$A * Dout$D
-    ADinv <- Matrix(solve(AD), sparse=TRUE)
-    listADinv <-sm2list(ADinv, rownames=pedigree[,1], colnames=c("row", "column", "ADinverse"))
+    ADinv <- Matrix(solve(AD), sparse = TRUE, doDiag = FALSE)
+    listADinv <- sm2list(ADinv, rownames = pedigree[, 1],
+      colnames = c("row", "column", "ADinverse"))
     ADinv <- as(ADinv, "dgCMatrix")
       ADinv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     DD <- Dout$D * Dout$D

@@ -4,7 +4,8 @@
 \name{ggTutorial}
 \alias{ggTutorial}
 \title{Simulated dataset used to analyze data with genetic group animal models}
-\format{A \code{data.frame} with 6000 observations on the following 10 
+\format{
+A \code{data.frame} with 6000 observations on the following 10 
   variables:
   \describe{
     \item{id }{an integer vector specifying the 6000 unique individual
@@ -28,7 +29,8 @@
       focal population, but immigrated}
     \item{gen }{an integer vector specifying the generation in which each 
       individual was born}
-  }}
+  }
+}
 \source{
 Wolak, M.E. & J.M. 2017. Accounting for genetic differences among
   unknown parents in microevolutionary studies: how to include genetic

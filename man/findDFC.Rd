@@ -4,8 +4,12 @@
 \alias{findDFC}
 \title{Finds the double first cousins in a pedigree}
 \usage{
-findDFC(pedigree, exact = FALSE, parallel = FALSE,
-  ncores = getOption("mc.cores", 2L))
+findDFC(
+  pedigree,
+  exact = FALSE,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L)
+)
 }
 \arguments{
 \item{pedigree}{A pedigree with columns organized: ID, Dam, Sire}

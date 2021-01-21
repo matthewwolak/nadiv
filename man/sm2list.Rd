@@ -11,7 +11,7 @@ sm2list(A, rownames = NULL, colnames = c("row", "column", "A"))
 
 \item{rownames}{a list of rownames from the 'A' matrix.}
 
-\item{colnames}{the columns will be labelled however they are entered in
+\item{colnames}{the columns will be labeled however they are entered in
 this character vector}
 }
 \value{

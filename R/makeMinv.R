@@ -1,0 +1,169 @@
+#' Create the inverse (additive) mutational effects relationship matrix
+#' 
+#' Returns the inverse of the (additive) mutational effects relationship matrix.
+#' It can also be used to obtain components needed for the calculations in the
+#' underlying algorithm.
+#' 
+#' Missing parents (e.g., base population) should be denoted by either 'NA',
+#' '0', or '*'.
+#' 
+#' Note the assumption under the infinitesimal model, that mutation has essentially
+#' zero probability of affecting an inbred locus (hence removing inbred
+#' identity-by-descent), however, mutations may themselves be subject to
+#' inbreeding (Wray 1990).
+#' 
+#' By default, the algorithm described in Casellas and Medrano (2008) is
+#' implemented here, in which the inverse-M is separate from the typical inverse
+#' relatedness matrix (inverse-A). Casellas and Medrano's algorithm allows
+#' separate partitioning of additive genetic variance attributed to inheritance
+#' of allelic variation present in the base population (inverse-A) from
+#' additive genetic variance arising from mutation and subsequent sharing of
+#' mutant alleles identical-by-descent. Alternatively, Wray (1990) formulates
+#' an algorithm which combines both of these processes (i.e., the A-inverse with
+#' the M-inverse matrices). If the Wray algorithm is desired, this can be
+#' implemented by specifying a numeric value to an argument named \code{theta}.
+#' The value used for \code{theta} should be as described in Wray (1990). See
+#' examples below for use of this argument.
+#'
+#' @aliases makeMinv
+#' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
+#' @param \dots Arguments to be passed to methods
+#'
+#' @return a \code{list}:
+#'   \describe{
+#'     \item{Minv }{the inverse of the (additive) mutational effects
+#'       relationship matrix in sparse matrix form}
+#'     \item{listMinv }{the three column list of the non-zero elements for the 
+#'       inverse of the (additive) mutational effects relationship matrix.
+#'       \code{attr(*, "rowNames")} links the integer for rows/columns to the ID
+#'       column from the pedigree.}
+#'     \item{h }{the amount by which segregation variance is reduced by
+#'       inbreeding. Similar to the individual coefficients of inbreeding (f)
+#'       derived during the construction of the inverse numerator relatedness matrix.
+#'       in the pedigree (matches the order of the first/ID column of the
+#'       pedigree).}
+#'     \item{logDet }{the log determinant of the M matrix}
+#'     \item{dii }{the (non-zero) elements of the diagonal D matrix of the M=TDT'
+#'       decomposition. Contains the variance of Mendelian sampling. Matches
+#'       the order of the first/ID column of the pedigree. Note Wray (1990) and
+#'       Casellas and Medrano (2008) algorithms use \code{v=sqrt(dii)}.} 
+#'   }
+#' @author \email{matthewwolak@@gmail.com}
+#' @references Casellas, J. and J.F. Medrano. 2008. Within-generation mutation
+#' variance for litter size in inbred mice. Genetics. 179:2147-2155. 
+#'
+#' Meuwissen, T.H.E & Luo, Z. 1992. Computing inbreeding
+#' coefficients in large populations. Genetics, Selection, Evolution. 24:305-313.
+#' 
+#' Mrode, R.A. 2005. Linear Models for the Prediction of Animal Breeding
+#' Values, 2nd ed.  Cambridge, MA: CABI Publishing.
+#' 
+#' Wray, N.A. 1990. Accounting for mutation effects in the additive genetic
+#' variance-covariance matrix and its inverse. Biometrics. 46:177-186.
+#' @examples
+#' 
+#'  ##  Example pedigree from Wray 1990
+#'    Wray90 <- data.frame(id = seq(8),
+#'	dam = c(NA, NA, 1, 1, 4, 4, 6, 7),
+#'	sire = c(NA, NA, 2, 2, 3, 2, 5, 5),
+#'	time = c(0, 0, 1, 1, 2, 2, 3, 4))
+#'  #### Implement Casellas & Medrano (2008) algorithm
+#'    Mout <- makeMinv(Wray90[, 1:3])
+#'  #### Wray (1990) algorithm with extra argument `theta`
+#'    Mwray <- makeMinv(Wray90[, 1:3], theta = 10.0)$Minv # compare to Wray p.184
+#' @export
+makeMinv <- function(pedigree, ...){
+  nPed <- numPed(pedigree)
+  N <- nrow(nPed)
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
+  el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
+  sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+    p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+    index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+    dimnames = list(as.character(nPed[, 1]), NULL))
+  Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
+
+  nPed[nPed == -998] <- N + 1
+  # Allow for switching to Wray (1990) algorithm that uses `theta`
+  ## Must provide named argument `theta` with a numeric value
+  new_args <- list(...)
+  if("theta" %in% names(new_args)) theta <- new_args$theta else theta <- 1.0
+
+  Cout <- .C("minvq", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(rep(0, N)),				#h ("f-coeff")
+            as.double(rep(0, N)),  				#dii/v
+            as.integer(N),   					#n
+            as.double(rep(0, length(Minv@i))),  			#xMinv
+	    as.integer(Minv@i), 				#iMinv
+	    as.integer(Minv@p), 				#pMinv
+	    as.double(0),	     				#logDet of M
+	    as.double(theta))					#for Wray90
+
+  Minv <- as(Minv, "dsCMatrix")
+  Minv@x <- Cout[[6]]
+    Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+    Minv <- as(Minv, "dgCMatrix")
+  h <- Cout[[3]]
+  dii <- Cout[[4]]
+
+ return(list(Minv = Minv,
+	listMinv = sm2list(Minv, rownames = rownames(Minv),
+	  colnames = c("row", "column", "Minv")),
+	h = h,
+	logDet = Cout[[9]],
+	dii = dii))
+}
+
+
+
+#' @rdname makeMinv
+#' @export
+makeMinvML <- function(pedigree, ...){
+  nPed <- numPed(pedigree)
+  N <- nrow(nPed)
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
+  el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
+  sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+    p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+    index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+    dimnames = list(as.character(nPed[, 1]), NULL))
+  Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
+
+  nPed[nPed == -998] <- N + 1
+
+  Cout <- .C("minvml", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(rep(0, N)),				#h ("f-coeff")
+            as.double(rep(0, N)),  				#dii
+            as.integer(N),   					#n
+            as.double(rep(0, length(Minv@i))),  			#xMinv
+	    as.integer(Minv@i), 				#iMinv
+	    as.integer(Minv@p), 				#pMinv
+	    as.double(0))	     				#logDet of M
+
+  Minv <- as(Minv, "dsCMatrix")
+  Minv@x <- Cout[[6]]
+    Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+    Minv <- as(Minv, "dgCMatrix")
+  h <- Cout[[3]]
+  dii <- Cout[[4]]
+
+ return(list(Minv = Minv,
+	listMinv = sm2list(Minv, rownames = rownames(Minv),
+	  colnames = c("row", "column", "Minv")),
+	h = h,
+	logDet = Cout[[9]],
+	dii = dii))
+}
+
+
+

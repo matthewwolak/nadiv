@@ -45,7 +45,6 @@
 #' @seealso \code{\link[nadiv]{genAssign}}, \code{\link[nadiv]{prunePed}}
 #' @examples
 #' 
-#' 
 #' # First create an unordered pedigree with (4) missing founders
 #'   warcolak_unsuitable <- warcolak[sample(seq(5, nrow(warcolak), 1),
 #' 	size = (nrow(warcolak) - 4), replace = FALSE), ]
@@ -60,26 +59,33 @@
 #' @export
 prepPed <- function(pedigree, gender = NULL, check = TRUE){
 
+ self <- FALSE
  if(check){      
-   if(length(which(pedigree[, 2] == 0)) > 0){
-     pedigree[which(pedigree[, 2] == 0), 2] <- NA
+   if(length(d0 <- which(pedigree[, 2] == 0)) > 0){
+     pedigree[d0, 2] <- NA
      warning("Zero in the dam column interpreted as a missing parent")
    }
-   if(length(which(pedigree[, 3] == 0)) > 0){
-     pedigree[which(pedigree[, 3] == 0), 3] <- NA
+   if(length(s0 <- which(pedigree[, 3] == 0)) > 0){
+     pedigree[s0, 3] <- NA
      warning("Zero in the sire column interpreted as a missing parent")
    }
-   if(length(which(pedigree[,2] == "*")) > 0) pedigree[which(pedigree[, 2] == "*"), 2] <- NA
-   if(length(which(pedigree[,3] == "*")) > 0) pedigree[which(pedigree[, 3] == "*"), 3] <- NA
+   if(length(dast <- which(pedigree[,2] == "*")) > 0) pedigree[dast, 2] <- NA
+   if(length(sast <- which(pedigree[,3] == "*")) > 0) pedigree[sast, 3] <- NA
    if(all(is.na(pedigree[, 2])) & all(is.na(pedigree[, 3]))){
      stop("All dams and sires are missing")
    }
-   if(any(pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1]))){
+   if(any(idMiss <- pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1]))){
      warning("Missing value in the ID column - row discarded")
      warning("Check to ensure first three columns of the pedigree object are ID, Dam, and Sire")
-     pedigree <- pedigree[-which(pedigree[, 1] == 0 | pedigree[, 1] == "0" | pedigree[, 1] == "*" | is.na(pedigree[, 1])), ]
+     pedigree <- pedigree[-which(idMiss), ]
    }
- }
+
+   if(any(pedigree[!is.na(pedigree[, 2]), 2] %in% pedigree[!is.na(pedigree[, 3]), 3])){
+    self <- TRUE
+    warning("Dams appearing as Sires - assumed selfing in pedigree")
+   }
+
+ }  #<-- end if check
 
   
  facflag <- is.factor(pedigree[, 1])
@@ -90,12 +96,20 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  usire <- usire[!is.na(usire)]
  misssire <- usire[which(is.na(match(usire, pedigree[, 1])))]
 
+
  if(length(missdam) == 0 & length(misssire) == 0){
    ped_fixed <- pedigree
  } else{
-     topPed <- data.frame(c(missdam, misssire), rep(NA, length(missdam) + length(misssire)), rep(NA, length(missdam) + length(misssire)), matrix(NA, nrow = (length(missdam) + length(misssire)), ncol = ncol(pedigree) - 3))
-  names(topPed) <- names(pedigree)
+     missparent <- union(missdam, misssire)
+     topPed <- data.frame(missparent,
+         rep(NA, length(missparent)),
+         rep(NA, length(missparent)),
+         matrix(NA, nrow = length(missparent), ncol = ncol(pedigree) - 3))
+     names(topPed) <- names(pedigree)
      if(!is.null(gender)){
+        if(self | (length(missdam) + length(misssire)) != length(missparent)){
+          warning("Selfing in the pedigree: the gender argument might not apply")
+        }
         if(is.factor(pedigree[, gender])){
           damgender <- as.character(pedigree[which(pedigree[, 1] == udam[which(!udam %in% missdam)][1]), gender]) 
           siregender <- as.character(pedigree[which(pedigree[, 1] == usire[which(!usire %in% misssire)][1]), gender]) 
@@ -127,20 +141,38 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
 	as.integer(rep(0, npf)),
 	as.integer(npf))
 
- ped_fixed_ord <- ped_fixed[order(Cout[[3]], Cout[[4]]), ]
- itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]), silent = TRUE)
- if(class(itwork) == "try-error"){
-   G <- Matrix(FALSE, npf, npf, sparse = TRUE)
-   G[cbind(c(nPed_fixed[which(nPed_fixed[, 2] != -998), 2], nPed_fixed[which(nPed_fixed[, 3] != -998), 3]), c(nPed_fixed[which(nPed_fixed[, 2] != -998), 1], nPed_fixed[which(nPed_fixed[, 3] != -998), 1]))] <- TRUE
-   Gtmp <- G
-   gconv <- Matrix(TRUE, nrow = 1, ncol = npf, sparse = TRUE)
-   gendepth <- rep(0, npf) + as((gconv %*% Gtmp), "ngCMatrix") 
-   while(nnzero(Gtmp) > 0){
-     Gtmp <- Gtmp %*% G
-     gendepth <- gendepth + as((gconv %*% Gtmp), "ngCMatrix") 
+ # check for errors/return values indicating an infinite loop
+ if(Cout[[5]] < npf){
+   infLooper <- Cout[[5]] + 1
+   if(Cout[[3]][1] == -999){
+     cat("\n Problem: infinite pedigree loop involving individual",
+       as.character(ped_fixed[infLooper, 1]), "and dam/female ancestors\n\n")
    }
-   ped_fixed_ord <- ped_fixed[order(as(gendepth, "matrix")), ]
+   if(Cout[[4]][1] == -999){
+     cat("\n Problem: infinite pedigree loop involving individual",
+       as.character(ped_fixed[infLooper, 1]), "and sire/male ancestors\n\n")
+   }
+   stop("Check for individuals that appear as their own ancestor")
  }
+
+  # Order by number of dam/sire paths to dam/sire founder:
+  ## first by parent paths wit MAX then by parent with MIN
+  ped_fixed_ord <- ped_fixed[order(pmax.int(Cout[[3]], Cout[[4]]),
+  				    pmin.int(Cout[[3]], Cout[[4]])), ]
+  				    
+  # Make this into newly oredered numPed (replace existing object "in place")
+  nPed_fixed[] <- numPed(ped_fixed_ord, check = FALSE)
+  generation <- rep(-1, npf)  
+    generation[which(nPed_fixed[, 2] == -998 & nPed_fixed[, 3] == -998)] <- 0
+   
+  Cout <- .C("ga", PACKAGE = "nadiv",
+	as.integer(nPed_fixed[, 2] - 1),
+	as.integer(nPed_fixed[, 3] - 1),
+        as.integer(generation),
+	as.integer(npf))   
+  generation[] <- Cout[[3]]    				    
+  ped_fixed_ord <- ped_fixed_ord[order(generation), ]
+  itwork <- try(expr = numPed(ped_fixed_ord[, 1:3]))
 
  return(ped_fixed_ord) 
 }

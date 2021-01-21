@@ -6,13 +6,27 @@
 \title{Create the dominance genetic relationship matrix through an iterative
 (simulation) process}
 \usage{
-makeDsim(pedigree, N, parallel = FALSE, ncores = getOption("mc.cores",
-  2L), invertD = TRUE, calcSE = FALSE, returnA = FALSE)
+makeDsim(
+  pedigree,
+  N,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L),
+  invertD = TRUE,
+  calcSE = FALSE,
+  returnA = FALSE
+)
 
-makeSdsim(pedigree, heterogametic, N, DosageComp = c(NULL, "ngdc",
-  "hori", "hedo", "hoha", "hopi"), parallel = FALSE,
-  ncores = getOption("mc.cores", 2L), invertSd = TRUE,
-  calcSE = FALSE, returnS = FALSE)
+makeSdsim(
+  pedigree,
+  heterogametic,
+  N,
+  DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L),
+  invertSd = TRUE,
+  calcSE = FALSE,
+  returnS = FALSE
+)
 }
 \arguments{
 \item{pedigree}{A pedigree with columns organized: ID, Dam, Sire. For use
@@ -49,23 +63,22 @@ a \code{list}:
   \describe{
     \item{A,S }{the A or S matrix in sparse matrix form}
     \item{D,Sd }{the approximate D or Sd matrix in sparse matrix form}
-    \item{logDetD,logDetSd }{the log determinant of the approximate D or
+    \item{logDetD,logDetSd }{the log determinant of the D or Sd matrix}
+    \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd
+      matrix in sparse matrix form}
+    \item{listDinv,listSdinv }{the three column form of the non-zero elements 
+      for the inverse of the approximate D matrix or the inverse of the
       approximate Sd matrix}
-   \item{Dinv,Sdinv }{the inverse of the approximate D or approximate Sd
-     matrix in sparse matrix form}
-   \item{listDinv,listSdinv }{the three column form of the non-zero elements 
-     for the inverse of the approximate D matrix or the inverse of the
-     approximate Sd matrix}
-   \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
-   \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or
-     simulated Sd matrix}
-   \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd
-     matrix in sparse matrix form}
-   \item{listDsim,listSdsim }{the three column form of the non-zero and
-     non-self elements for the simulated D or simulated Sd matrix}
-   \item{listDsiminv,listSdsiminv }{the three column form of the non-zero
-     elements for the inverse of the simulated D or the inverse of the 
-     simulated Sd matrix}
+    \item{Dsim,Sdsim }{the simulated D or Sd matrix in sparse matrix form}
+    \item{logDetDsim,logDetSdsim }{the log determinant of the simulated D or
+      simulated Sd matrix}
+    \item{Dsiminv,Sdsiminv }{the inverse of the simulated D or simulated Sd
+      matrix in sparse matrix form}
+    \item{listDsim,listSdsim }{the three column form of the non-zero and
+      non-self elements for the simulated D or simulated Sd matrix}
+    \item{listDsiminv,listSdsiminv }{the three column form of the non-zero
+      elements for the inverse of the simulated D or the inverse of the 
+      simulated Sd matrix}
   }
 }
 \description{

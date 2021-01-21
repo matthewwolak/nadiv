@@ -5,8 +5,12 @@
 \title{Creates the additive genetic relationship matrix for the shared sex
 chromosomes}
 \usage{
-makeS(pedigree, heterogametic, DosageComp = c(NULL, "ngdc", "hori",
-  "hedo", "hoha", "hopi"), returnS = FALSE)
+makeS(
+  pedigree,
+  heterogametic,
+  DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
+  returnS = FALSE
+)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire, Sex}

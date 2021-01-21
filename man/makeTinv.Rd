@@ -2,10 +2,12 @@
 % Please edit documentation in R/makeTinvDF.R
 \name{makeTinv}
 \alias{makeTinv}
+\alias{makeT}
+\alias{makeT.default}
+\alias{makeT.numPed}
 \alias{makeTinv.default}
 \alias{makeTinv.numPed}
 \alias{makeDiiF}
-\alias{makeDiiF2}
 \alias{makeDiiF.default}
 \alias{makeDiiF.numPed}
 \title{Creates components of the additive genetic relationship matrix and its inverse}
@@ -16,6 +18,8 @@ makeTinv(pedigree, ...)
 
 \method{makeTinv}{numPed}(pedigree, ...)
 
+\method{makeT}{default}(pedigree, genCol = NULL, ...)
+
 \method{makeDiiF}{default}(pedigree, f = NULL, ...)
 
 \method{makeDiiF}{numPed}(pedigree, f = NULL, ...)
@@ -24,6 +28,11 @@ makeTinv(pedigree, ...)
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}
 
 \item{\dots}{Arguments to be passed to methods}
+
+\item{genCol}{An integer value indicating the generation up to which the
+\code{T} matrix is to be created (corresponding to columns of the lower
+triangle \code{T} matrix). The first generation is numbered 0, default is
+all generations.}
 
 \item{f}{A numeric indicating the level of inbreeding. See Details}
 }
@@ -52,7 +61,7 @@ Missing parents (e.g., base population) should be denoted by either 'NA',
 The function implements an adaptation of the Meuwissen and Luo (1992)
 algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
-Jarrod Hadfield in the \code{MCMCglmm} package.
+Jarrod Hadfield in the \code{MCMCglmm} package. 
 
 At the moment, providing the inbreeding level of individuals or the base
 population has not been implemented. However, this argument is a placeholder

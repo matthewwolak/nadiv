@@ -18,7 +18,7 @@
 #' 
 #' @param A a sparse matrix
 #' @param rownames a list of rownames from the 'A' matrix.
-#' @param colnames the columns will be labelled however they are entered in
+#' @param colnames the columns will be labeled however they are entered in
 #'   this character vector
 #' @return returns the list form of the sparse matrix as a \code{data.frame}
 #' @seealso \code{\link[MCMCglmm]{MCMCglmm}}

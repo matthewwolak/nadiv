@@ -18,8 +18,13 @@
 #' population has not been implemented. However, this argument is a placeholder
 #' for now.
 #' 
-#' @aliases makeTinv makeTinv.default makeTinv.numPed makeDiiF makeDiiF2
+#' @aliases makeT makeT.default makeT.numPed
+#'   makeTinv makeTinv.default makeTinv.numPed makeDiiF
 #' @param pedigree A pedigree where the columns are ordered ID, Dam, Sire
+#' @param genCol An integer value indicating the generation up to which the
+#'   \code{T} matrix is to be created (corresponding to columns of the lower
+#'   triangle \code{T} matrix). The first generation is numbered 0, default is
+#'   all generations.
 #' @param f A numeric indicating the level of inbreeding. See Details
 #' @param \dots Arguments to be passed to methods
 #'
@@ -108,8 +113,73 @@ makeTinv.numPed <- function(pedigree, ...){
 
 ###############################################################################
 ###############################################################################
+#' @export
+makeT <- function(pedigree, genCol = NULL, ...){
+  UseMethod("makeT", pedigree)
+}
+
+################################
+# Methods:
+#' @rdname makeTinv
+#' @method makeT default
+#' @export
+makeT.default <- function(pedigree, genCol = NULL, ...){
+
+  gen <- genAssign(pedigree)
+    if(is.null(genCol)) genCol <- max(gen)
+  pedOrd <- order(gen, pedigree[, 2], pedigree[, 3])
+  nPed <- numPed(pedigree[pedOrd, 1:3])
+  ogen <- gen[pedOrd]
+  
+  N <- dim(nPed)[1]
+  n0 <- sum(ogen == 0)
+  ncol <- sum(ogen <= genCol)
+  # size of upper part of Tcol (lower-triangle, incl. diagonal, matrix)
+  nlt <- ncol * (ncol + 1) / 2
+  # size of rectangle that is rest of ncols below upper trianglular portion
+  nrect <- (N - ncol) * ncol
 
 
+  Cout <- .C("Trow", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+            as.double(c(rep(1.0, n0),
+              rep(0.0, (nlt - n0) + nrect))),  		        #xTrow
+	    as.integer(c(seq(n0),
+	      rep(0, (nlt - n0) + nrect)) - 1),			#iTrow
+	    as.integer(c((1:n0),
+	      rep(n0 + 1, N - n0 + 1)) - 1), 			#pTrow
+            as.integer(c(ncol, n0, N)))				
+
+
+  nnz <- Cout[[5]][N+1]
+  Trow <- sparseMatrix(i = as.integer(Cout[[4]][1:nnz]),
+    p = as.integer(Cout[[5]]),
+    x = as.double(Cout[[3]][1:nnz]),
+    index1 = FALSE, dims = c(ncol, N), symmetric = FALSE,
+    dimnames = list(NULL, NULL))
+
+  fsOrd <- as(as.integer(pedOrd), "pMatrix")
+  if(ncol == N){
+    T <- crossprod(fsOrd, crossprod(Trow, fsOrd))
+  } else{
+      T <- crossprod(fsOrd,
+        crossprod(rbind(Trow,
+          sparseMatrix(i = as.integer(seq(N-ncol) - 1),
+            j = as.integer(seq(ncol+1, N, 1) - 1),
+            x = rep(1.0, N-ncol),
+            index1 = FALSE, dims = c(N-ncol, N), symmetric = FALSE,
+            dimnames = list(NULL, NULL))),
+        fsOrd))[, gen <= genCol]
+    }          
+ return(T)
+}
+
+
+
+
+###############################################################################
+###############################################################################
 #' @export
 makeDiiF <- function(pedigree, ...){
   UseMethod("makeDiiF", pedigree)
@@ -125,13 +195,15 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
   nPed <- numPed(pedigree[renPed, ])
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
+  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  f <- c(f, -1)
   Cout <- .C("fcoeff", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 				#dam
-	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(f),					#f
-            as.double(rep(0, N)),  				#dii
-            as.integer(N))   					#n
+	    as.integer(nPed[, 2] - 1), 			#dam
+	    as.integer(nPed[, 3] - 1),  		#sire
+	    as.double(f),				#f
+            as.double(rep(0, N)),  			#dii
+            as.integer(N),   				#n
+	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
   dii <- Cout[[4]][t(fsOrd)@perm]
@@ -151,13 +223,15 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
   nPed <- ronPed(pedigree, renPed)
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(0, N), -1)
+  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  f <- c(f, -1)
   Cout <- .C("fcoeff", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
-            as.integer(N))   					#n
+            as.integer(N),   					#n
+	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
   dii <- Cout[[4]][t(fsOrd)@perm]

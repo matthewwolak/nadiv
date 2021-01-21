@@ -11,20 +11,14 @@ Constructs (non)additive genetic relationship matrices, and their inverses,
 from a pedigree to be used in linear mixed effect models (A.K.A. the 'animal
 model'). Also includes other functions to facilitate the use of animal
 models. Some functions have been created to be used in conjunction with the
-R package for 'ASReml' software, which can be obtained upon purchase from
-'VSN' international (<http://www.vsni.co.uk/software/asreml>).
-}
-\examples{
-#TODO: simple examples of the most important functions
-\dontrun{
-  
-}
+R package for ASReml software, which can be obtained upon purchase from
+VSN international (<https://www.vsni.co.uk/software/asreml>).
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://github.com/matthewwolak/nadiv}
-  \item Report bugs at \url{http://github.com/matthewwolak/nadiv/issues}
+  \item \url{https://github.com/matthewwolak/nadiv}
+  \item Report bugs at \url{https://github.com/matthewwolak/nadiv/issues}
 }
 
 }

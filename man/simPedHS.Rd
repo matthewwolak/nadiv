@@ -16,7 +16,7 @@ simPedHS(s, d, n, uniqueDname = TRUE, prefix = NULL)
 \item{uniqueDname}{Logical indicating if dams should have unique names
 within sire families or throughout the entire pedigree}
 
-\item{prefix}{Optional prefix to every identity}
+\item{prefix}{Optional prefix to add to every identity}
 }
 \value{
 A \code{data.frame} with columns corresponding to: id, dam, sire,

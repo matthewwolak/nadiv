@@ -4,8 +4,8 @@
 #' from a pedigree to be used in linear mixed effect models (A.K.A. the 'animal
 #' model'). Also includes other functions to facilitate the use of animal
 #' models. Some functions have been created to be used in conjunction with the
-#' R package for 'ASReml' software, which can be obtained upon purchase from
-#' 'VSN' international (<http://www.vsni.co.uk/software/asreml>).
+#' R package for ASReml software, which can be obtained upon purchase from
+#' VSN international (<https://www.vsni.co.uk/software/asreml>).
 #' 
 #' @aliases nadiv-package nadiv
 #' @useDynLib nadiv, .registration = TRUE
@@ -15,11 +15,6 @@
 #' @importFrom stats pchisq qchisq qnorm rnorm sd
 #' @import Matrix
 #' @author Matthew Wolak \email{matthewwolak@@gmail.com}
-#' @examples
-#' #TODO: simple examples of the most important functions
-#' \dontrun{
-#'   
-#' }
 "_PACKAGE"
 
 

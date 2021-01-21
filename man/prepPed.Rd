@@ -57,7 +57,6 @@ values and validity of the basic pedigree for further processing.
 }
 \examples{
 
-
 # First create an unordered pedigree with (4) missing founders
   warcolak_unsuitable <- warcolak[sample(seq(5, nrow(warcolak), 1),
 	size = (nrow(warcolak) - 4), replace = FALSE), ]

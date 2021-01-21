@@ -65,12 +65,12 @@ makeSd <- function(pedigree, heterogametic,
 		as.integer(0),				# [[10]] cnt/count
 		as.integer(sex))	      		# [[11]] sex                  
 
-     Sd <- Matrix(0, nhom, nhom,
-	sparse = TRUE, dimnames = list(as.character(pedigree[homs, 1]), NULL))
-     Sd@uplo <- "U"
-     Sd@i <- Cout[[8]][1:Cout[[10]]]
-     Sd@p <- Cout[[9]][1:(nhom+1)]
-     Sd@x <- Cout[[7]][1:Cout[[10]]]
+     Sd <- sparseMatrix(i = Cout[[8]][1:Cout[[10]]],
+     		p = Cout[[9]][1:(nhom+1)],
+     		x = Cout[[7]][1:Cout[[10]]],
+     		dims = c(nhom, nhom),
+     		dimnames = list(as.character(pedigree[homs, 1]), NULL),
+     		symmetric = TRUE, index1 = FALSE)
      diag(Sd) <- 1 - Sout$inbreeding[homs]
 
      if(!returnS) S <- NULL
@@ -99,12 +99,8 @@ stop("code not yet written to parallelize function") #FIXME
 #        cat("starting to make D...")
 #        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
-#        D <- Matrix(0, N, N, sparse = TRUE, dimnames = list(as.character(pedigree[, 1]), NULL))
-#        D@uplo <- "U"
-#        D@i <- A@i
-#        D@p <- A@p
+#        D <- sparseMatrix(i = A@i, p = A@p, x = Dijs, ...)
 #        if(!returnA) A <- NULL
-#        D@x <- Dijs
 #        D <- drop0(D)
 #        diag(D) <- 2 - dA
 
