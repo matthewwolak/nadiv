@@ -1,3 +1,5 @@
+# 2.17.1
+
 # 2.17.0 Released to CRAN 14 January 2021
 ## NEW
   * `makeMinv()` creates the inverse of the (additive) mutational effects relatedness matrix.
