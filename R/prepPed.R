@@ -160,8 +160,8 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
   ped_fixed_ord <- ped_fixed[order(pmax.int(Cout[[3]], Cout[[4]]),
   				    pmin.int(Cout[[3]], Cout[[4]])), ]
   				    
-  # Make this into newly oredered numPed (replace existing object "in place")
-  nPed_fixed[] <- numPed(ped_fixed_ord, check = FALSE)
+  # Make this into newly ordered numPed (replace existing object)
+  nPed_fixed <- numPed(ped_fixed_ord, check = FALSE)
   generation <- rep(-1, npf)  
     generation[which(nPed_fixed[, 2] == -998 & nPed_fixed[, 3] == -998)] <- 0
    
