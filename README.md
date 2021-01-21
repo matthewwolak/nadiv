@@ -21,7 +21,7 @@ R package that constructs (non)additive genetic relationship matrices, and their
    
  * From GitHub:
    * clone or download the latest development version here
-   * install the latest development version directly in R using the `devtools` package [https://github.com/hadley/devtools](https://github.com/r-lib/devtools):
+   * install the latest development version directly in R using the `devtools` package [https://github.com/r-lib/devtools](https://github.com/r-lib/devtools):
    ```R
    library(devtools); install_github("matthewwolak/nadiv")
    ```
