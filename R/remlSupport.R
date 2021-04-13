@@ -9,6 +9,12 @@
 
 #' Approximate standard errors for linear functions of variance components
 #' 
+#' This function is Deprecated and will be removed in a future version. The pin
+#' function works with an asreml-R version 3 model object. Since ASReml has
+#' updated to version 4, they have changed their model output. ASReml has also
+#' provided their own \code{vpredict} function that does (for asreml v4 model
+#' objects) what \code{pin} did for asreml v3 model objects.
+#'
 #' This function is similar to the pin calculations performed by the standalone
 #' ASReml.  This function, written by Ian White, applies the delta method for
 #' the estimation of approximate standard errors on linear functions of
@@ -31,20 +37,23 @@
 #'   corresponding to the \code{Estimate} and approximate \code{SE} of the 
 #'   linear transformation.
 #' @author Ian White
-#' @seealso See Also as \code{\link{aiCI}}, \code{\link{aiFun}}
-#' @examples
-#' 
-#' # Below is the heritability calculation for tait1 of the warcolak dataset
-#' # Re-create the output from a basic, univariate animal model in asreml-R
-#'    asrMod <- list(gammas = c(0.6383285, 1.00),
-#' 	gammas.type = c(2, 1),
-#' 	ai = c(0.0044461106, -0.0011754947, 0.0004424668))
-#'    namevec <- c("ped(ID)!ped", "R!variance")
-#'    names(asrMod[[1]]) <- names(asrMod[[2]]) <- namevec
-#' 
-#'    nadiv:::pin(asrMod, h2 ~ V1 / (V1 + V2))
+#' @name pin-deprecated
+#' @usage pin(object, transform)
+#' @seealso See Also \code{\link{nadiv-deprecated}},  \code{\link{aiCI}},
+#'   \code{\link{aiFun}}
+#' @keywords internal
+NULL
+
+
+#' @rdname nadiv-deprecated
+#' @section \code{pin}:
+#' For \code{pin} with asreml version 4 objects, use \code{asreml::vpredict}
+#'
 #' @export
 pin <- function (object, transform){
+  .Deprecated("vpredict", package = "asreml",
+    msg = "This function works with an asreml-R version 3 model object. Since ASReml has updated to version 4, they have changed their model output. ASReml has also provided their own 'asreml::vpredict' function that does (for asreml v4 model objects) what 'nadiv::pin' did for asreml v3 model objects.")
+    
   pframe <- as.list(object$gammas)
   names(pframe) <- paste("V", seq(1, length(pframe)), sep = "")
   tvalue <- eval(deriv(transform[[length(transform)]], names(pframe)), pframe)
