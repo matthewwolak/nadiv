@@ -4,34 +4,29 @@
 ////////////////////////////////////////////////
 //   based on M&L 1992 algorithm (for `ainvml`)
 //   as presented in Mrode 2005
-extern "C"{  
 
-void fcoeff(
-	int *dam,
-	int *sire,
-	double *f,
-	double *dii,
-	int *n,
-	int *fmiss
+void ml(int *dam, int *sire,
+	double *f, double *dii,
+	int n, int fmiss
 ){
 
   int     j, k, h, cnt, sj, dj;
   double  ai;
-  double  *AN = new double[2*n[0]];
-  double  *li = new double[n[0]];
+  double  *AN = new double[2*n];
+  double  *li = new double[n];
 
-  for(k = 0; k < n[0]; k++){
+  for(k = 0; k < n; ++k){
      li[k] = 0.0;               // set l to zero
   }
-  for(k = 0; k < n[0]; k++){
+  for(k = 0; k < n; ++k){
      AN[k] = -1;               // set AN to "zero" 
                                //// (since an ID is 0, make 1 less than lowest ID)
   }
 
-  for(k = 0; k < n[0]; k++){  // iterate through each row of l 
+  for(k = 0; k < n; ++k){  // iterate through each row of l 
     dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
     
-    if(fmiss[0] == 1){  // only do below if f coefficients NOT supplied by user
+    if(fmiss == 1){  // only do below if f coefficients NOT supplied by user
       if((k > 0) && (dam[k] == dam[k-1]) && (sire[k] == sire[k-1])){
         f[k] += f[k-1];
       } 
@@ -44,36 +39,36 @@ void fcoeff(
           sj = sire[j];
           dj = dam[j];
 
-          if(sj != n[0]){
+          if(sj != n){
             AN[cnt] = sj;
             li[sj] += 0.5*li[j];
-            cnt++;
+            ++cnt;
           }
 
-          if(dj != n[0]){
+          if(dj != n){
             AN[cnt] = dj;
             li[dj] += 0.5*li[j];
-            cnt++;
+            ++cnt;
           }
 
           ai += li[j]*li[j]*dii[j];
-          j -= n[0];             // set to value lower than all known identities
+          j -= n;             // set to value lower than all known identities
 
-          for(h = 0; h < cnt; h++){   // find eldest individual
+          for(h = 0; h < cnt; ++h){   // find eldest individual
             if(AN[h] > j){
               j = AN[h];
             }
           }
-          for(h = 0; h < cnt; h++){   // delete duplicates
+          for(h = 0; h < cnt; ++h){   // delete duplicates
             if(AN[h] == j){
-              AN[h] -= n[0];    // set to value lower than all known identities
+              AN[h] -= n;    // set to value lower than all known identities
             }
           }
         }  // end of while
         
         f[k] = ai - 1.0;
 
-        for(h = 0; h <= k; h++){
+        for(h = 0; h <= k; ++h){
           li[h] = 0.0;            // reset l to zero
         }
 
@@ -82,9 +77,26 @@ void fcoeff(
   } // end of for
   delete[] AN;
   delete[] li;
+
+}
+  
+
+
+// R-interface/wrapper for M&L routine
+extern "C"{  
+
+void fcoeff(
+	int *dam,
+	int *sire,
+	double *f,
+	double *dii,
+	int *n,
+	int *fmiss
+){
+
+  // Meuwissen and Luo 1992 algorithm to obtain f and dii values
+  ml(dam, sire, f, dii, n[0], fmiss[0]);
 }
 }  
-
-
 
 
