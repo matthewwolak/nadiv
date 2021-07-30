@@ -7,5 +7,5 @@
 //   as presented in Mrode 2005
 void ml(int *dam, int *sire,
 	double *f, double *dii,
-	int n, int fmiss);
+	int n, int g, int fmiss);
 

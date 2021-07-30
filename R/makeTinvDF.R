@@ -203,6 +203,7 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
 	    as.double(f),				#f
             as.double(rep(0, N)),  			#dii
             as.integer(N),   				#n
+            as.integer(0),				#number genetic groups
 	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
@@ -231,6 +232,7 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
 	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
             as.integer(N),   					#n
+            as.integer(0),				#number genetic groups
 	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]

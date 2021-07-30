@@ -7,7 +7,7 @@
 
 void ml(int *dam, int *sire,
 	double *f, double *dii,
-	int n, int fmiss
+	int n, int g, int fmiss
 ){
 
   int     j, k, h, cnt, sj, dj;
@@ -15,15 +15,15 @@ void ml(int *dam, int *sire,
   double  *AN = new double[2*n];
   double  *li = new double[n];
 
-  for(k = 0; k < n; ++k){
+  for(k = g; k < n; ++k){
      li[k] = 0.0;               // set l to zero
   }
-  for(k = 0; k < n; ++k){
+  for(k = g; k < n; ++k){
      AN[k] = -1;               // set AN to "zero" 
                                //// (since an ID is 0, make 1 less than lowest ID)
   }
 
-  for(k = 0; k < n; ++k){  // iterate through each row of l 
+  for(k = g; k < n; ++k){  // iterate through each row of l 
     dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
     
     if(fmiss == 1){  // only do below if f coefficients NOT supplied by user
@@ -39,13 +39,13 @@ void ml(int *dam, int *sire,
           sj = sire[j];
           dj = dam[j];
 
-          if(sj != n){
+          if((sj >= g) && (sj != n)){
             AN[cnt] = sj;
             li[sj] += 0.5*li[j];
             ++cnt;
           }
 
-          if(dj != n){
+          if((dj >= g) && (dj != n)){
             AN[cnt] = dj;
             li[dj] += 0.5*li[j];
             ++cnt;
@@ -91,11 +91,12 @@ void fcoeff(
 	double *f,
 	double *dii,
 	int *n,
+	int *g,
 	int *fmiss
 ){
 
   // Meuwissen and Luo 1992 algorithm to obtain f and dii values
-  ml(dam, sire, f, dii, n[0], fmiss[0]);
+  ml(dam, sire, f, dii, n[0], g[0], fmiss[0]);
 }
 }  
 
