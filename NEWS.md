@@ -1,5 +1,9 @@
 #2.17.2
 
+## NEW
+  * `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
+    - `proLik()` is kept to retain compatibility with asreml v3 model objects
+  
 # DEPRECATED
   - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
     - will not support this in the future as asreml v4 has `vpredict()`
