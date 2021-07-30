@@ -2,9 +2,9 @@
 % Please edit documentation in R/proLik.R
 \name{proLik}
 \alias{proLik}
+\alias{proLik4}
 \alias{is.proLik}
 \alias{plot.proLik}
-\alias{proLik4}
 \title{Profile Likelihoods}
 \usage{
 proLik(
@@ -53,8 +53,8 @@ proLik4(
 be a \code{formula}) indicating for which variance component the
 profile likelihood will be constructed. For \code{proLik}, must be an object
 in \code{full.model$gammas}. For \code{proLik4}, must be an object in 
-\code{full.model$vparameters}. To specify a \code{formula}, components are
-specified as \code{Vx}, where \dQuote{x} is a number between 1 and
+\code{full.model$vparameters}. To specify as a \code{formula}, components are
+written as \code{Vx}, where \dQuote{x} is a number between 1 and
 \code{length(full.model$vparameters)} (e.g., \code{component = ~ V1}).}
 
 \item{G}{Logical indicating whether component is part of the G structure. If
