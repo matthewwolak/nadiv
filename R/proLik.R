@@ -229,8 +229,17 @@ proLik <- function(full.model, component,
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
 	component = component,
-	alpha = alpha), class = "proLik"))
+	alpha = alpha),
+  class = c("proLik", class(prof))))
 }
+
+
+
+
+
+
+
+
 
 
 ################################################################################
@@ -471,13 +480,14 @@ proLik4 <- function(full.model, component,
   if(UCL[[2L]] > chi.tol) UCL[[1L]] <- NA
   if(LCL[[2L]] > chi.tol) LCL[[1L]] <- NA
 
-  
+
  return(structure(list(lambdas = prof$lambdas[ord.index], 
 	var.estimates = prof$var.estimates[ord.index] * s2, 
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
 	component = component,
-	alpha = alpha), class = "proLik"))
+	alpha = alpha),
+  class = c("proLik", class(prof))))
 }
 
 ################################################################################
