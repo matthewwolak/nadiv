@@ -654,7 +654,7 @@ void ainvfuzz(
 
 
 ///////////////////////////////////////////////////////////////////////
-//	Used in makeA()
+//     *Previously* used in makeA() (kept in case need again in future)
 ////   based on Hadfield's implementation of 
 ////   in MCMCglmm (nadiv < v2.13.4)
 
