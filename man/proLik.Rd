@@ -4,9 +4,23 @@
 \alias{proLik}
 \alias{is.proLik}
 \alias{plot.proLik}
+\alias{proLik4}
 \title{Profile Likelihoods}
 \usage{
 proLik(
+  full.model,
+  component,
+  G = TRUE,
+  negative = FALSE,
+  nsample.units = 3,
+  nse = 3,
+  alpha = 0.05,
+  tolerance = 0.001,
+  parallel = FALSE,
+  ncores = getOption("mc.cores", 2L)
+)
+
+proLik4(
   full.model,
   component,
   G = TRUE,
@@ -35,9 +49,13 @@ proLik(
 \arguments{
 \item{full.model}{An \code{asreml} model object}
 
-\item{component}{A character indicating for which variance component the
-profile likelihood will be constructed. Must be an object in
-\code{full.model$gammas}.}
+\item{component}{A character (alternatively for \code{proLik4} this could also
+be a \code{formula}) indicating for which variance component the
+profile likelihood will be constructed. For \code{proLik}, must be an object
+in \code{full.model$gammas}. For \code{proLik4}, must be an object in 
+\code{full.model$vparameters}. To specify a \code{formula}, components are
+specified as \code{Vx}, where \dQuote{x} is a number between 1 and
+\code{length(full.model$vparameters)} (e.g., \code{component = ~ V1}).}
 
 \item{G}{Logical indicating whether component is part of the G structure. If
 the component is part of the R structure, G = FALSE.}

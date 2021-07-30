@@ -26,14 +26,14 @@
 #' explicitly specifying the R structure of the ASReml model. See example
 #' below.
 #' 
-#' @aliases proLik is.proLik plot.proLik
+#' @aliases proLik proLik4 is.proLik plot.proLik
 #' @param full.model An \code{asreml} model object
 #' @param component A character (alternatively for \code{proLik4} this could also
 #'   be a \code{formula}) indicating for which variance component the
 #'   profile likelihood will be constructed. For \code{proLik}, must be an object
 #'   in \code{full.model$gammas}. For \code{proLik4}, must be an object in 
-#'   \code{full.model$vparameters}. To specify a \code{formula}, components are
-#'   specified as \code{Vx}, where \dQuote{x} is a number between 1 and
+#'   \code{full.model$vparameters}. To specify as a \code{formula}, components are
+#'   written as \code{Vx}, where \dQuote{x} is a number between 1 and
 #'   \code{length(full.model$vparameters)} (e.g., \code{component = ~ V1}).
 #' @param G Logical indicating whether component is part of the G structure. If
 #'   the component is part of the R structure, G = FALSE.
