@@ -222,9 +222,10 @@ void minvml(
   double  *u = new double[n[0]];
   
   for(k = 0; k < n[0]; k++){
-     li[k]=0.0;               // set l to zero
-     AN[k]=-1;                // set AN to zero
-     u[k] = 0.0;              // set u to zero
+     li[k] = 0.0;               // set l to zero
+     AN[k] = -1;                // set AN to "zero" 
+                                //// (since an ID is 0, make 1 less than lowest ID)
+     u[k] = 0.0;               // set u to zero
   }
 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
@@ -273,7 +274,7 @@ void minvml(
       u[k] += li[j] * li[j] * dii[j];
       g += li[j];
       
-      j =- 1;
+      j -= n[0];             // set to value lower than all known identities
       
       for(m = 0; m < cnt; m++){    // find the eldest individual
         if(AN[m] > j){

@@ -170,56 +170,56 @@ void ainvfuzz(
   double  *li = new double[n[0]];
 
   for(k = g[0]; k < n[0]; k++){
-     li[k]=0.0;               // set l to zero
+     li[k] = 0.0;               // set l to zero
   }
   for(k = g[0]; k < n[0]; k++){
      AN[k] = -1;               // set AN to "zero" 
                                //// (since an ID is 0, make 1 less than lowest ID)
   }
 
-  for(k = g[0]; k<n[0]; k++){  // iterate through each row of l 
-    dii[k] = 0.5-0.25*(f[dam[k]]+f[sire[k]]);
+  for(k = g[0]; k < n[0]; k++){  // iterate through each row of l 
+    dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
     if((k > 0) && (phdam[k] == phdam[k-1]) && (phsire[k] == phsire[k-1])){
       f[k] += f[k-1];
     } 
     else {
-      li[k] = 1.0;                   // set l_ii to one
-      ai=0.0;                        // set a_ii to zero
-      j=k;
-      cnt=0;
-      while(j>=0){
-        sj=sire[j];
-        dj=dam[j];
+      li[k] = 1.0;                     // set l_ii to one
+      ai = 0.0;                        // set a_ii to zero
+      j = k;
+      cnt = 0;
+      while(j >= 0){
+        sj = sire[j];
+        dj = dam[j];
 
-        if((sj >= g[0]) && (sj!= n[0])){
+        if((sj >= g[0]) && (sj != n[0])){
           AN[cnt] = sj;
           li[sj] += 0.5*li[j];
           cnt++;
         }
 
-        if((dj >= g[0]) && (dj!= n[0])){ 
+        if((dj >= g[0]) && (dj != n[0])){ 
           AN[cnt] = dj;
           li[dj] += 0.5*li[j];
           cnt++;
         }
 
         ai += li[j]*li[j]*dii[j];
-        j=-1;
+        j -= n[0];     // set to value lower than all known identities
 
-        for(h=0; h<cnt; h++){   // find eldest individual
-          if(AN[h]>j){
+        for(h = 0; h < cnt; h++){   // find eldest individual
+          if(AN[h] > j){
             j = AN[h];
           }
         }
-        for(h=0; h<cnt; h++){   // delete duplicates
-          if(AN[h]==j){
-            AN[h] -= n[0]; 
+        for(h = 0; h < cnt; h++){   // delete duplicates
+          if(AN[h] == j){
+            AN[h] -= n[0];      // set to value lower than all known identities 
           }
         }
       }  // end of while
       f[k] = ai-1.0;
-      for(h=0; h<=k; h++){
-        li[h]  = 0.0;            // reset l to zero except l_ii =1
+      for(h = 0; h <= k; h++){
+        li[h] = 0.0;            // reset l to zero
       }
 
     } // end else for checking if k has same parents as k-1
@@ -269,8 +269,8 @@ void ainvfuzz(
               step = lb/2;
               it = h + step;
               if(iA[it] < k){
-                h=++it;
-                lb-=step+1;
+                h = ++it;
+                lb -= step+1;
               }
               else lb = step;
             }
@@ -290,8 +290,8 @@ void ainvfuzz(
                     step = lb/2;
                     it = i + step;
                     if(iA[it] < s){
-                      i=++it;
-                      lb-=step+1;
+                      i = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -317,16 +317,16 @@ void ainvfuzz(
             pik += xF[j];
             // k,dam-group d
             aistart = pA[d];
-            h  =aistart;
+            h = aistart;
             lb = pA[d+1] - 1 - h;
             while(lb > 0){
               step = lb/2;
               it = h + step;
               if(iA[it] < k){
-                h=++it;
-                lb-=step+1;
+                h = ++it;
+                lb -= step+1;
               }
-              else lb  =step;
+              else lb = step;
             }
             if(iA[h] == k) xA[h] += alphai * -2.0 * pik;
 
@@ -338,14 +338,14 @@ void ainvfuzz(
                   pikp += xF[h];
                   // group, k's dam's-group dp
                   aistart = pA[dp];
-                  i  =aistart;
+                  i = aistart;
                   lb = pA[dp+1] - 1 - i;
                   while(lb > 0){
                     step = lb/2;
                     it = i + step;
                     if(iA[it] < d){
-                      i=++it;
-                      lb-=step+1;
+                      i = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -384,8 +384,8 @@ void ainvfuzz(
                       step = lb/2;
                       it = i + step;
                       if(iA[it] < max(s, d)){
-                        i=++it;
-                        lb-=step+1;
+                        i = ++it;
+                        lb -= step+1;
                       }
                       else lb = step;
                     }
@@ -448,8 +448,8 @@ void ainvfuzz(
                     step = lb/2;
                     it = i + step;
                     if(iA[it] < s){
-                      i=++it;
-                      lb-=step+1;
+                      i = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -475,8 +475,8 @@ void ainvfuzz(
         step = lb/2;
         it = j + step;
         if(iA[it] < k){
-          j=++it;
-          lb-=step+1;
+          j = ++it;
+          lb -= step+1;
         }
         else lb = step;
       }
@@ -501,8 +501,8 @@ void ainvfuzz(
         step = lb/2;
         it = j + step;
         if(iA[it] < k){
-          j=++it;
-          lb-=step+1;
+          j = ++it;
+          lb -= step+1;
         }
         else lb = step;
       }
@@ -541,8 +541,8 @@ void ainvfuzz(
                     step = lb/2;
                     it= i + step;
                     if(iA[it] < d){
-                      i=++it;
-                      lb-=step+1;
+                      i = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
