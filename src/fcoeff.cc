@@ -24,7 +24,8 @@ void fcoeff(
      li[k] = 0.0;               // set l to zero
   }
   for(k = 0; k < n[0]; k++){
-     AN[k] = -1;               // set AN to zero
+     AN[k] = -1;               // set AN to "zero" 
+                               //// (since an ID is 0, make 1 less than lowest ID)
   }
 
   for(k = 0; k < n[0]; k++){  // iterate through each row of l 
@@ -36,7 +37,7 @@ void fcoeff(
       } 
       else {
         li[k] = 1.0;                   // set l_ii to one
-        ai = 0.0;                        // set a_ii to zero
+        ai = 0.0;                      // set a_ii to zero
         j = k;
         cnt = 0;
         while(j >= 0){
@@ -56,7 +57,7 @@ void fcoeff(
           }
 
           ai += li[j]*li[j]*dii[j];
-          j =- 1;
+          j -= n[0];             // set to value lower than all known identities
 
           for(h = 0; h < cnt; h++){   // find eldest individual
             if(AN[h] > j){
@@ -65,13 +66,15 @@ void fcoeff(
           }
           for(h = 0; h < cnt; h++){   // delete duplicates
             if(AN[h] == j){
-              AN[h] -= n[0];
+              AN[h] -= n[0];    // set to value lower than all known identities
             }
           }
         }  // end of while
-        f[k] = ai-1.0;
+        
+        f[k] = ai - 1.0;
+
         for(h = 0; h <= k; h++){
-          li[h]  = 0.0;            // reset l to zero except l_ii =1
+          li[h] = 0.0;            // reset l to zero
         }
 
       } // end else for checking if k has same parents as k-1

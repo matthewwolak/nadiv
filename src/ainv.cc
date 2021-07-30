@@ -25,26 +25,26 @@ void ainvml(
   double  *AN = new double[2*n[0]];
   double  *li = new double[n[0]];
 
-  for(k=g[0]; k<n[0]; k++){
-     li[k]=0.0;               // set l to zero
+  for(k = g[0]; k < n[0]; k++){
+     li[k] = 0.0;               // set l to zero
   }
-  for(k=g[0]; k<n[0]; k++){
-     AN[k]=-1;               // set AN to zero
+  for(k = g[0]; k <n [0]; k++){
+     AN[k] = -1;               // set AN to zero
   }
 
-  for(k=g[0]; k<n[0]; k++){  // iterate through each row of l 
-    dii[k] = 0.5-0.25*(f[dam[k]]+f[sire[k]]);
+  for(k = g[0]; k < n[0]; k++){  // iterate through each row of l 
+    dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
     if((k > 0) && (dam[k] == dam[k-1]) && (sire[k] == sire[k-1])){
       f[k] += f[k-1];
     } 
     else {
       li[k] = 1.0;                   // set l_ii to one
-      ai=0.0;                        // set a_ii to zero
-      j=k;
-      cnt=0;
-      while(j>=0){
-        sj=sire[j];
-        dj=dam[j];
+      ai = 0.0;                      // set a_ii to zero
+      j = k;
+      cnt = 0;
+      while(j >= 0){
+        sj = sire[j];
+        dj = dam[j];
 
         if((sj >= g[0]) && (sj!= n[0])){
           AN[cnt] = sj;
