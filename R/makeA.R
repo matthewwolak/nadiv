@@ -36,7 +36,8 @@ makeA <- function(pedigree)
             as.integer(N),   				#n
 	    as.integer(1))	#FIXME placeholder	#f missing or supplied
   nPed[nPed == (N+1)] <- -998
-  A <- as(chol2inv(t(crossprod(makeTinv(nPed), Diagonal(x = sqrt(1 / Cout[[4]]), n = N)))), "symmetricMatrix")
+  A <- as(chol2inv(t(crossprod(makeTinv(nPed),
+      Diagonal(x = sqrt(1 / Cout[[4]]), n = N)))), "symmetricMatrix")
     A@Dimnames <- list(as.character(pedigree[, 1]),
 			as.character(pedigree[, 1]))
  A
