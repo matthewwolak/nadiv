@@ -4,7 +4,7 @@
 ////////////////////////////////////////////////
 //   based on M&L 1992 algorithm (for `ainvml`)
 //   as presented in Mrode 2005
-
+//// replaces elements of f and dii with calculated values in place
 void ml(int *dam, int *sire,
 	double *f, double *dii,
 	int n, int g, int fmiss

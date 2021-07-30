@@ -1,5 +1,6 @@
 #include "nadivcc.h"
 
+
 //////////////////////////////////////
 //   M&L 1992 algorithm 
 //   as presented in Mrode 2005
@@ -20,65 +21,15 @@ void ainvml(
 	int *nzmaxA
 ){         
 
-  int     lb, step, it, j, k, h, cnt, sj, dj, istart;
-  double  ai, alphai;
-  double  *AN = new double[2*n[0]];
-  double  *li = new double[n[0]];
+  int     lb, step, it, k, h, sj, dj, istart;
+  double  alphai;
 
-  for(k = g[0]; k < n[0]; k++){
-     li[k] = 0.0;               // set l to zero
-  }
-  for(k = g[0]; k <n [0]; k++){
-     AN[k] = -1;               // set AN to zero
-  }
 
-  for(k = g[0]; k < n[0]; k++){  // iterate through each row of l 
-    dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
-    if((k > 0) && (dam[k] == dam[k-1]) && (sire[k] == sire[k-1])){
-      f[k] += f[k-1];
-    } 
-    else {
-      li[k] = 1.0;                   // set l_ii to one
-      ai = 0.0;                      // set a_ii to zero
-      j = k;
-      cnt = 0;
-      while(j >= 0){
-        sj = sire[j];
-        dj = dam[j];
+  // Meuwissen and Luo 1992 algorithm to obtain f and dii values
+  //TODO FIXME: last argument assumes f NOT supplied by user
+  ml(dam, sire, f, dii, n[0], g[0], 1);
 
-        if((sj >= g[0]) && (sj!= n[0])){
-          AN[cnt] = sj;
-          li[sj] += 0.5*li[j];
-          cnt++;
-        }
-
-        if((dj >= g[0]) && (dj!= n[0])){
-          AN[cnt] = dj;
-          li[dj] += 0.5*li[j];
-          cnt++;
-        }
-
-        ai += li[j]*li[j]*dii[j];
-        j=-1;
-
-        for(h=0; h<cnt; h++){   // find eldest individual
-          if(AN[h]>j){
-            j = AN[h];
-          }
-        }
-        for(h=0; h<cnt; h++){   // delete duplicates
-          if(AN[h]==j){
-            AN[h] -= n[0];
-          }
-        }
-      }  // end of while
-      f[k] = ai-1.0;
-      for(h=0; h<=k; h++){
-        li[h]  = 0.0;            // reset l to zero except l_ii =1
-      }
-
-    } // end else for checking if k has same parents as k-1
-
+  for(k = g[0]; k < n[0]; ++k){  // iterate through each individual (not groups)
     // check to see if k has 2 phantom parents from same genetic group
     sj = sire[k];
     dj = dam[k];
@@ -92,8 +43,8 @@ void ainvml(
         step = lb/2;
         it = h + step;
         if(iA[it] < k){
-          h=++it;
-          lb-=step+1;
+          h = ++it;
+          lb -= step + 1;
         }
         else lb = step;
       }  // end while
@@ -116,16 +67,16 @@ void ainvml(
               lb = pA[sj+1] - 1 - h;
               while(lb > 0){
                 step = lb/2;
-                it= h + step;
+                it = h + step;
                 if(iA[it] < dj){
-                  h=++it;
-                  lb-=step+1;
+                  h = ++it;
+                  lb -= step+1;
                 }
                 else lb = step;
               }
               if(iA[h] == dj) xA[h] += alphai;
             }
-         }
+         }  // end if sj <= dj
          // sire,k
          h = istart;
          lb = pA[sj+1] - 1 - h;
@@ -133,13 +84,13 @@ void ainvml(
            step = lb/2;
            it = h + step;
            if(iA[it] < k){
-             h=++it;
-             lb-=step+1;
+             h = ++it;
+             lb -= step+1;
            }
            else lb = step;
          }
          if(iA[h] == k) xA[h] += alphai * -2.0;
-      }
+      } // end if sj not missing
       if(dj != n[0]){
          istart = pA[dj];
          // dam,dam
@@ -152,11 +103,11 @@ void ainvml(
            step = lb/2;
            it = h + step;
            if(iA[it] < k){
-             h=++it;
-             lb-=step+1;
+             h = ++it;
+             lb -= step+1;
            }
            else lb = step;
-         }
+         } // end while
          if(iA[h] == k) xA[h] += alphai * -2.0;
          // dam,sire
          if(dj <= sj){
@@ -167,21 +118,23 @@ void ainvml(
                 step = lb/2;
                 it = h + step;
                 if(iA[it] < sj){
-                  h=++it;
-                  lb-=step+1;
+                  h = ++it;
+                  lb -= step+1;
                 }
                 else lb = step;
-              }
+              } // end while
               if(iA[h] == sj) xA[h] += alphai;
-            }
-         }
-       }
-    }
-  } // end of for
-  delete[] AN;
-  delete[] li;
+            } // end if sj not missing
+         } // end if dj <= sj
+       } // end if dj not missing
+    } // end else k doesn't have 2 phantom parents from same group
+  } // end for k
+
 }
 }
+
+
+
 
 
 
@@ -216,14 +169,15 @@ void ainvfuzz(
   double  *AN = new double[2*n[0]];
   double  *li = new double[n[0]];
 
-  for(k=g[0]; k<n[0]; k++){
+  for(k = g[0]; k < n[0]; k++){
      li[k]=0.0;               // set l to zero
   }
-  for(k=g[0]; k<n[0]; k++){
-     AN[k]=-1;               // set AN to zero
+  for(k = g[0]; k < n[0]; k++){
+     AN[k] = -1;               // set AN to "zero" 
+                               //// (since an ID is 0, make 1 less than lowest ID)
   }
 
-  for(k=g[0]; k<n[0]; k++){  // iterate through each row of l 
+  for(k = g[0]; k<n[0]; k++){  // iterate through each row of l 
     dii[k] = 0.5-0.25*(f[dam[k]]+f[sire[k]]);
     if((k > 0) && (phdam[k] == phdam[k-1]) && (phsire[k] == phsire[k-1])){
       f[k] += f[k-1];
