@@ -24,7 +24,6 @@
 makeA <- function(pedigree)
 {
   nPed <- numPed(pedigree)
-  N <- dim(nPed)[1]
   sqrtDinv <- makeDiiF(nPed)$D
     sqrtDinv@x <- sqrt(1 / sqrtDinv@x)
   A <- as(chol2inv(crossprod(sqrtDinv, makeTinv(nPed))), "symmetricMatrix")
