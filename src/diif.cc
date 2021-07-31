@@ -3,7 +3,7 @@
 // R-interface/wrapper for M&L routine
 extern "C"{  
 
-void fcoeff(
+void diif(
 	int *dam,
 	int *sire,
 	double *f,

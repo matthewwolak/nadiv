@@ -197,7 +197,7 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
   nPed[nPed == -998] <- N + 1
   if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
   f <- c(f, -1)
-  Cout <- .C("fcoeff", PACKAGE = "nadiv",
+  Cout <- .C("diif", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 			#dam
 	    as.integer(nPed[, 3] - 1),  		#sire
 	    as.double(f),				#f
@@ -226,7 +226,7 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
   nPed[nPed == -998] <- N + 1
   if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
   f <- c(f, -1)
-  Cout <- .C("fcoeff", PACKAGE = "nadiv",
+  Cout <- .C("diif", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
