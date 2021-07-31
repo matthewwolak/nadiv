@@ -173,8 +173,8 @@ void ainvfuzz(
      li[k] = 0.0;               // set l to zero
   }
   for(k = g[0]; k < n[0]; k++){
-     AN[k] = -1;               // set AN to "zero" 
-                               //// (since an ID is 0, make 1 less than lowest ID)
+     AN[k] = -1;        // set AN to "empty" 
+                        //// (since lowest ID is 0, make empty as 1 less than it)
   }
 
   for(k = g[0]; k < n[0]; k++){  // iterate through each row of l 

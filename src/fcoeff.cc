@@ -19,8 +19,8 @@ void ml(int *dam, int *sire,
      li[k] = 0.0;               // set l to zero
   }
   for(k = g; k < n; ++k){
-     AN[k] = -1;               // set AN to "zero" 
-                               //// (since an ID is 0, make 1 less than lowest ID)
+     AN[k] = -1;      // set AN to "empty" 
+                      //// (since lowest ID is 0, make empty with 1 less than it)
   }
 
   for(k = g; k < n; ++k){  // iterate through each row of l 
@@ -52,7 +52,7 @@ void ml(int *dam, int *sire,
           }
 
           ai += li[j]*li[j]*dii[j];
-          j -= n;             // set to value lower than all known identities
+          j -= n;          // set to empty-value lower than all known identities
 
           for(h = 0; h < cnt; ++h){   // find eldest individual
             if(AN[h] > j){
@@ -61,7 +61,7 @@ void ml(int *dam, int *sire,
           }
           for(h = 0; h < cnt; ++h){   // delete duplicates
             if(AN[h] == j){
-              AN[h] -= n;    // set to value lower than all known identities
+              AN[h] -= n;    // set to empty-value lower than all known identities
             }
           }
         }  // end of while

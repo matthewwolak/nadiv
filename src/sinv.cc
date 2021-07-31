@@ -30,8 +30,8 @@ void sinv(
      li[k] = 0.0;               
   }
   for(k=0; k<nQP[0]; k++){
-     AN[k] = -1;         // set AN to "zero" 
-                         //// (since an ID is 0, make 1 less than lowest ID)       
+     AN[k] = -1;      // set AN to "empty" 
+                      //// (since an ID is 0, make 1 less than lowest ID)       
   }
 
   ntwo = nQP[0];
@@ -162,7 +162,7 @@ if(DC[0] == 0.0){
       }
       for(h=0; h<cnt; h++){   
         if(AN[h]==j){
-          AN[h] -= ntwo;             // set to value lower than all known identities
+          AN[h] -= ntwo;        // set to value lower than all known identities
         }
       }
     }  // end of while

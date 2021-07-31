@@ -52,7 +52,8 @@ void minvq(
           v[k] = sqrt(0.5 + 0.25*u[p] - 0.5*h[p] + theta[0]);
         }
     }
-    if(p == n[0]) v[k] = 1.0; // because p <= q then if p=n[0]=missing ID THEN so will q
+    // because p <= q then if p=n[0]=missing ID, THEN so will q
+    if(p == n[0]) v[k] = 1.0; 
 
 
     for(j = k; j < n[0]; j++){
@@ -182,8 +183,6 @@ void minvq(
 }
 }
 
-
-
 ///////////////////////////////////////////////////////////////////////
 
 
@@ -222,10 +221,10 @@ void minvml(
   double  *u = new double[n[0]];
   
   for(k = 0; k < n[0]; k++){
-     li[k] = 0.0;               // set l to zero
-     AN[k] = -1;                // set AN to "zero" 
-                                //// (since an ID is 0, make 1 less than lowest ID)
-     u[k] = 0.0;               // set u to zero
+     li[k] = 0.0;     // set l to zero
+     AN[k] = -1;      // set AN to "empty" 
+                      //// (since lowest ID is 0, make empty with 1 less than it)
+     u[k] = 0.0;      // set u to zero
   }
 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
@@ -246,7 +245,8 @@ void minvml(
       dii[k] = 0.25 * (u[p] + u[q]) - 0.5 * (h[p] + h[q]) + 1.0;
     }
     if(p < n[0] && q == n[0]) dii[k] = 0.25*u[p] - 0.5*h[p] + 0.5;  
-    if(p == n[0]) dii[k] = 1.0; // because p <= q then if p=n[0]=missing ID THEN so will q
+    // because p <= q then if p=n[0]=missing ID, THEN so will q
+    if(p == n[0]) dii[k] = 1.0; 
 
     alphai = 1 / dii[k];
     detM *= dii[k];    // add contributions to determinant of M
@@ -274,7 +274,7 @@ void minvml(
       u[k] += li[j] * li[j] * dii[j];
       g += li[j];
       
-      j -= n[0];             // set to value lower than all known identities
+      j -= n[0];          // set to empty, value lower than all known identities
       
       for(m = 0; m < cnt; m++){    // find the eldest individual
         if(AN[m] > j){
