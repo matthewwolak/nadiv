@@ -167,3 +167,52 @@ makeMinvML <- function(pedigree, ...){
 
 
 
+
+
+
+
+
+#' @rdname makeMinv
+#' @export
+makeMinvML2 <- function(pedigree, ...){
+  nPed <- numPed(pedigree)
+  N <- nrow(nPed)
+  dnmiss <- which(nPed[, 2] != -998)
+  snmiss <- which(nPed[, 3] != -998)
+  Tinv.row <- c(nPed[, 1][dnmiss], nPed[, 1][snmiss], 1:N)
+  Tinv.col <- c(nPed[, 2][dnmiss], nPed[, 3][snmiss], 1:N)
+  el.order <- order(Tinv.col + Tinv.row/(N + 1), decreasing = FALSE)
+  sTinv <- sparseMatrix(i = as.integer(Tinv.row[el.order] - 1),
+    p = as.integer(c(match(1:N, Tinv.col[el.order]), length(el.order) + 1) - 1),
+    index1 = FALSE, dims = c(N, N), symmetric = FALSE,
+    dimnames = list(as.character(nPed[, 1]), NULL))
+  Minv <- t(crossprod(sTinv)) # transpose gives lower triangle
+
+  nPed[nPed == -998] <- N + 1
+
+  Cout <- .C("minvml2", PACKAGE = "nadiv",
+	    as.integer(nPed[, 2] - 1), 				#dam
+	    as.integer(nPed[, 3] - 1),  			#sire
+	    as.double(rep(0, N)),				#h ("f-coeff")
+            as.double(rep(0, N)),  				#dii
+            as.integer(N),   					#n
+            as.double(rep(0, length(Minv@i))),  			#xMinv
+	    as.integer(Minv@i), 				#iMinv
+	    as.integer(Minv@p), 				#pMinv
+	    as.double(0))	     				#logDet of M
+
+  Minv <- as(Minv, "dsCMatrix")
+  Minv@x <- Cout[[6]]
+    Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
+    Minv <- as(Minv, "dgCMatrix")
+  h <- Cout[[3]]
+  dii <- Cout[[4]]
+
+ return(list(Minv = Minv,
+	listMinv = sm2list(Minv, rownames = rownames(Minv),
+	  colnames = c("row", "column", "Minv")),
+	h = h,
+	logDet = Cout[[9]],
+	dii = dii))
+}
+

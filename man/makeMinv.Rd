@@ -3,11 +3,14 @@
 \name{makeMinv}
 \alias{makeMinv}
 \alias{makeMinvML}
+\alias{makeMinvML2}
 \title{Create the inverse (additive) mutational effects relationship matrix}
 \usage{
 makeMinv(pedigree, ...)
 
 makeMinvML(pedigree, ...)
+
+makeMinvML2(pedigree, ...)
 }
 \arguments{
 \item{pedigree}{A pedigree where the columns are ordered ID, Dam, Sire}

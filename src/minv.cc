@@ -389,4 +389,127 @@ void minvml(
 
 
 
+///////////////////////////////////////////////////////////////////////
+//     Mutational Effects (additive) inverse relatedness matrix
+////   algorithm in Casellas & Medrano 2008
+////   Uses the Quaas 1976 algorithm for A-inverse as a basis
+//     Note difference from Wray 1990 algorithm (coded below as `minvw`)
+////   Casellas & Medrano make separate invA_0 and invM matrices; Wray combines
+
+extern "C"{  
+
+void minvml2(
+        int *dam,       
+        int *sire,         
+        double *h,     // essentially coeff. of inbreeding (f)     
+	double *dii,
+        int *n,
+        double *xMinv,
+	int *iMinv,
+	int *pMinv,
+	double *logDet
+){         
+
+  int     k, m, sk, dk, lb, step, istart, it;
+  double  alphai, detM;
+  
+
+  detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
+    
+  for(k = 0; k < n[0]; ++k){  // iterate through each row of L 
+
+    // Meuwissen and Luo 1992 algorithm to obtain f and dii values
+    //// Extends Wray 1990; Casellas and Medrano 2008
+    mml(dam, sire, h, dii, n[0]);
+
+    alphai = 1.0 / dii[k];
+    detM *= dii[k];    // add contributions to determinant of M     
+    ////////////////////////////////////////
+    // Now add contributions to M-inverse
+    sk = sire[k];
+    dk = dam[k];
+    istart = pMinv[k];
+    // k,k
+    xMinv[istart] += alphai;    
+    if(sk != n[0]){
+     istart = pMinv[sk];
+     // sire,sire
+     xMinv[istart] += 0.25 * alphai;
+     // sire,dam
+     if(sk <= dk){
+        if(dk != n[0]){
+          m = istart;
+          lb = pMinv[sk+1] - 1 - m;
+              while(lb > 0){
+                step = lb/2;
+                it = m + step;
+                if(iMinv[it] < dk){
+                  m = ++it;
+                  lb -= step+1;
+                }
+                else lb = step;
+              }
+              if(iMinv[m] == dk) xMinv[m] += 0.25 * alphai;
+            }
+         }
+         // sire,k
+         m = istart;
+         lb = pMinv[sk+1] - 1 - m;
+         while(lb > 0){
+           step = lb/2;
+           it = m + step;
+           if(iMinv[it] < k){
+             m = ++it;
+             lb -= step+1;
+           }
+           else lb = step;
+         }
+         if(iMinv[m] == k) xMinv[m] += -0.5 * alphai;
+      }  // end if sire KNOWN
+      
+      if(dk != n[0]){
+         istart = pMinv[dk];
+         // dam,dam
+         xMinv[istart] += 0.25 * alphai;
+         // dam,k
+         m = istart;
+         lb = pMinv[dk+1] - 1 - m;
+         while(lb > 0){
+           step = lb/2;
+           it = m + step;
+           if(iMinv[it] < k){
+             m = ++it;
+             lb -= step+1;
+           }
+           else lb = step;
+         }
+         if(iMinv[m] == k) xMinv[m] += -0.5 * alphai;
+         // dam,sire
+         if(dk <= sk){
+            if(sk != n[0]){
+              m = istart;
+              lb = pMinv[dk+1] - 1 - m;
+              while(lb > 0){
+                step = lb/2;
+                it = m + step;
+                if(iMinv[it] < sk){
+                  m = ++it;
+                  lb -= step+1;
+                }
+                else lb = step;
+              }
+              if(iMinv[m] == sk) xMinv[m] += 0.25 * alphai;
+            }
+         }
+       }  // end if dam KNOWN
+
+   
+  }  // end for k
+
+
+  // Calculate log determinant of M (needed for REML)    
+  logDet[0] += log(detM);
+
+}
+}
 
