@@ -412,16 +412,14 @@ void minvml2(
 
   int     k, m, sk, dk, lb, step, istart, it;
   double  alphai, detM;
-  
-
+ 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
+
+  // Meuwissen and Luo 1992 algorithm to obtain f and dii values
+  //// Extends Wray 1990; Casellas and Medrano 2008
+  mml(dam, sire, h, dii, n[0]);
     
   for(k = 0; k < n[0]; ++k){  // iterate through each row of L 
-
-    // Meuwissen and Luo 1992 algorithm to obtain f and dii values
-    //// Extends Wray 1990; Casellas and Medrano 2008
-    mml(dam, sire, h, dii, n[0]);
-
     alphai = 1.0 / dii[k];
     detM *= dii[k];    // add contributions to determinant of M     
     ////////////////////////////////////////
