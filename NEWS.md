@@ -1,12 +1,18 @@
 #2.17.2
 
-## NEW
-  * `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
-    - `proLik()` is kept to retain compatibility with asreml v3 model objects
-  
 # DEPRECATED
   - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
-    - will not support this in the future as asreml v4 has `vpredict()`
+    - `nadiv` will not support this in the future as asreml v4 has `vpredict()`
+
+## NEW
+  - `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
+    - `proLik()` is kept to retain compatibility with asreml v3 model objects
+  
+## Small changes
+  - new c++ routine to calculate coefficients of inbreeding and __D__ of Cholesky decomposed __A__ matrix
+    - follows Meuwissen and Luo's (1992) algorithm
+    - standardizes this code and consolidates to 1 location, instead of being spread out as copies in several other places
+    
 
 # 2.17.1
 
