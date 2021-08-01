@@ -7,7 +7,10 @@
 ## NEW
   - `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
     - `proLik()` is kept to retain compatibility with asreml v3 model objects
-  
+
+  - `makeM()` creates mutational effects relatedness matrix __M__ directly
+    - can be used with `brms`/`JAGS` etc. that require relatedness matrices (not their inverse) in mixed models
+      
 ## Small changes
   - new c++ routine to calculate coefficients of inbreeding and __D__ of Cholesky decomposed __A__ matrix
     - follows Meuwissen and Luo's (1992) algorithm
