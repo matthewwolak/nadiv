@@ -72,7 +72,7 @@
 grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", stdnorms = NULL, warn = TRUE){
   d <- nrow(G)
   if(d > 1 && all(G == G[1,1])) warning("variance-covariance matrix 'G' may have caused 'chol.default(G)' error.  If so, consider subtracting 0.0001 from the covariances to make correlations < 1 or >-1")
-  Mg <- as(chol(G), "dtCMatrix")
+  Mg <- as(as(chol(G), "triangularMatrix"), "CsparseMatrix")
   if(is.null(incidence)){
      if(any(ls(envir = globalenv() ) == "nadiv_prev_Mincidence")){
        if(warn) warning("using previous incidence matrix")
