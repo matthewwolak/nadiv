@@ -20,4 +20,4 @@ Description: Constructs (non)additive genetic relationship matrices, and their
     obtained upon purchase from 'VSN' international 
     (<https://www.vsni.co.uk/software/asreml>).
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.0
