@@ -288,10 +288,10 @@ makeAinv.default <- function(pedigree, f = NULL,
 	    as.integer(Ainv@i), 				#iA
 	    as.integer(Ainv@p), 				#pA
 	    as.integer(length(Ainv@i))) 			#nzmaxA
-  Ainv <- as(Ainv, "dsCMatrix")
+  Ainv <- as(Ainv, "dMatrix")
   Ainv@x <- Cout[[7]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
+  Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
       f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
@@ -308,7 +308,9 @@ makeAinv.default <- function(pedigree, f = NULL,
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
-	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
+	                       colnames = c("row", "column", "Ainv")),
+	geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
@@ -400,7 +402,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  
   groupFuzz <- Diagonal(x = 1, n = nggroups)
   groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
-  fuzzmat <- rbind(groupFuzz, as(fuzz, "sparseMatrix"))
+  fuzzmat <- rbind(groupFuzz, fuzz)
   # predict non-zero elements of Astar
   ## make H from Quaas 1988:
   ## H = [-Pb Qb : Tinv]
@@ -426,7 +428,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 	  index1 = FALSE, dims = c(eN, p), symmetric = FALSE,
 	  dimnames = list(NULL, as.character(pedalt[phantomPars, 1])))
   ### Qb is the fuzzy classification matrix ('fuzz')
-  Qb <- as(fuzzmat[-groupRows, ][match(rownames(fuzzmat)[-groupRows], colnames(sPb)), ], "sparseMatrix")
+  Qb <- fuzzmat[-groupRows, ][match(rownames(fuzzmat)[-groupRows], colnames(sPb)), ]
   sQb <- sparseMatrix(i = Qb@i,
 	  p = Qb@p,
 	  index1 = FALSE, dims = Qb@Dim, symmetric = FALSE,
@@ -454,11 +456,11 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 	    as.integer(Ainv@i), 				#iA
 	    as.integer(Ainv@p)) 				#pA
 
-  Ainv <- as(Ainv, "dsCMatrix")
+  Ainv <- as(Ainv, "dMatrix")
   Ainv@x <- Cout[[12]]
-  fsOrd1 <- as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "CsparseMatrix")
-  fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "sparseMatrix")@x, "pMatrix")
-  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
+  fsOrd1 <- as(as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "nMatrix"), "CsparseMatrix")
+  fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "CsparseMatrix")@x, "pMatrix")
+  Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   Ainv@Dimnames <- list(as.character(pedalt[crossprod(fsOrd1, matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
   f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
   dii <- (fsOrd1 %*% Cout[[6]][-c(N+1)])@x[-groupRows]
@@ -469,7 +471,9 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
-	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
+	                               colnames = c("row", "column", "Ainv")),
+	geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
