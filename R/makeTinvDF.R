@@ -87,7 +87,7 @@ makeTinv.default <- function(pedigree, ...){
     j = as.integer(c(nPed[, 2][dnmiss], nPed[, 3][snmiss])-1),
     x = as.double(rep(-0.5, length(dnmiss) + length(snmiss))),
     Dim = c(N, N), Dimnames = list(as.character(pedigree[, 1]), NULL),
-    uplo = "L", diag = "U"), "dtCMatrix")
+    uplo = "L", diag = "U"), "CsparseMatrix")
 
  return(Tinv)
 }
@@ -104,7 +104,7 @@ makeTinv.numPed <- function(pedigree, ...){
     j = as.integer(c(pedigree[, 2][dnmiss], pedigree[, 3][snmiss])-1),
     x = as.double(rep(-0.5, length(dnmiss) + length(snmiss))),
     Dim = c(N, N), Dimnames = list(as.character(pedigree[, 1]), NULL),
-    uplo = "L", diag = "U"), "dtCMatrix")
+    uplo = "L", diag = "U"), "CsparseMatrix")
 
  return(Tinv)
 }
