@@ -238,11 +238,12 @@ makeS <- function(pedigree, heterogametic,
       }              
 
     logDet <- -1*determinant(Sinv, logarithm = TRUE)$modulus[1]
-    listSinv <- sm2list(Sinv, rownames = as.character(pedigree[, 1]), colnames = c("Row", "Column", "Sinverse"))
+    listSinv <- sm2list(Sinv, rownames = as.character(pedigree[, 1]),
+                              colnames = c("Row", "Column", "Sinverse"))
     if(returnS){
        cat("S-inverse made: Starting to make S...")
-          T <- as(solve(Q), "dgCMatrix")
-          S <- as(t(T) %*% Diagonal(N, Vii) %*% T, "dgCMatrix")
+          T <- as(solve(Q), "CsparseMatrix")
+          S <- as(crossprod(T, Diagonal(N, Vii)) %*% T, "dgCMatrix")
             S@Dimnames <- list(as.character(pedigree[, 1]), NULL)
        cat(".done", "\n")
     } else{
