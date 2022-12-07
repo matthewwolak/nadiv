@@ -12,6 +12,9 @@
     - can be used with `brms`/`JAGS` etc. that require relatedness matrices (not their inverse) in mixed models
       
 ## Small changes
+  - fixed deprecated use of `Matrix` non-virtual subclasses
+    - addresses issues with `Matrix` 1.4-2 and specifically >=1.5-0
+    
   - new c++ routine to calculate coefficients of inbreeding and __D__ of Cholesky decomposed __A__ matrix
     - follows Meuwissen and Luo's (1992) algorithm
     - standardizes this code and consolidates to 1 location, instead of being spread out as copies in several other places
