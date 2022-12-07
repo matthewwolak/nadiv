@@ -468,7 +468,9 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   dii <- (fsOrd1 %*% Cout[[6]][-c(N+1)])@x[-groupRows]
   if(!gOnTop){ 
     permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
-    Ainv <- t(permute) %*% Ainv %*% permute
+      dmnms <- Ainv@Dimnames[[1L]][invPerm(permute@perm)]
+    Ainv <- crossprod(permute, Ainv) %*% permute
+      Ainv@Dimnames[[1L]] <- dmnms
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
