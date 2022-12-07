@@ -270,7 +270,7 @@ proLik4 <- function(full.model, component,
       }
       vInd <- match(component, names(full.model$vparameters))
     }  
-   bndChk <- vpc.char(full.model)[[vInd]]
+   bndChk <- asreml:::vpc.char(full.model)[[vInd]]
     warned <- FALSE
     if(bndChk == "B"){
       warned <- TRUE
@@ -290,9 +290,9 @@ proLik4 <- function(full.model, component,
   chi.tol <- chi.val - 0.5 * qchisq(alpha + tolerance, df = 1, lower.tail = FALSE)
 
   # Set asreml option to continue even if singularity in AI
-  oldAIsingFailOpt <- asreml.options("ai.sing", "fail")
-  asreml.options(ai.sing = TRUE, fail = "soft")
-  on.exit(asreml.options(oldAIsingFailOpt))
+  oldAIsingFailOpt <- asreml:::asreml.options("ai.sing", "fail")
+  asreml:::asreml.options(ai.sing = TRUE, fail = "soft")
+  on.exit(asreml:::asreml.options(oldAIsingFailOpt))
   
   ###########################################################
   # Internal constrain function for asreml version 4
@@ -331,7 +331,7 @@ proLik4 <- function(full.model, component,
       conMod$converge <- pcntChng
     }  #<-- end if converge
 
-    if(conMod$converge) return(lrt(conMod, full.model)$'LR-statistic')
+    if(conMod$converge) return(asreml:::lrt(conMod, full.model)$'LR-statistic')
       else return(NA)
   }  #<-- end conFun()
   
