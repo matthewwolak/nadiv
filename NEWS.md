@@ -276,11 +276,9 @@ as a minimum
    * changed `makeDomEpi()` argument "Dinverse" to "invertD" to be similar to makeD()
    * added `pcc()` checks to `constrainFun()` so that only likelihood ratio test statistics of the constrained model returned if both the loglikelihood & parameter estimates have converged
 
-# PREVIOUS (Incomplete below)
 # 2.9
-## New
-   * enabled parallel processing (forking, so no Windows compatibility) in:
-     * `findDFC()`, `makeD()`, `makeDsim()`
+  * enabled parallel processing (forking, so no Windows compatibility) in:
+    * `findDFC()`, `makeD()`, `makeDsim()`
 
 # 2.8
    * changed name of `FindDFC()` to `findDFC()`

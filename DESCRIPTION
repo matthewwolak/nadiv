@@ -18,6 +18,6 @@ Description: Constructs (non)additive genetic relationship matrices, and their
     animal models. Some functions have been created to be used in conjunction
     with the R package 'asreml' for the 'ASReml' software, which can be
     obtained upon purchase from 'VSN' international 
-    (<https://www.vsni.co.uk/software/asreml>).
+    (<https://vsni.co.uk/software/asreml>).
 Encoding: UTF-8
 RoxygenNote: 7.2.2
