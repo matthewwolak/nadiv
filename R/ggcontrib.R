@@ -229,7 +229,7 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
       }
       # end checks
 
-      Qb <- as(fuzz, "dgCMatrix")
+      Qb <- as(fuzz, "CsparseMatrix")
       pp <- which(na2)            #<-- phantom parents
       oid <- which(!na2)          #<-- observed individuals
       N <- dim(nPed)[1]
@@ -251,8 +251,9 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
         p = Cout[[4]], x = Cout[[5]][1:Cout[[6]]],
 	dims = c(N, N),
 	dimnames = list(as.character(pedigree[, 1]), as.character(pedigree[, 1])),
-	symmetric = FALSE, index1 = FALSE))    }
-  # End strictly fuzzy classification section  
+	symmetric = FALSE, index1 = FALSE))    
+    }
+    # End strictly fuzzy classification section  
 
 
 
@@ -272,7 +273,8 @@ ggcontrib <- function(pedigree, ggroups = NULL, fuzz = NULL, output = "matrix"){
   if(is.null(fuzz)){
     return(as(T[-c(nggroups), nggroups], output))
   } else{
-      Q <- as(solve(Tinv[oid, oid]), "dgCMatrix") %*% (-1*Tinv[oid, pp]) %*% Qb
+      Q <- as(solve(Tinv[oid, oid]), "CsparseMatrix") %*%
+                                                     (-1*Tinv[oid, pp]) %*% Qb
       Q@Dimnames <- list(Tinv@Dimnames[[1]][oid], Qb@Dimnames[[2]])
      return(as(Q, output))
     }
