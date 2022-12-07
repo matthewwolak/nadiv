@@ -312,7 +312,7 @@ makeAinv.default <- function(pedigree, f = NULL,
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
 	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
 	                       colnames = c("row", "column", "Ainv")),
-	geneticGroups = c(nggroups, 0)),
+	                     geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
@@ -477,7 +477,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
 	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
 	                               colnames = c("row", "column", "Ainv")),
-	geneticGroups = c(nggroups, 0)),
+	                     geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
