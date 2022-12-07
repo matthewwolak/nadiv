@@ -5,6 +5,7 @@
   - [win-builder](https://win-builder.r-project.org/)
     - R version 4.2.2 (2022-10-31), platform: x86_64-w64-mingw32 (64-bit)
     - R-devel (2022-12-06 r83409), platform: x86_64-w64-mingw32 (64-bit) 
+    - R old version 4.1.3 (2022-03-10)
     
   - R-hub (`devtools::check_rhub(".", interactive = FALSE)`)
     - Ubuntu Linux 20.04.1 LTS, R-release 4.2.2 (2022-11-10), GCC
