@@ -67,7 +67,7 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
     dimnames = list(as.character(nPed[, 1]), as.character(nPed[, 1])),
     symmetric = FALSE, index1 = FALSE))
 
-  T <- as(solve(Tinv), "dgCMatrix")
+  T <- as(solve(Tinv), "CsparseMatrix")
   T@Dimnames <- Tinv@Dimnames
   Q <- as(T[-c(1:nggroups), 1:nggroups], "matrix")
 
@@ -104,7 +104,8 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
     Dj <- (1 - Q[, j] * OneMinDii)
     DinvTilde <- Diagonal(x = 1 / (Dj * scalingj), n = eN) 
     # Ainv_j created by Muff et al. 2019 (eqn 13)
-    Ainv_list[[j]] <- structure(as(crossprod(fsOrd, crossprod(sqrt(DinvTilde) %*% Tinv2)) %*% fsOrd, "dgCMatrix"), geneticGroups = c(0, 0))
+    Ainv_list[[j]] <- structure(as(crossprod(fsOrd, crossprod(sqrt(DinvTilde) %*% Tinv2)) %*% fsOrd, "CsparseMatrix"),
+                                geneticGroups = c(0, 0))
     if(det) logDet_list[j] <- -1*determinant(Ainv_list[[j]], logarithm = TRUE)$modulus[1]
 
     if(ptype == "D"){
