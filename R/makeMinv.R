@@ -104,10 +104,10 @@ makeMinv <- function(pedigree, ...){
 	    as.double(0),	     				#logDet of M
 	    as.double(theta))					#for Wray90
 
-  Minv <- as(Minv, "dsCMatrix")
+  Minv <- as(Minv, "dMatrix")
   Minv@x <- Cout[[6]]
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-    Minv <- as(Minv, "dgCMatrix")
+    Minv <- as(Minv, "generalMatrix")
   h <- Cout[[3]]
   dii <- Cout[[4]]
 
@@ -150,10 +150,10 @@ makeMinvML <- function(pedigree, ...){
 	    as.integer(Minv@p), 				#pMinv
 	    as.double(0))	     				#logDet of M
 
-  Minv <- as(Minv, "dsCMatrix")
+  Minv <- as(Minv, "dMatrix")
   Minv@x <- Cout[[6]]
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-    Minv <- as(Minv, "dgCMatrix")
+    Minv <- as(Minv, "generalMatrix")
   h <- Cout[[3]]
   dii <- Cout[[4]]
 
