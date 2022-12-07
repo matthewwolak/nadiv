@@ -146,7 +146,7 @@ makeDsim <- function(pedigree, N, parallel = FALSE,
       Dsiminv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
     cat(".done", "\n")
     listDsiminv <- sm2list(Dsiminv, rownames = pedigree[,1], colnames = c("row", "column", "simDinverse"))
-    Dsim <- as(Dsim, "dgCMatrix")
+    Dsim <- as(Dsim, "generalMatrix")
     return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet,
 	Dinv = approxD$Dinv, listDinv = approxD$listDinv,
 	Dsim = Dsim, logDetDsim = logDetDsim,
