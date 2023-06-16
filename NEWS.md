@@ -1,4 +1,7 @@
-#2.17.2
+# 2.17.3
+
+
+# 2.17.2
 
 # DEPRECATED
   - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
