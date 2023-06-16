@@ -1,7 +1,7 @@
 Package: nadiv
 Type: Package
 Title: (Non)Additive Genetic Relatedness Matrices
-Version: 2.17.1
+Version: 2.17.2
 Authors@R: person("Matthew", "Wolak", email = "matthewwolak@gmail.com", role = c("cre", "aut"))
 URL: https://github.com/matthewwolak/nadiv
 BugReports: https://github.com/matthewwolak/nadiv/issues
@@ -18,6 +18,6 @@ Description: Constructs (non)additive genetic relationship matrices, and their
     animal models. Some functions have been created to be used in conjunction
     with the R package 'asreml' for the 'ASReml' software, which can be
     obtained upon purchase from 'VSN' international 
-    (<https://www.vsni.co.uk/software/asreml>).
+    (<https://vsni.co.uk/software/asreml>).
 Encoding: UTF-8
-RoxygenNote: 7.1.1
+RoxygenNote: 7.2.2

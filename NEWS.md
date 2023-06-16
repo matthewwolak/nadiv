@@ -1,3 +1,25 @@
+#2.17.2
+
+# DEPRECATED
+  - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
+    - `nadiv` will not support this in the future as asreml v4 has `vpredict()`
+
+## NEW
+  - `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
+    - `proLik()` is kept to retain compatibility with asreml v3 model objects
+
+  - `makeM()` creates mutational effects relatedness matrix __M__ directly
+    - can be used with `brms`/`JAGS` etc. that require relatedness matrices (not their inverse) in mixed models
+      
+## Small changes
+  - fixed deprecated use of `Matrix` non-virtual subclasses
+    - addresses issues with `Matrix` 1.4-2 and specifically >=1.5-0
+    
+  - new c++ routine to calculate coefficients of inbreeding and __D__ of Cholesky decomposed __A__ matrix
+    - follows Meuwissen and Luo's (1992) algorithm
+    - standardizes this code and consolidates to 1 location, instead of being spread out as copies in several other places
+    
+
 # 2.17.1
 
 ## Small changes
@@ -254,11 +276,9 @@ as a minimum
    * changed `makeDomEpi()` argument "Dinverse" to "invertD" to be similar to makeD()
    * added `pcc()` checks to `constrainFun()` so that only likelihood ratio test statistics of the constrained model returned if both the loglikelihood & parameter estimates have converged
 
-# PREVIOUS (Incomplete below)
 # 2.9
-## New
-   * enabled parallel processing (forking, so no Windows compatibility) in:
-     * `findDFC()`, `makeD()`, `makeDsim()`
+  * enabled parallel processing (forking, so no Windows compatibility) in:
+    * `findDFC()`, `makeD()`, `makeDsim()`
 
 # 2.8
    * changed name of `FindDFC()` to `findDFC()`

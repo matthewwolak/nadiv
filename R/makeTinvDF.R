@@ -87,7 +87,7 @@ makeTinv.default <- function(pedigree, ...){
     j = as.integer(c(nPed[, 2][dnmiss], nPed[, 3][snmiss])-1),
     x = as.double(rep(-0.5, length(dnmiss) + length(snmiss))),
     Dim = c(N, N), Dimnames = list(as.character(pedigree[, 1]), NULL),
-    uplo = "L", diag = "U"), "dtCMatrix")
+    uplo = "L", diag = "U"), "CsparseMatrix")
 
  return(Tinv)
 }
@@ -104,7 +104,7 @@ makeTinv.numPed <- function(pedigree, ...){
     j = as.integer(c(pedigree[, 2][dnmiss], pedigree[, 3][snmiss])-1),
     x = as.double(rep(-0.5, length(dnmiss) + length(snmiss))),
     Dim = c(N, N), Dimnames = list(as.character(pedigree[, 1]), NULL),
-    uplo = "L", diag = "U"), "dtCMatrix")
+    uplo = "L", diag = "U"), "CsparseMatrix")
 
  return(Tinv)
 }
@@ -197,12 +197,13 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
   nPed[nPed == -998] <- N + 1
   if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
   f <- c(f, -1)
-  Cout <- .C("fcoeff", PACKAGE = "nadiv",
+  Cout <- .C("diif", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 			#dam
 	    as.integer(nPed[, 3] - 1),  		#sire
 	    as.double(f),				#f
             as.double(rep(0, N)),  			#dii
             as.integer(N),   				#n
+            as.integer(0),				#number genetic groups
 	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]
@@ -225,12 +226,13 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
   nPed[nPed == -998] <- N + 1
   if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
   f <- c(f, -1)
-  Cout <- .C("fcoeff", PACKAGE = "nadiv",
+  Cout <- .C("diif", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
 	    as.double(f),					#f
             as.double(rep(0, N)),  				#dii
             as.integer(N),   					#n
+            as.integer(0),				#number genetic groups
 	    as.integer(fmiss))				#f missing or supplied
   fsOrd <- as(as.integer(renPed), "pMatrix")
   f <- Cout[[3]][t(fsOrd)@perm]

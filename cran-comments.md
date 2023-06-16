@@ -1,17 +1,17 @@
 # Test environments
-  - Ubuntu 20.04.2 LTS
-    - R version 4.0.4 (2020-02-15) x86_64-pc-linux-gnu (64-bit)
+  - Ubuntu 20.04.5 LTS
+    - R version 4.2.2 (2022-11-10 r83330) x86_64-pc-linux-gnu (64-bit)
 
   - [win-builder](https://win-builder.r-project.org/)
-    - R version 4.0.5 (2021-03-31), platform: x86_64-w64-mingw32 (64-bit)
-    - R version 3.6.3 (2020-02-29), platform: x86_64-w64-mingw32 (64-bit)
-    - R-devel (2021-04-05 r80144), platform: x86_64-w64-mingw32 (64-bit) 
+    - R version 4.2.2 (2022-10-31), platform: x86_64-w64-mingw32 (64-bit)
+    - R-devel (2022-12-06 r83409), platform: x86_64-w64-mingw32 (64-bit) 
+    - R old version 4.1.3 (2022-03-10)
     
   - R-hub (`devtools::check_rhub(".", interactive = FALSE)`)
-    - Ubuntu Linux 20.04.1 LTS, R-release 4.0.5 (2021-03-31), GCC
-    - Windows Server 2008 R2 SP1, R-devel (2021-04-01 r80137), 32/64 bit
-    - Fedora Linux, R-devel (2021-04-05 r80145)
-    - Debian Linux, R-devel (2020-07-31 r78945), GCC ASAN/UBSAN
+    - Ubuntu Linux 20.04.1 LTS, R-release 4.2.2 (2022-11-10), GCC
+    - Windows Server 2022 R-devel (2022-10-11 r83083), 32/64 bit
+    - Fedora Linux, R-devel (2022-12-06 r83409), clang, gfortran
+    - Debian Linux, R-devel (2022-12-05 r83406), GCC ASAN/UBSAN
 
 # R CMD check results
 There were no ERRORs or WARNINGs.

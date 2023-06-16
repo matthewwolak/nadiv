@@ -27,10 +27,11 @@ void sinv(
   cs *Q, *V, *tQ, *QV, *tS, *S;
 
   for(k=0; k<nQP[0]; k++){
-     li[k]=0.0;               
+     li[k] = 0.0;               
   }
   for(k=0; k<nQP[0]; k++){
-     AN[k]=-1;               
+     AN[k] = -1;      // set AN to "empty" 
+                      //// (since an ID is 0, make 1 less than lowest ID)       
   }
 
   ntwo = nQP[0];
@@ -59,7 +60,7 @@ if(DC[0] == 0.0){
   for(k=0; k<nQP[0]; k++){   
 
     li[k] = 1.0;                   
-    si=0.0;                        
+    si =0.0;                        
 
     if(dam[k] == ntwo){
       vii[k] = 1.0;
@@ -83,7 +84,7 @@ if(DC[0] == 0.0){
 
       si += li[j]*li[j]*vii[j];
 
-      j=-1;
+      j -= ntwo;             // set to value lower than all known identities
 
       for(h=0; h<cnt; h++){   // find eldest individual
        if(AN[h]>j){
@@ -92,7 +93,7 @@ if(DC[0] == 0.0){
       }
       for(h=0; h<cnt; h++){   
         if(AN[h]==j){
-          AN[h] -= ntwo; 
+          AN[h] -= ntwo;      // set to value lower than all known identities
         }
       }
     }  // end of while
@@ -152,7 +153,7 @@ if(DC[0] == 0.0){
 
       si += li[j]*li[j]*vii[j];
 
-      j=-1;
+      j -= ntwo;               // set to value lower than all known identities
 
       for(h=0; h<cnt; h++){   // find eldest individual
        if(AN[h]>j){
@@ -161,7 +162,7 @@ if(DC[0] == 0.0){
       }
       for(h=0; h<cnt; h++){   
         if(AN[h]==j){
-          AN[h] -= ntwo; 
+          AN[h] -= ntwo;        // set to value lower than all known identities
         }
       }
     }  // end of while

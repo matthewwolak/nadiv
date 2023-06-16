@@ -396,3 +396,25 @@
 
 
 
+
+#' Pedigree, adapted from Wray (1990)
+#' 
+#' @format A data frame with 8 observations on the following 4 variables:
+#'   \describe{
+#'     \item{\code{id} }{a numeric vector}
+#'     \item{\code{dam} }{a numeric vector}
+#'     \item{\code{sire} }{a numeric vector}
+#'     \item{\code{time} }{a numeric vector}
+#'   }
+#'
+#' @docType data
+#' @source Wray, N.A. 1990. Accounting for mutation effects in the additive
+#'   genetic variance-covariance matrix and its inverse. Biometrics. 46:177-186.
+#' @keywords datasets
+#' @examples
+#'   data(Wray90)
+#'   str(Wray90)
+"Wray90"
+
+
+

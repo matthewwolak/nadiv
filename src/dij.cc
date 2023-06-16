@@ -42,8 +42,8 @@ void dij(
                step = lb/2;
                it = m + step;
                if(iAP[it] < min(kDam, jSire)){
-                 m=++it;
-                 lb-=step+1;
+                 m = ++it;
+                 lb -= step+1;
                }
                else lb = step;
              }
@@ -56,8 +56,8 @@ void dij(
                step = lb/2;
                it = m + step;
                if(iAP[it] < min(kDam, jDam)){
-                 m=++it;
-                 lb-=step+1;
+                 m = ++it;
+                 lb -= step+1;
                }
                else lb = step;
              }
@@ -70,8 +70,8 @@ void dij(
                step = lb/2;
                it = m + step;
                if(iAP[it] < min(kSire, jDam)){
-                 m=++it;
-                 lb-=step+1;
+                 m = ++it;
+                 lb -= step+1;
                }
                else lb = step;
              }
@@ -84,8 +84,8 @@ void dij(
                step = lb/2;
                it = m + step;
                if(iAP[it] < min(kSire, jSire)){
-                 m=++it;
-                 lb-=step+1;
+                 m = ++it;
+                 lb -= step+1;
                }
                else lb = step;
              }
@@ -154,8 +154,8 @@ void dijp(
              step = lb/2;
              it = m + step;
              if(iAP[it] < min(kDam, jSire)){
-               m=++it;
-               lb-=step+1;
+               m = ++it;
+               lb -= step+1;
              }
              else lb = step;
            }
@@ -168,8 +168,8 @@ void dijp(
              step = lb/2;
              it = m + step;
              if(iAP[it] < min(kDam, jDam)){
-               m=++it;
-               lb-=step+1;
+               m = ++it;
+               lb -= step+1;
              }
              else lb = step;
            }
@@ -182,8 +182,8 @@ void dijp(
              step = lb/2;
              it = m + step;
              if(iAP[it] < min(kSire, jDam)){
-               m=++it;
-               lb-=step+1;
+               m = ++it;
+               lb -= step+1;
              }
              else lb = step;
            }
@@ -196,8 +196,8 @@ void dijp(
              step = lb/2;
              it = m + step;
              if(iAP[it] < min(kSire, jSire)){
-               m=++it;
-               lb-=step+1;
+               m = ++it;
+               lb -= step+1;
              }
              else lb = step;
            }
@@ -280,8 +280,8 @@ void sdij(
                  step = lb/2;
                  it = m + step;
                  if(iAP[it] < min(kDam, jSire)){
-                   m=++it;
-                   lb-=step+1;
+                   m = ++it;
+                   lb -= step+1;
                  }
                  else lb = step;
                }
@@ -294,8 +294,8 @@ void sdij(
                  step = lb/2;
                  it = m + step;
                  if(iAP[it] < min(kDam, jDam)){
-                   m=++it;
-                   lb-=step+1;
+                   m = ++it;
+                   lb -= step+1;
                  }
                  else lb = step;
                }
@@ -308,8 +308,8 @@ void sdij(
                  step = lb/2;
                  it = m + step;
                  if(iAP[it] < min(kSire, jDam)){
-                   m=++it;
-                   lb-=step+1;
+                   m = ++it;
+                   lb -= step+1;
                  }
                  else lb = step;
                }
@@ -322,8 +322,8 @@ void sdij(
                  step = lb/2;
                  it = m + step;
                  if(iAP[it] < min(kSire, jSire)){
-                   m=++it;
-                   lb-=step+1;
+                   m = ++it;
+                   lb -= step+1;
                  }
                  else lb = step;
                }
@@ -423,8 +423,8 @@ void dijjskip(
                     step = lb/2;
                     it = m + step;
                     if(iAP[it] < min(kDam, jSire)){
-                      m=++it;
-                      lb-=step+1;
+                      m = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -437,8 +437,8 @@ void dijjskip(
                     step = lb/2;
                     it = m + step;
                     if(iAP[it] < min(kDam, jDam)){
-                      m=++it;
-                      lb-=step+1;
+                      m = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -451,8 +451,8 @@ void dijjskip(
                     step = lb/2;
                     it = m + step;
                     if(iAP[it] < min(kSire, jDam)){
-                      m=++it;
-                      lb-=step+1;
+                      m = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }
@@ -465,8 +465,8 @@ void dijjskip(
                     step = lb/2;
                     it = m + step;
                     if(iAP[it] < min(kSire, jSire)){
-                      m=++it;
-                      lb-=step+1;
+                      m = ++it;
+                      lb -= step+1;
                     }
                     else lb = step;
                   }

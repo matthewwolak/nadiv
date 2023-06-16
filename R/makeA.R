@@ -24,19 +24,9 @@
 makeA <- function(pedigree)
 {
   nPed <- numPed(pedigree)
-  N <- dim(nPed)[1]
-  nPed[nPed == -998] <- N + 1
-  #TODO: implement functionality/argument to supply f-coeffs (see `makeDiiF()`)
-  f <- c(rep(0, N), -1)
-  Cout <- .C("fcoeff", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 			#dam
-	    as.integer(nPed[, 3] - 1),  		#sire
-	    as.double(f),				#f
-            as.double(rep(0, N)),  			#dii
-            as.integer(N),   				#n
-	    as.integer(1))	#FIXME placeholder	#f missing or supplied
-  nPed[nPed == (N+1)] <- -998
-  A <- as(chol2inv(t(crossprod(makeTinv(nPed), Diagonal(x = sqrt(1 / Cout[[4]]), n = N)))), "symmetricMatrix")
+  sqrtDinv <- makeDiiF(nPed)$D
+    sqrtDinv@x <- sqrt(1 / sqrtDinv@x)
+  A <- as(chol2inv(crossprod(sqrtDinv, makeTinv(nPed))), "symmetricMatrix")
     A@Dimnames <- list(as.character(pedigree[, 1]),
 			as.character(pedigree[, 1]))
  A

@@ -26,11 +26,15 @@
 #' explicitly specifying the R structure of the ASReml model. See example
 #' below.
 #' 
-#' @aliases proLik is.proLik plot.proLik
+#' @aliases proLik proLik4 is.proLik plot.proLik
 #' @param full.model An \code{asreml} model object
-#' @param component A character indicating for which variance component the
-#'   profile likelihood will be constructed. Must be an object in
-#'   \code{full.model$gammas}.
+#' @param component A character (alternatively for \code{proLik4} this could also
+#'   be a \code{formula}) indicating for which variance component the
+#'   profile likelihood will be constructed. For \code{proLik}, must be an object
+#'   in \code{full.model$gammas}. For \code{proLik4}, must be an object in 
+#'   \code{full.model$vparameters}. To specify as a \code{formula}, components are
+#'   written as \code{Vx}, where \dQuote{x} is a number between 1 and
+#'   \code{length(full.model$vparameters)} (e.g., \code{component = ~ V1}).
 #' @param G Logical indicating whether component is part of the G structure. If
 #'   the component is part of the R structure, G = FALSE.
 #' @param negative Logical indicating whether or not the \code{component} can
@@ -225,8 +229,269 @@ proLik <- function(full.model, component,
 	UCL = UCL$minimum * s2, 
 	LCL = LCL$minimum * s2, 
 	component = component,
-	alpha = alpha), class = "proLik"))
+	alpha = alpha),
+  class = c("proLik", class(prof))))
 }
+
+
+
+
+
+
+
+
+
+
+################################################################################
+#' @rdname proLik
+#' @export
+proLik4 <- function(full.model, component,
+	G = TRUE, negative = FALSE,
+	nsample.units = 3, nse = 3,
+	alpha = 0.05, tolerance = 0.001,
+	parallel = FALSE, ncores = getOption("mc.cores", 2L)){
+
+  if(inherits(component, "formula")){
+    vin <- as.character(component[[length(component)]])
+    v <- substr(vin, start = 1, stop = 1)
+    vInd <- as.integer(substr(vin, start = 2, stop = nchar(vin)))
+    if(!v %in% c("V", "v")){
+      warning(cat(" Assuming formula position", length(component),
+          "indicates component to profile.\n",
+        "Also assuming right hand side of formula, character string position(s)",
+          seq(nchar(vin))[-1],
+          "\n represent an integer denoting component position in 'full.model$vparameters'\n",
+          "(interpreted as position", vInd, ")\n"))
+    }
+
+  } else{
+      if(!inherits(component, "character")){
+        stop("'component' must be either a formula (e.g., ~ V1) or a character")
+      }
+      vInd <- match(component, names(full.model$vparameters))
+    }  
+   bndChk <- asreml::vpc.char(full.model)[[vInd]]
+    warned <- FALSE
+    if(bndChk == "B"){
+      warned <- TRUE
+      warning(cat("Boundary parameter: CI estimation may produce strange behavior\n
+        proceed with caution\n"))
+    }
+
+  s2 <- full.model$sigma2
+  vEst <- full.model$vparameters[[vInd]]
+  std.err <- sqrt(diag(full.model$ai)[vInd])
+  if(is.na(std.err) | std.err == 0) std.err <- 0.1 
+  full.mod2 <- asreml::update.asreml(object = full.model,
+    start.values = TRUE)$vparameters.table
+  # constrain component
+  full.mod2[vInd, "Constraint"] <- "F"
+  chi.val <- 0.5 * qchisq(1 - alpha, df = 1)
+  chi.tol <- chi.val - 0.5 * qchisq(alpha + tolerance, df = 1, lower.tail = FALSE)
+
+  # Set asreml option to continue even if singularity in AI
+  oldAIsingFailOpt <- asreml::asreml.options("ai.sing", "fail")
+  asreml::asreml.options(ai.sing = TRUE, fail = "soft")
+  on.exit(asreml::asreml.options(oldAIsingFailOpt))
+  
+  ###########################################################
+  # Internal constrain function for asreml version 4
+  ## So not confused with version 3 `nadiv::constrainFun()`
+  conFun <- function(parameterVal, maxit = 600){ 
+    full.mod2[vInd, "Value"] <- parameterVal
+    ## rerun model with constraint
+    if(G){
+      conMod <- asreml::update.asreml(full.model,
+        random = ~ ., G.param = full.mod2,
+        maxiter = maxit, trace = FALSE)
+    } else{
+        conMod <- asreml::update.asreml(full.model,
+          residual = ~ ., R.param = full.mod2,
+          maxiter = maxit, trace = FALSE)
+      }  #<-- end if/else
+
+
+    cnt <- 0
+    while(!conMod$converge & cnt <= 5){
+      conMod <- asreml::update.asreml(conMod)
+      cnt <- cnt + 1
+    }  #<-- end while
+
+
+    cnt <- 0
+    if(conMod$converge){
+      pcntChng <- sum(!conMod$vparameters.pc < 0.015, na.rm = TRUE) == 0
+      while(!pcntChng & cnt <= 5){
+        conMod <- asreml::update.asreml(conMod, maxiter = maxit)
+        if(conMod$converge){
+          pcntChng <- sum(!conMod$vparameters.pc < 0.015, na.rm = TRUE) == 0
+        } else pcntChng <- FALSE
+        cnt <- cnt + 1
+      }  #<-- end while
+      conMod$converge <- pcntChng
+    }  #<-- end if converge
+
+    if(conMod$converge) return(asreml::lrt(conMod, full.model)$'LR-statistic')
+      else return(NA)
+  }  #<-- end conFun()
+  
+  # Internal parallel friendly wrapper of constrain function for asreml version 4
+  ## So not confused with version 3 `nadiv::parConstrainFun()`
+  parConFun <- function(x, parameterVals){
+    vapply(parameterVals[min(x):max(x)],
+      FUN = conFun, FUN.VALUE = vector("numeric", length = 1))
+  }  #<-- end parConFun() 
+  #####################
+
+  
+  proLik_keep_uniQUe_UCL <- list(gam = NULL, lambdas = NULL)
+  tmpLRTU <- function(st, chi){
+      proLik_keep_uniQUe_UCL[[1]] <<- c(proLik_keep_uniQUe_UCL[[1]], st)
+      lrt <- conFun(st)
+      proLik_keep_uniQUe_UCL[[2]] <<- c(proLik_keep_uniQUe_UCL[[2]], lrt)
+      abs(chi - lrt)
+  }
+  proLik_keep_uniQUe_LCL <- list(gam = NULL, lambdas = NULL)
+  tmpLRTL <- function(st, chi){
+      proLik_keep_uniQUe_LCL[[1]] <<- c(proLik_keep_uniQUe_LCL[[1]], st)
+      lrt <- conFun(st)
+      proLik_keep_uniQUe_LCL[[2]] <<- c(proLik_keep_uniQUe_LCL[[2]], lrt)
+      abs(chi - lrt)
+  }
+  UCL <- LCL <- list(minimum = NA, objective = chi.val)
+  ltol <- utol <- .Machine$double.eps^0.25
+
+
+  cnt <- 0
+  # Are 3 iterations of `while()` sufficient?
+  ## with `optim(tol=...)` changed by 2 decimal places each successive try?
+  while(((UCL[[2L]] > chi.tol) + (LCL[[2L]] > chi.tol)) > 0 & cnt < 3){
+    if(cnt == 0){
+      Uint <- c(vEst, vEst + (nse * std.err))
+      Lint <- c(vEst - (nse * std.err), vEst)
+    } else{
+        if(UCL[[2L]] > chi.tol){
+	  if(with(proLik_keep_uniQUe_UCL,
+	    any(lambdas > chi.val) && any(lambdas < chi.val))){
+	      Uint <- with(proLik_keep_uniQUe_UCL,
+	        c(gam[which.min(ifelse((chi.val - lambdas) > 0,
+	            (chi.val - lambdas), Inf))],
+	          gam[which.min(ifelse((lambdas - chi.val) > 0,
+	            (lambdas - chi.val), Inf))]))
+	  } else{
+              Uext <- chi.val / max(proLik_keep_uniQUe_UCL$lambdas)
+              Uint <- c(vEst + (nse * std.err),
+                vEst + (Uext*(nse*std.err) + std.err))
+            }
+          # Adjust `optimize()` tolerance: see details in `?optimize`
+#TODO could make `optimize(tol)` argument correspond more directly with `proLik(tolerance)`
+## Use default `tol` in first pass
+## then see, given approx. quadratic relationship between `gam` and `lambdas`
+## what `optimize(tol)` needed to find `gam` value giving `lambda` within `tolerance`/`chi.tol` of `chi.val`
+          x_0 <- with(proLik_keep_uniQUe_UCL,
+            gam[which.min(abs(chi.val - lambdas))])
+          d <- sqrt(.Machine$double.eps) * abs(x_0) + ((utol)/3)
+          if(d > 1e-6) ltol <- 3*(d*0.01 - sqrt(.Machine$double.eps * x_0^2))
+        }
+        if(LCL[[2L]] > chi.tol){
+	  if(with(proLik_keep_uniQUe_LCL,
+	    any(lambdas > chi.val) && any(lambdas < chi.val))){
+	      Lint <- with(proLik_keep_uniQUe_LCL,
+	        c(gam[which.min(ifelse((lambdas - chi.val) > 0,
+	            (lambdas - chi.val), Inf))],
+	          gam[which.min(ifelse((chi.val - lambdas) > 0,
+	            (chi.val - lambdas), Inf))]))
+	  } else{
+              Lext <- chi.val / max(proLik_keep_uniQUe_LCL$lambdas)
+              Lint <- c(vEst - (Lext*(nse*std.err) + std.err),
+                vEst - (nse*std.err))
+            }
+          # Adjust `optimize()` tolerance: see details in `?optimize`
+          x_0 <- with(proLik_keep_uniQUe_LCL,
+            gam[which.min(abs(chi.val - lambdas))])
+          d <- sqrt(.Machine$double.eps) * abs(x_0) + ((ltol)/3)
+          if(d > 1e-6) ltol <- 3*(d*0.01 - sqrt(.Machine$double.eps * x_0^2))
+        }          
+      }
+    if(!negative & Lint[1L] < 0) Lint[1L] <- 1e-8
+      if(!negative & Lint[2L] < 0) Lint[2L] <- 1e-7
+    #FIXME next two lines assume correlations and won't work for covariance
+    if(negative == TRUE & Uint[2L] > 1) Uint[2L] <- 1.0 - 1e-8
+    if(negative == TRUE & Lint[1L] < -1) Lint[1L] <- -1.0 + 1e-8
+
+
+    if(UCL[[2L]] > chi.tol){
+      if(parallel){
+        tmpUCL <- parallel::mcparallel(expr = expression(c(optimize(f=tmpLRTU,
+            interval = Uint,
+            chi = chi.val,
+            tol = utol),
+          proLik_keep_uniQUe_UCL)))
+      } else{
+          UCL <- optimize(f = tmpLRTU,
+            interval = Uint, chi = chi.val, tol = utol)
+        }
+    }
+
+
+    if(LCL[[2L]] > chi.tol){
+      LCL <- optimize(f = tmpLRTL, interval = Lint, chi = chi.val, tol = ltol)
+    }
+    if(parallel & UCL[[2L]] > chi.tol){
+      tmpUCL.out <- parallel::mccollect(tmpUCL, wait = TRUE)[[1]]
+      UCL <- list(minimum = tmpUCL.out$minimum[[1]],
+        objective = tmpUCL.out$objective[[1]])
+      proLik_keep_uniQUe_UCL <- list(gam = tmpUCL.out$gam,
+        lambdas = tmpUCL.out$lambdas)
+    }
+    cnt <- cnt + 1
+  }  #<-- end `while()`
+
+  vEstVec <- c(vEst,
+      seq(vEst - (vEst - LCL$minimum)/2, vEst + (UCL$minimum - vEst)/2,
+        length.out = nsample.units))
+
+
+  if(parallel){
+    if(length(vEstVec) < ncores) ncores <- length(vEstVec)
+    prof <- list(lambdas = parallel::pvec(v = seq(1,length(vEstVec),1),
+          FUN = parConFun, parameterVals = vEstVec,
+          mc.set.seed = FALSE, mc.silent = FALSE,
+          mc.cores = ncores, mc.cleanup = TRUE),
+      var.estimates = vEstVec)
+    } else{
+    prof <- list(lambdas = vapply(vEstVec,
+        FUN = conFun, FUN.VALUE = vector("numeric", length = 1)),
+      var.estimates = vEstVec)
+      }
+
+  prof$var.estimates <- c(prof$var.estimates, proLik_keep_uniQUe_LCL$gam,
+    proLik_keep_uniQUe_UCL$gam)
+  prof$lambdas <- c(prof$lambdas, proLik_keep_uniQUe_LCL$lambdas,
+    proLik_keep_uniQUe_UCL$lambdas)
+  ord.index <- order(prof$var.estimates)
+
+    if(!negative & LCL$minimum < 0.01 & !warned){
+      warning(cat("Boundary parameter: CI estimation may produce strange behavior\n
+        proceed with caution\n"))
+      }
+
+  # Remove CI limit estimates if they haven't been reached
+  if(UCL[[2L]] > chi.tol) UCL[[1L]] <- NA
+  if(LCL[[2L]] > chi.tol) LCL[[1L]] <- NA
+
+
+ return(structure(list(lambdas = prof$lambdas[ord.index], 
+	var.estimates = prof$var.estimates[ord.index] * s2, 
+	UCL = UCL$minimum * s2, 
+	LCL = LCL$minimum * s2, 
+	component = component,
+	alpha = alpha),
+  class = c("proLik", class(prof))))
+}
+
+################################################################################
+
 
 
 #' @method is proLik

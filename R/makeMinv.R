@@ -63,10 +63,6 @@
 #' @examples
 #' 
 #'  ##  Example pedigree from Wray 1990
-#'    Wray90 <- data.frame(id = seq(8),
-#'	dam = c(NA, NA, 1, 1, 4, 4, 6, 7),
-#'	sire = c(NA, NA, 2, 2, 3, 2, 5, 5),
-#'	time = c(0, 0, 1, 1, 2, 2, 3, 4))
 #'  #### Implement Casellas & Medrano (2008) algorithm
 #'    Mout <- makeMinv(Wray90[, 1:3])
 #'  #### Wray (1990) algorithm with extra argument `theta`
@@ -104,10 +100,10 @@ makeMinv <- function(pedigree, ...){
 	    as.double(0),	     				#logDet of M
 	    as.double(theta))					#for Wray90
 
-  Minv <- as(Minv, "dsCMatrix")
+  Minv <- as(Minv, "dMatrix")
   Minv@x <- Cout[[6]]
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-    Minv <- as(Minv, "dgCMatrix")
+    Minv <- as(Minv, "generalMatrix")
   h <- Cout[[3]]
   dii <- Cout[[4]]
 
@@ -150,10 +146,10 @@ makeMinvML <- function(pedigree, ...){
 	    as.integer(Minv@p), 				#pMinv
 	    as.double(0))	     				#logDet of M
 
-  Minv <- as(Minv, "dsCMatrix")
+  Minv <- as(Minv, "dMatrix")
   Minv@x <- Cout[[6]]
     Minv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-    Minv <- as(Minv, "dgCMatrix")
+    Minv <- as(Minv, "generalMatrix")
   h <- Cout[[3]]
   dii <- Cout[[4]]
 

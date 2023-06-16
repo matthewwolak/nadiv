@@ -67,7 +67,7 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
     dimnames = list(as.character(nPed[, 1]), as.character(nPed[, 1])),
     symmetric = FALSE, index1 = FALSE))
 
-  T <- as(solve(Tinv), "dgCMatrix")
+  T <- as(solve(Tinv), "CsparseMatrix")
   T@Dimnames <- Tinv@Dimnames
   Q <- as(T[-c(1:nggroups), 1:nggroups], "matrix")
 
@@ -78,13 +78,7 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
     nPedNoGG[nPedNoGG[, 2] <= 0, 2] <- -998
     nPedNoGG[nPedNoGG[, 3] <= 0, 3] <- -998
   Tinv2 <- makeTinv(nPedNoGG)
-  DiiF <- makeDiiF(nPedNoGG) # note, fcoeff here assumes f=0 of phantom parents
-#TODO need to keep f coefficient at all? if not only return D object from `makeDiiF()`
-#TODO consider creating (1-D) object; use `1-D` repeatedly, but never D
-## replace DiiF$D with `DiiF$D@x <- 1 - DiiF$D@x` once now instead of doing
-###calculation repeatedly below
-## However, currently the operations below align with Muff et al. 2019 so not
-### doing the above idea makes the code easier to follow when reading Muff et al.
+  OneMinDii <- 1 - makeDiiF(nPedNoGG)$D@x  
 
 
   ##### Begin group-specific calculations ######
@@ -107,10 +101,11 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
     #### (would follow Lacy, Alaks, & Walsh 1996 founder-specific F approach) 
     #### this would be implemented with Muff et al. 2019 (eqn 11)
     ## However, currently do Muff et al. 2019 approximation to D_j (eqn 10)
-    Dj <- (1 - Q[, j] * (1 - DiiF$D@x))
+    Dj <- (1 - Q[, j] * OneMinDii)
     DinvTilde <- Diagonal(x = 1 / (Dj * scalingj), n = eN) 
     # Ainv_j created by Muff et al. 2019 (eqn 13)
-    Ainv_list[[j]] <- structure(as(crossprod(fsOrd, crossprod(sqrt(DinvTilde) %*% Tinv2)) %*% fsOrd, "dgCMatrix"), geneticGroups = c(0, 0))
+    Ainv_list[[j]] <- structure(as(crossprod(fsOrd, crossprod(sqrt(DinvTilde) %*% Tinv2)) %*% fsOrd, "CsparseMatrix"),
+                                geneticGroups = c(0, 0))
     if(det) logDet_list[j] <- -1*determinant(Ainv_list[[j]], logarithm = TRUE)$modulus[1]
 
     if(ptype == "D"){

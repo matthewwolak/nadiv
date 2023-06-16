@@ -100,7 +100,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
     cat(".done", "\n")
     listSdsiminv <- sm2list(Sdsiminv, rownames = Sdsim@Dimnames[[1L]],
 	colnames = c("row", "column", "simSdinverse"))
-    Sdsim <- as(Sdsim, "dgCMatrix")
+    Sdsim <- as(Sdsim, "generalMatrix")
 
     return(list(S = approxSd$S,
 	Sd = approxSd$Sd, logDetSd = approxSd$logDet,

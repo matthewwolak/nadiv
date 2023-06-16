@@ -276,7 +276,7 @@ makeAinv.default <- function(pedigree, f = NULL,
   # 2: First checks to see if individual k has same dam and sire as k-1, if so then just assigns k-1's f 
   # 3: simplifies the calculation of the addition to the Ainv element (instead of alphai * 0.25 - defines alphai=alphai*0.25).
   nPed[nPed == -998] <- N + 1
-  f <- c(rep(-1, nggroups), rep(0, eN), -1)
+  f <- c(rep(-1, nggroups), rep(0, eN), -1) #TODO allow user to specify some f
   Cout <- .C("ainvml", PACKAGE = "nadiv",
 	    as.integer(nPed[, 2] - 1), 				#dam
 	    as.integer(nPed[, 3] - 1),  			#sire
@@ -288,10 +288,10 @@ makeAinv.default <- function(pedigree, f = NULL,
 	    as.integer(Ainv@i), 				#iA
 	    as.integer(Ainv@p), 				#pA
 	    as.integer(length(Ainv@i))) 			#nzmaxA
-  Ainv <- as(Ainv, "dsCMatrix")
+  Ainv <- as(Ainv, "dMatrix")
   Ainv@x <- Cout[[7]]
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
+  Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
       f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
@@ -303,12 +303,16 @@ makeAinv.default <- function(pedigree, f = NULL,
     }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
-     Ainv <- t(permute) %*% Ainv %*% permute
+       dmnms <- Ainv@Dimnames[[1L]][invPerm(permute@perm)]
+     Ainv <- crossprod(permute, Ainv) %*% permute
+       Ainv@Dimnames[[1L]] <- dmnms
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
-	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
+	                       colnames = c("row", "column", "Ainv")),
+	                     geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
@@ -400,7 +404,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  
   groupFuzz <- Diagonal(x = 1, n = nggroups)
   groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
-  fuzzmat <- rbind(groupFuzz, as(fuzz, "sparseMatrix"))
+  fuzzmat <- rbind(groupFuzz, fuzz)
   # predict non-zero elements of Astar
   ## make H from Quaas 1988:
   ## H = [-Pb Qb : Tinv]
@@ -426,7 +430,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 	  index1 = FALSE, dims = c(eN, p), symmetric = FALSE,
 	  dimnames = list(NULL, as.character(pedalt[phantomPars, 1])))
   ### Qb is the fuzzy classification matrix ('fuzz')
-  Qb <- as(fuzzmat[-groupRows, ][match(rownames(fuzzmat)[-groupRows], colnames(sPb)), ], "sparseMatrix")
+  Qb <- fuzzmat[-groupRows, ][match(rownames(fuzzmat)[-groupRows], colnames(sPb)), ]
   sQb <- sparseMatrix(i = Qb@i,
 	  p = Qb@p,
 	  index1 = FALSE, dims = Qb@Dim, symmetric = FALSE,
@@ -437,7 +441,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 
   phantomless[phantomless == -998] <- N + 1
   # for now, phantom parents cannot be inbred (just like genetic groups)
-  f <- c(rep(-1, nggroups), rep(0, eN), -1)
+  f <- c(rep(-1, nggroups), rep(0, eN), -1) #TODO allow user to specify some f
   Cout <- .C("ainvfuzz", PACKAGE = "nadiv",
 	    as.integer(phantomless[, 2] - 1), 			#dam
 	    as.integer(phantomless[, 3] - 1),  			#sire
@@ -454,24 +458,30 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
 	    as.integer(Ainv@i), 				#iA
 	    as.integer(Ainv@p)) 				#pA
 
-  Ainv <- as(Ainv, "dsCMatrix")
+  Ainv <- as(Ainv, "dMatrix")
   Ainv@x <- Cout[[12]]
-  fsOrd1 <- as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "CsparseMatrix")
-  fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "sparseMatrix")@x, "pMatrix")
-  Ainv <- as(crossprod(fsOrd, Ainv) %*% fsOrd, "dgCMatrix")
+  fsOrd1 <- as(as(as(as.integer(renPed), "pMatrix")[, -c(naPed2 + nggroups)], "nMatrix"), "CsparseMatrix")
+  fsOrd <- as(as(fsOrd1 %*% matrix(seq(N), nrow = N), "CsparseMatrix")@x, "pMatrix")
+  Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   Ainv@Dimnames <- list(as.character(pedalt[crossprod(fsOrd1, matrix(seq(N+p), ncol = 1))@x, 1]), NULL)
   f <- (fsOrd1 %*% Cout[[5]][-c(N+1)])@x[-groupRows]
   dii <- (fsOrd1 %*% Cout[[6]][-c(N+1)])@x[-groupRows]
   if(!gOnTop){ 
     permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
-    Ainv <- t(permute) %*% Ainv %*% permute
+      dmnms <- Ainv@Dimnames[[1L]][invPerm(permute@perm)]
+    Ainv <- crossprod(permute, Ainv) %*% permute
+      Ainv@Dimnames[[1L]] <- dmnms
   }
   if(det) logDet <- -1*determinant(Ainv, logarithm = TRUE)$modulus[1] else logDet <- NULL
 
  return(list(Ainv = structure(Ainv, geneticGroups = c(nggroups, 0)),
-	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv), colnames = c("row", "column", "Ainv")), geneticGroups = c(nggroups, 0)),
+	listAinv = structure(sm2list(Ainv, rownames = rownames(Ainv),
+	                               colnames = c("row", "column", "Ainv")),
+	                     geneticGroups = c(nggroups, 0)),
 	f = f,
 	logDet = logDet,
 	dii = dii))
 }
+
+
 

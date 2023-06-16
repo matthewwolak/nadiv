@@ -52,7 +52,8 @@ void minvq(
           v[k] = sqrt(0.5 + 0.25*u[p] - 0.5*h[p] + theta[0]);
         }
     }
-    if(p == n[0]) v[k] = 1.0; // because p <= q then if p=n[0]=missing ID THEN so will q
+    // because p <= q then if p=n[0]=missing ID, THEN so will q
+    if(p == n[0]) v[k] = 1.0; 
 
 
     for(j = k; j < n[0]; j++){
@@ -182,8 +183,6 @@ void minvq(
 }
 }
 
-
-
 ///////////////////////////////////////////////////////////////////////
 
 
@@ -215,84 +214,18 @@ void minvml(
 	double *logDet
 ){         
 
-  int     j, k, m, p, q, cnt, sk, dk, sj, dj, lb, step, istart, it;
-  double  g, alphai, detM;
-  double  *AN = new double[2*n[0]];
-  double  *li = new double[n[0]];
-  double  *u = new double[n[0]];
-  
-  for(k = 0; k < n[0]; k++){
-     li[k]=0.0;               // set l to zero
-     AN[k]=-1;                // set AN to zero
-     u[k] = 0.0;              // set u to zero
-  }
-
+  int     k, m, sk, dk, lb, step, istart, it;
+  double  alphai, detM;
+ 
   detM = 1.0;  // determinant of M=TDT'=prod(diag(D))
+
+  // Meuwissen and Luo 1992 algorithm to obtain f and dii values
+  //// Extends Wray 1990; Casellas and Medrano 2008
+  mml(dam, sire, h, dii, n[0]);
     
-  for(k = 0; k < n[0]; k++){  // iterate through each row of L 
-
-    // intialize/guess and change if different
-    //// if sire < dam OR sire=dam=UNKNOWN
-    p = sire[k];
-    q = dam[k];
-    //// otherwise, change so p is always < q (unless p=q)
-    if(sire[k] > dam[k]){
-      p = dam[k];
-      q = sire[k];
-    }
-  
-    if(p != n[0] && q != n[0]){
-      dii[k] = 0.25 * (u[p] + u[q]) - 0.5 * (h[p] + h[q]) + 1.0;
-    }
-    if(p < n[0] && q == n[0]) dii[k] = 0.25*u[p] - 0.5*h[p] + 0.5;  
-    if(p == n[0]) dii[k] = 1.0; // because p <= q then if p=n[0]=missing ID THEN so will q
-
-    alphai = 1 / dii[k];
-    detM *= dii[k];    // add contributions to determinant of M
-    
-    li[k] = 1.0;     // set L_ii to one
-    j = k;
-    cnt = 0;
-    g = 0.0;
-    while(j >= 0){
-      sj = sire[j];
-      dj = dam[j];
-      
-      if(sj != n[0]){
-        AN[cnt] = sj;
-        li[sj] += 0.5 * li[j];
-        cnt++;
-      }
-
-      if(dj != n[0]){
-        AN[cnt] = dj;
-        li[dj] += 0.5 * li[j];
-        cnt++;
-      }
-
-      u[k] += li[j] * li[j] * dii[j];
-      g += li[j];
-      
-      j =- 1;
-      
-      for(m = 0; m < cnt; m++){    // find the eldest individual
-        if(AN[m] > j){
-          j = AN[m];
-        }
-      }
-      for(m = 0; m < cnt; m++){    // delete duplicates
-        if(AN[m] == j){
-          AN[m] -= n[0];  // set to negative value so never `AN[m]>j` in above
-        }
-      }
-      
-    }  // end of while
-
-    h[k] = u[k] - g;
-
-    for(m = 0; m <= k; m++) li[m] = 0.0;    // reset li to zero
-            
-
+  for(k = 0; k < n[0]; ++k){  // iterate through each row of L 
+    alphai = 1.0 / dii[k];
+    detM *= dii[k];    // add contributions to determinant of M     
     ////////////////////////////////////////
     // Now add contributions to M-inverse
     sk = sire[k];
@@ -379,13 +312,6 @@ void minvml(
   // Calculate log determinant of M (needed for REML)    
   logDet[0] += log(detM);
 
-  delete[] u;
-  delete[] li;
-  delete[] AN;
-  
 }
 }
-
-
-
 
