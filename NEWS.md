@@ -1,5 +1,10 @@
 # 2.17.3
 
+## NEW
+  - `makeDiiF()` can now be given coefficients of inbreeding. Facilitates either:
+    - calculating `f` in a new generation of the pedigree if `f` has already been calculated for previous generations
+    - creating a "phantom parent" to all founders to specify an average coefficient of inbreeding in the base population.
+    - can be used to drastically speed up simulations where breeding values are calculated based on mid-parent value plus Mendelian sampling deviation (that needs to account for inbreeding of parents).
 
 # 2.17.2
 

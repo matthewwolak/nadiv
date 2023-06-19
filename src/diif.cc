@@ -70,9 +70,9 @@ void ml(int *dam, int *sire,
   for(k = g; k < n; ++k){  // iterate through each row of l 
     dii[k] = 0.5 - 0.25*(f[dam[k]] + f[sire[k]]);
     
-    if(fmiss == 1){  // only do below if f coefficients NOT supplied by user
+    if(k >= fmiss + g){  // only do below if f coefficients NOT supplied by user
       if((k > 0) && (dam[k] == dam[k-1]) && (sire[k] == sire[k-1])){
-        f[k] += f[k-1];
+        f[k] = f[k-1];
       } 
       else {
         li[k] = 1.0;                   // set l_ii to one
