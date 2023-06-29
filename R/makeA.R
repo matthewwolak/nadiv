@@ -24,9 +24,11 @@
 makeA <- function(pedigree)
 {
   nPed <- numPed(pedigree)
-  sqrtDinv <- makeDiiF(nPed)$D
-    sqrtDinv@x <- sqrt(1 / sqrtDinv@x)
-  A <- as(chol2inv(crossprod(sqrtDinv, makeTinv(nPed))), "symmetricMatrix")
+#  sqrtDinv <- makeDiiF(nPed)$D
+#    sqrtDinv@x <- sqrt(1 / sqrtDinv@x)
+  A <- as(tcrossprod(solve(Diagonal(x = sqrt(1 / makeAinv(pedigree)$dii),
+           n = nrow(nPed)) %*% makeTinv(nPed))),
+         "symmetricMatrix")
     A@Dimnames <- list(as.character(pedigree[, 1]),
 			as.character(pedigree[, 1]))
  A

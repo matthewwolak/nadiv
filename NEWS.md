@@ -4,8 +4,19 @@
   - `makeDiiF()` can now be given coefficients of inbreeding. Facilitates either:
     - calculating `f` in a new generation of the pedigree if `f` has already been calculated for previous generations
     - creating a "phantom parent" to all founders to specify an average coefficient of inbreeding in the base population.
-    - can be used to drastically speed up simulations where breeding values are calculated based on mid-parent value plus Mendelian sampling deviation (that needs to account for inbreeding of parents).
+    - can be used to speed up simulations where breeding values are calculated based on mid-parent value plus Mendelian sampling deviation (that needs to account for inbreeding of parents).
 
+## Major changes
+  - `makeA()` was affected by a bug in `Matrix` <1.6-0
+    - `Matrix::chol2inv()` bug highlighted a messy order of operations in `nadiv`
+    - now perfected the order of operations and explicitly use `tcrossprod()` and
+`solve()` which are just what `chol2inv()` uses
+        - done to be more explicit in `nadiv` and take 1 step away from future bugs like this
+    - checked speed and memory profiling for several options of types of matrices
+        - dtCMatrix is best for time (tried "dtrMatrix" and "dtpMatrix", but these
+were __much__ slower.
+        - `chol2inv()` and `tcrossprod(solve())` allocated same amount of memory according to `profmem` package
+                 
 # 2.17.2
 
 # DEPRECATED
