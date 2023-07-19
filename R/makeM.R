@@ -33,8 +33,7 @@ makeM <- function(pedigree){
             as.double(rep(0, N)),  			#dii
             as.integer(N))   				#n
 
-  M <- as(chol2inv(crossprod(Diagonal(x = sqrt(1 / Cout[[4]]), n = N),
-        Tinv)),
+  M <- as(tcrossprod(solve(Diagonal(x = sqrt(1 / Cout[[4]]), n = N) %*% Tinv)),
       "symmetricMatrix")
 
     M@Dimnames <- list(as.character(pedigree[, 1]),
