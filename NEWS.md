@@ -16,6 +16,11 @@
         - dtCMatrix is best for time (tried "dtrMatrix" and "dtpMatrix", but these
 were __much__ slower.
         - `chol2inv()` and `tcrossprod(solve())` allocated same amount of memory according to `profmem` package
+        
+## Small changes
+  - `nadiv` version 2.17.2 caused CRAN to archive due to error induced by `Matrix` updates
+    - Mikael Jagan (`Matrix` author) helpfully provided excellent explanations and patches
+    - errors in `nadiv` code caused by new methods for `all.equal()` and `rbind2()`        
                  
 # 2.17.2
 
