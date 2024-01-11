@@ -154,7 +154,7 @@
 #'     ## genetic groups
 #'     ggAinv[1:8, 1:8]
 #'     noggAinv
-#'    stopifnot(all.equal(ggAinv[1:8, 1:8], noggAinv))
+#'    stopifnot(all.equal(ggAinv[1:8, 1:8], structure(noggAinv, geneticGroups = NULL)))
 #'    
 #'  ##  With fuzzy classification of genetic groups  ##
 #'   ## example in Fikse (2009)
@@ -404,7 +404,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  
   groupFuzz <- Diagonal(x = 1, n = nggroups)
   groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
-  fuzzmat <- rbind(groupFuzz, fuzz)
+  fuzzmat <- as(rbind(groupFuzz, fuzz), "CsparseMatrix")
   # predict non-zero elements of Astar
   ## make H from Quaas 1988:
   ## H = [-Pb Qb : Tinv]
