@@ -29,7 +29,7 @@
 #' @param Dimnames A vector of characters if names are desired for the output
 #'   (co)variance matrix. If not specified, either the default labels from the
 #'   \code{asreml} object will be used or the rows and columns will be
-#'   un-labeled.
+#'   unlabeled.
 #'
 #' @return A /code{matrix} of k x k dimensions is returned, if k is the number
 #'   of (co)variance components estimated in the model. Sampling covariances are

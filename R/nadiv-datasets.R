@@ -247,7 +247,7 @@
 #' Pedigree and phenotypic values for a mythical population of Warcolaks
 #' 
 #' A two trait example pedigree from the three generation breeding design of
-#' Fairbairn & Roff (2006) with two un-correlated traits.
+#' Fairbairn & Roff (2006) with two uncorrelated traits.
 #' 
 #' Unique sets of relatives are specified for a three generation breeding
 #' design (Fairbairn & Roff, 2006).  Each set contains 72 individuals. This
@@ -255,7 +255,7 @@
 #' Fairbairn & Roff's design. The pedigree was created using
 #' \code{simPedDFC()}.
 #' 
-#' The dataset was simulated to have two un-correlated traits with different
+#' The dataset was simulated to have two uncorrelated traits with different
 #' genetic architectures (see \code{examples} below). The trait means are both
 #' equal to 1 for males and 2 for females. The additive genetic, dominance
 #' genetic, and environmental (or residual) variances for both \code{trait1}

@@ -9,7 +9,7 @@
 #' @param fp A vector containing the numbers of free parameters of each model
 #'   included in the logLik vector
 #' @param n An optional vector of sample sizes for each model.  Used to
-#'   calculate AICc (small sample un-biased AIC).
+#'   calculate AICc (small sample unbiased AIC).
 #'
 #' @return a \code{list}:
 #'   \describe{

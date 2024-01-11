@@ -19,7 +19,7 @@ must be the row-wise lower triangle of the matrix (including the diagonal).}
 \item{Dimnames}{A vector of characters if names are desired for the output
 (co)variance matrix. If not specified, either the default labels from the
 \code{asreml} object will be used or the rows and columns will be
-un-labeled.}
+unlabeled.}
 }
 \value{
 A /code{matrix} of k x k dimensions is returned, if k is the number
