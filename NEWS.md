@@ -21,12 +21,13 @@ were __much__ slower.
   - `nadiv` version 2.17.2 caused CRAN to archive due to error induced by `Matrix` updates
     - Mikael Jagan (`Matrix` author) helpfully provided excellent explanations and patches
     - errors in `nadiv` code caused by new methods for `all.equal()` and `rbind2()`        
+         
                  
 # 2.17.2
 
-# DEPRECATED
-  - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
-    - `nadiv` will not support this in the future as asreml v4 has `vpredict()`
+# DEPRECATED version 2.17.2
+  - `pin()` does not work with asreml 4 (should still work with asreml 3 model objects)
+    - `nadiv` will not support this in the future as asreml 4 has `vpredict()`
 
 ## NEW
   - `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4
