@@ -497,7 +497,7 @@ proLik4 <- function(full.model, component,
 #' @method is proLik
 #' @rdname proLik
 #' @export
-is.proLik <- function(x, ...) inherits(x, "proLik")
+is.proLik <- function(x, class2) inherits(x, "proLik")
 
 
 

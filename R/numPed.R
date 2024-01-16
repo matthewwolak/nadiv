@@ -122,7 +122,7 @@ numPed <- function(pedigree, check = TRUE){
 #' @ method is numPed
 #' @rdname numPed
 #' @export
-is.numPed <- function(x, ...) inherits(x, "numPed")
+is.numPed <- function(x, class2) inherits(x, "numPed")
 
 
 

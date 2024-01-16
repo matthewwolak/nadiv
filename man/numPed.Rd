@@ -8,7 +8,7 @@
 \usage{
 numPed(pedigree, check = TRUE)
 
-is.numPed(x, ...)
+is.numPed(x, class2)
 
 ronPed(x, i, ...)
 }

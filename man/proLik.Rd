@@ -33,7 +33,7 @@ proLik4(
   ncores = getOption("mc.cores", 2L)
 )
 
-\method{is}{proLik}(x, ...)
+\method{is}{proLik}(x, class2)
 
 \method{plot}{proLik}(
   x,
@@ -83,12 +83,12 @@ available.}
 
 \item{x}{Object of class \code{proLik}.}
 
-\item{\dots}{other arguments to \code{\link[graphics]{plot}}.}
-
 \item{CL}{A logical indicating whether a lines at the confidence limits are
 to be drawn when plotting.}
 
 \item{type, main, xlab, ylab}{See arguments to \code{\link[graphics]{plot}}.}
+
+\item{\dots}{other arguments to \code{\link[graphics]{plot}}.}
 }
 \value{
 An S3 object of class \dQuote{proLik} containing:
