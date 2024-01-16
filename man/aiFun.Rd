@@ -22,7 +22,7 @@ must be the row-wise lower triangle of the matrix (including the diagonal).}
 unlabeled.}
 }
 \value{
-A /code{matrix} of k x k dimensions is returned, if k is the number
+A \code{matrix} of k x k dimensions is returned, if k is the number
   of (co)variance components estimated in the model. Sampling covariances are
   above and below the diagonal while variances are located along the
    diagonal. If \code{Dimnames} is specified, the row and column names are
