@@ -20,7 +20,9 @@ were __much__ slower.
 ## Small changes
   - `nadiv` version 2.17.2 caused CRAN to archive due to error induced by `Matrix` updates
     - Mikael Jagan (`Matrix` author) helpfully provided excellent explanations and patches
-    - errors in `nadiv` code caused by new methods for `all.equal()` and `rbind2()`        
+    - errors in `nadiv` code caused by new methods for `all.equal()` and `rbind2()`
+    - removed methods `is.numPed()` and `is.proLik()`
+        - hardly use first and never second plus they just call `inherits()`       
          
                  
 # 2.17.2

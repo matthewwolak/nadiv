@@ -2,13 +2,10 @@
 % Please edit documentation in R/numPed.R
 \name{numPed}
 \alias{numPed}
-\alias{is.numPed}
 \alias{ronPed}
 \title{Integer Format Pedigree}
 \usage{
 numPed(pedigree, check = TRUE)
-
-is.numPed(x, class2)
 
 ronPed(x, i, ...)
 }
@@ -51,11 +48,11 @@ Based on code from the \code{MCMCglmm} package
 \examples{
 
 (nPed <- numPed(Mrode2))
-is(nPed)
+class(nPed)
 
 # re-order and retain class 'numPed'
 ronPed(nPed, order(nPed[, 2], nPed[, 3]))
-is(nPed)
+class(nPed)
 
 }
 \seealso{

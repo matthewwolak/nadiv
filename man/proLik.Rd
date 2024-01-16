@@ -3,7 +3,6 @@
 \name{proLik}
 \alias{proLik}
 \alias{proLik4}
-\alias{is.proLik}
 \alias{plot.proLik}
 \title{Profile Likelihoods}
 \usage{
@@ -32,8 +31,6 @@ proLik4(
   parallel = FALSE,
   ncores = getOption("mc.cores", 2L)
 )
-
-\method{is}{proLik}(x, class2)
 
 \method{plot}{proLik}(
   x,

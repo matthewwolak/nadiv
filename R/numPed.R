@@ -43,11 +43,11 @@
 #' @examples
 #' 
 #' (nPed <- numPed(Mrode2))
-#' is(nPed)
+#' class(nPed)
 #' 
 #' # re-order and retain class 'numPed'
 #' ronPed(nPed, order(nPed[, 2], nPed[, 3]))
-#' is(nPed)
+#' class(nPed)
 #' 
 #' @export
 numPed <- function(pedigree, check = TRUE){
