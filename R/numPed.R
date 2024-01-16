@@ -25,7 +25,7 @@
 #' 
 #' Based on code from the \code{MCMCglmm} package
 #' 
-#' @aliases numPed is.numPed ronPed
+#' @aliases numPed ronPed
 #' @param pedigree A three column pedigree object, where the columns correspond 
 #'   to: ID, Dam, & Sire
 #' @param check A logical argument indicating if checks on the validity of the 
@@ -51,7 +51,7 @@
 #' 
 #' @export
 numPed <- function(pedigree, check = TRUE){
- if(!is.numPed(pedigree) && check){      
+ if(!inherits(pedigree, "numPed") && check){      
   if(any(d0 <- pedigree[, 2] == 0, na.rm = TRUE)){
     pedigree[which(d0), 2] <- NA
     warning("Zero in the dam column interpreted as a missing parent")
@@ -62,11 +62,11 @@ numPed <- function(pedigree, check = TRUE){
   }
   if(any(d998 <- pedigree[, 2] == -998, na.rm = TRUE)){
     pedigree[which(d998), 2] <- NA
-    if(!is.numPed(pedigree)) warning("-998 in the dam column interpreted as a missing parent")
+    if(!inherits(pedigree, "numPed")) warning("-998 in the dam column interpreted as a missing parent")
   }
   if(any(s998 <- pedigree[, 3] == -998, na.rm = TRUE)){
     pedigree[which(s998), 3] <- NA
-    if(!is.numPed(pedigree)) warning("-998 in the sire column interpreted as a missing parent")
+    if(!inherits(pedigree, "numPed")) warning("-998 in the sire column interpreted as a missing parent")
   }
   if(any(dast <- pedigree[, 2] == "*", na.rm = TRUE)) pedigree[which(dast), 2] <- NA
   if(any(sast <- pedigree[, 3] == "*", na.rm = TRUE)) pedigree[which(sast), 3] <- NA
@@ -116,13 +116,6 @@ numPed <- function(pedigree, check = TRUE){
   nPed <- structure(nPed, class = "numPed")
  nPed
 }
-
-
-
-#' @ method is numPed
-#' @rdname numPed
-#' @export
-is.numPed <- function(x, class2) inherits(x, "numPed")
 
 
 

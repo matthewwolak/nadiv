@@ -26,7 +26,7 @@
 #' explicitly specifying the R structure of the ASReml model. See example
 #' below.
 #' 
-#' @aliases proLik proLik4 is.proLik plot.proLik
+#' @aliases proLik proLik4 plot.proLik
 #' @param full.model An \code{asreml} model object
 #' @param component A character (alternatively for \code{proLik4} this could also
 #'   be a \code{formula}) indicating for which variance component the
@@ -491,15 +491,6 @@ proLik4 <- function(full.model, component,
 }
 
 ################################################################################
-
-
-
-#' @method is proLik
-#' @rdname proLik
-#' @export
-is.proLik <- function(x, class2) inherits(x, "proLik")
-
-
 
 
 
