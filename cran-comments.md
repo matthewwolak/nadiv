@@ -3,8 +3,7 @@
     - R version 4.3.2 (2023-10-31 r85441) x86_64-pc-linux-gnu
 
   - [win-builder](https://win-builder.r-project.org/)
-    - R version 4.3.2 (2023-10-31 ucrt)
-    - R Under development (unstable) (2024-01-16 r85812 ucrt)
+    - R version 4.2.3 (2023-03-15 ucrt)
     
   - R-hub (`devtools::check_rhub(".", interactive = FALSE)`)
     - Ubuntu 20.04.6 LTS, R version 4.3.2 (2023-10-31)
