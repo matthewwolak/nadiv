@@ -73,30 +73,29 @@ ped
 #' still has difficulty separating dominance variance from common maternal
 #' environmental variance (Meyer 2008).
 #'
-#' For a given unit of the design (\code{F} total), \code{2*gpn} 0-generation 
+#' For a given unit of the design (\code{U} total), \code{2*gpn} 0-generation 
 #' (grandparental or GP) individuals are created and paired to make \code{gpn}
 #' full-sib families. Then the first \code{fws} families are each allocated \code{s}
-#' males/sires and \code{s*(fws-1)} females/dams in the 1/P generation. The
-#' remaining (\code{gpn-fws}) families (only when: \code{gpn > fws}) are assigned
-#' \code{s*fws} females/dams. If \code{fsn > (s*fws)}, the remaining 1/P 
-#' generation individuals in each full-sib family (\code{fsn - (s*fws)}) are
-#' allocated to each family with equal numbers of females and males (this allows
-#' for more individuals to be phenotyped in the 1/P generation than are used to
-#' produce the 2/F1 generation). The 2/F1 generation is then assigned, based on
-#' the mating design in Fairbairn and Roff (2006) - essentially each sire (of
-#' the \code{s} per full-sib family in the 1/P generation) is mated to a female
-#' from each of the other \code{gpn-1} full-sib families to produce \code{fsn}
-#' offspring (with equal numbers of females and males).
+#' males/sires and \code{s*(fws-1)} females/dams in the 1 (parental or P)
+#' generation. The remaining (\code{gpn-fws}) families (only when: 
+#' \code{gpn > fws}) are assigned \code{s*fws} females/dams. If
+#' \code{fsn > (s*fws)}, the remaining generation 1 (P) individuals in each 
+#' full-sib family (\code{fsn - (s*fws)}) are allocated to each family with
+#' equal numbers of females and males [this allows for more individuals to be
+#' phenotyped in generation 1 (P) than are used to produce generation 2 (F1)].
+#' Generation 2 (F1) is then assigned, based on the mating design in Fairbairn
+#' and Roff (2006) - essentially each sire [of the \code{s} per full-sib family
+#' in generation 1 (P)] is mated to a female from each of the other \code{gpn-1}
+#' full-sib families to produce \code{fsn} offspring (with equal numbers of
+#' females and males).
 #' 
-#' @param F Number of blocks for the design
-#' @param gpn Number of grandparent pairs in the 0/GP generation
-#'   (must be >= 2). Equals the number of full-sib families in the
-#'   1/P generation.
-#' @param fsn Number of offspring in each full-sib family of the 1/P
-#'   and 2/F1 generations (must be an even number >= 4).
-#' @param s Number of sires per full-sib family in the 1/P generation
-#'   (must be >=2)
-#' @param fws Number of 1/P generation families with sires. Together, with
+#' @param U An integer number of units or blocks for the design
+#' @param gpn Number of grandparent pairs in the generation 0 (GP)
+#'   (must be >= 2). Equals the number of full-sib families in generation 1 (P).
+#' @param fsn Number of offspring in each full-sib family of generations 1 and 2
+#'   (P and F1 - must be an even number >= 4).
+#' @param s Number of sires per full-sib family in generation 1 (P - must be >=2)
+#' @param fws Number of generation 1 (P) families with sires. Together, with
 #'   \code{s}, sets up how cousins and double first cousins are produced 
 #' @param prefix Optional prefix to add to every identity
 #'
@@ -112,10 +111,10 @@ ped
 #' estimate genetic variances. Heredity 101:212-221.
 #' @examples
 #' 
-#'   DFC1 <- simPedDFC(F = 1, gpn = 2, fsn = 4, s = 2, fws = 2)
+#'   DFC1 <- simPedDFC(U = 1, gpn = 2, fsn = 4, s = 2, fws = 2)
 #' 
 #' @export
-simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
+simPedDFC <- function(U, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
 {
 
   if(gpn < 2){
@@ -125,7 +124,7 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
     stop("Full-sib family size ('fsn') must be greater than or equal to 4")
   }
   if(s < 2){
-    stop("Number of sires per full-sib family in 1/P generation ('s') must be greater than or equal to 2")
+    stop("Number of sires per full-sib family in generation 1 or P ('s') must be greater than or equal to 2")
   }
   #FIXME let fsn != even number (then incorporate this below for P and F generations)
   if(floor(fsn/2) != (fsn/2)){
@@ -152,13 +151,13 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
   # total individuals in a unit
   n <- gppu + pspu + pdpu + pnmpu + f1pu
   # total individuals in pedigree
-  N <- n*F
+  N <- n*U
   # allocate output data.frame
   ped_out <- data.frame(id = rep(NA, N), dam = rep(NA, N), sire = rep(NA, N),
 	sex = rep(NA, N))
 
   # Calculate starting/ending indices for each group
-  gpsi <- seq(from = 1, by = n, length.out = F)
+  gpsi <- seq(from = 1, by = n, length.out = U)
     gpei <- gpsi + gppu - 1
   psi <- gpei + 1
     pei <- psi + pspu + pdpu + pnmpu - 1
@@ -179,7 +178,7 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
   design <- matrix(NA, nrow = fsn, ncol = gpn)
   sirepos <- cbind(seq(s*fws), rep(seq(fws), each = s))
 
-  # conduct the following on the `Fx`th unit out of `F` total
+  # conduct the following on the `Fx`th unit out of `U` total
   unitFun <- function(Fx){
     # setup mating females and males (dams/sires) for a unit
     ## 1/P names are: unit | sire/dam/non-mating male/nom-mating female | gp family number | full-sib letter (order of full-sib within gp family)
@@ -227,7 +226,7 @@ simPedDFC <- function(F, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
    }
 
 
-  sapply(seq(F), FUN = unitFun)
+  sapply(seq(U), FUN = unitFun)
   ped_out$id <- as.factor(ped_out$id)
   ped_out$dam <- as.factor(ped_out$dam)
   ped_out$sire <- as.factor(ped_out$sire)
