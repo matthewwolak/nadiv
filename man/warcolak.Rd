@@ -77,7 +77,6 @@ coding for \sQuote{sex} and did not contain the random effects.
 \examples{
 
  \donttest{
-  rm(list = ls())
   set.seed(101)
   library(nadiv)
   # create pedigree

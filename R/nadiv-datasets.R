@@ -120,7 +120,6 @@
 #' @examples
 #' 
 #'  \donttest{
-#'   rm(list = ls())
 #'   set.seed(102)     #<-- seed value used originally
 #'   library(nadiv)
 #'   # create data using `simGG()`
@@ -321,7 +320,6 @@
 #' @examples
 #' 
 #'  \donttest{
-#'   rm(list = ls())
 #'   set.seed(101)
 #'   library(nadiv)
 #'   # create pedigree
