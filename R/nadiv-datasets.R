@@ -119,7 +119,7 @@
 #' @keywords datasets
 #' @examples
 #' 
-#'  \dontrun{
+#'  \donttest{
 #'   rm(list = ls())
 #'   set.seed(102)     #<-- seed value used originally
 #'   library(nadiv)
@@ -320,7 +320,7 @@
 #' @keywords datasets
 #' @examples
 #' 
-#'  \dontrun{
+#'  \donttest{
 #'   rm(list = ls())
 #'   set.seed(101)
 #'   library(nadiv)
