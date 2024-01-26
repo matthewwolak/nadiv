@@ -155,10 +155,12 @@ below.
     profileE <- proLik(warcolak.mod, component = "R!units.var", G = FALSE, negative = FALSE)
 
     x11(w = 6, h = 8)
+    oldpar <- par()
     par(mfrow = c(3,1))
       plot(profileA) 
       plot(profileD)
       plot(profileE)
+    par(oldpar)
    }
 
 
