@@ -17,6 +17,9 @@
 #' @param mit numeric, indicating maximum number of iterations for the
 #' constrained asreml model
 #'
+#' @return A \code{vector} of length 1 returning either a \code{numeric} value
+#'  corresponding to the likelihood ratio test statistic or else the missing 
+#'  value indicator \code{NA}.
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso See also \code{\link{proLik}}
 #' @export

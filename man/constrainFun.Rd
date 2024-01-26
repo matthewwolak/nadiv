@@ -22,6 +22,11 @@ be calculated}
 \item{mit}{numeric, indicating maximum number of iterations for the
 constrained asreml model}
 }
+\value{
+A \code{vector} of length 1 returning either a \code{numeric} value
+ corresponding to the likelihood ratio test statistic or else the missing 
+ value indicator \code{NA}.
+}
 \description{
 Given a model object from \code{asreml} and a range of estimates of the
 parameter, the function will supply the likelihood ratio test statistic for

@@ -16,6 +16,9 @@
 #' @param comp which variance component to constrain
 #' @param G logical indicating if the component is part of the G structure
 #'
+#' @return A \code{vector} containing either \code{numeric} values
+#'  corresponding to the likelihood ratio test statistics or else the missing 
+#'  value indicators \code{NA}.
 #' @author \email{matthewwolak@@gmail.com}
 #' @seealso See Also \code{\link{proLik}}, \code{\link{constrainFun}}
 #' @export
