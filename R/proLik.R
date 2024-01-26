@@ -256,12 +256,12 @@ proLik4 <- function(full.model, component,
     v <- substr(vin, start = 1, stop = 1)
     vInd <- as.integer(substr(vin, start = 2, stop = nchar(vin)))
     if(!v %in% c("V", "v")){
-      warning(cat(" Assuming formula position", length(component),
+      warning(" Assuming formula position", length(component),
           "indicates component to profile.\n",
         "Also assuming right hand side of formula, character string position(s)",
           seq(nchar(vin))[-1],
           "\n represent an integer denoting component position in 'full.model$vparameters'\n",
-          "(interpreted as position", vInd, ")\n"))
+          "(interpreted as position", vInd, ")\n")
     }
 
   } else{
@@ -274,8 +274,8 @@ proLik4 <- function(full.model, component,
     warned <- FALSE
     if(bndChk == "B"){
       warned <- TRUE
-      warning(cat("Boundary parameter: CI estimation may produce strange behavior\n
-        proceed with caution\n"))
+      warning("Boundary parameter: CI estimation may produce strange behavior\n
+        proceed with caution\n")
     }
 
   s2 <- full.model$sigma2
@@ -472,8 +472,8 @@ proLik4 <- function(full.model, component,
   ord.index <- order(prof$var.estimates)
 
     if(!negative & LCL$minimum < 0.01 & !warned){
-      warning(cat("Boundary parameter: CI estimation may produce strange behavior\n
-        proceed with caution\n"))
+      warning("Boundary parameter: CI estimation may produce strange behavior\n
+        proceed with caution\n")
       }
 
   # Remove CI limit estimates if they haven't been reached

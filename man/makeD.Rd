@@ -11,7 +11,8 @@ makeD(
   ncores = getOption("mc.cores", 2L),
   invertD = TRUE,
   returnA = FALSE,
-  det = TRUE
+  det = TRUE,
+  verbose = TRUE
 )
 
 makeSd(
@@ -22,7 +23,8 @@ makeSd(
   ncores = getOption("mc.cores", 2L),
   invertSd = TRUE,
   returnS = FALSE,
-  det = TRUE
+  det = TRUE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -45,6 +47,8 @@ matrix (A or S) should be stored and returned.}
 
 \item{det}{Logical, indicating if the determinant of the D or Sd matrix
 should be returned.}
+
+\item{verbose}{Logical, indicating if progress messages should be displayed.}
 
 \item{heterogametic}{Character indicating the label corresponding to the
 heterogametic sex used in the "Sex" column of the pedigree}

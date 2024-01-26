@@ -46,6 +46,7 @@
 #'   each coefficient of fraternity should be calculated
 #' @param returnA,returnS Logical, indicating if the numerator relationship
 #'   matrix (A or S) should be stored and returned.
+#' @param verbose Logical, indicating if progress messages should be displayed.
 #'
 #' @return a \code{list}:
 #'   \describe{
@@ -88,7 +89,7 @@
 #' @export
 makeDsim <- function(pedigree, N, parallel = FALSE,
 	ncores = getOption("mc.cores", 2L), invertD = TRUE,
-	calcSE = FALSE, returnA = FALSE){
+	calcSE = FALSE, returnA = FALSE, verbose = TRUE){
 
   approxD <- makeD(pedigree, parallel = parallel, ncores = ncores, invertD = invertD, returnA = returnA)
   lapproxD <- summary(approxD$D)
@@ -105,7 +106,7 @@ makeDsim <- function(pedigree, N, parallel = FALSE,
   dalleles <- rep(alleles[, 1], each = N)
   salleles <- rep(alleles[, 2], each = N)
   
-  cat("making Dsim ...")
+  if(verbose) cat("making Dsim ...")
 
   Cout <- .C("dsim", PACKAGE = "nadiv",
 	as.integer(dalleles),
@@ -137,14 +138,14 @@ makeDsim <- function(pedigree, N, parallel = FALSE,
     dims = c(n, n), dimnames = list(as.character(pedigree[, 1]), NULL),
     symmetric = TRUE, index1 = FALSE)
   diag(Dsim) <- diag(approxD$D)
-  cat(".done", "\n")
+  if(verbose) cat(".done", "\n")
   logDetDsim <- determinant(Dsim, logarithm = TRUE)$modulus[1]
   
   if(invertD){
-    cat("inverting Dsim ...")
+    if(verbose) cat("inverting Dsim ...")
     Dsiminv <- solve(Dsim)
       Dsiminv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-    cat(".done", "\n")
+    if(verbose) cat(".done", "\n")
     listDsiminv <- sm2list(Dsiminv, rownames = pedigree[,1], colnames = c("row", "column", "simDinverse"))
     Dsim <- as(Dsim, "generalMatrix")
     return(list(A = approxD$A, D = approxD$D, logDetD = approxD$logDet,

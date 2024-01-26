@@ -344,13 +344,13 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   # checks on fuzzy classification matrix and pedigree consistency:
   ## 'fuzz' is a type of matrix
   if(!is(fuzz, "matrix") && !is(fuzz, "Matrix")){
-    cat("'fuzz' of class", class(fuzz), "\n")
-    stop("class of 'fuzz' must be either 'matrix' or 'Matrix'")
+    stop("'fuzz' of class", class(fuzz), "\n",
+    "class of 'fuzz' must be either 'matrix' or 'Matrix'")
   }
   ## rows of 'fuzz' add up to 1
   if(any(rowSums(fuzz) != 1)){
-    cat("rows:", which(rowSums(fuzz) != 1), "\ndo not equal 1\n")
-    stop("all rowSums(fuzz) must equal 1\n(check for possible rounding errors, e.g., 3*0.33333 != 1)")
+    stop("rows:", which(rowSums(fuzz) != 1), "\ndo not equal 1\n",
+    "all rowSums(fuzz) must equal 1\n(check for possible rounding errors, e.g., 3*0.33333 != 1)")
   }
   ## fuzz has dimnames
   if(is.null(dimnames(fuzz)[[1]]) | is.null(dimnames(fuzz)[[2]])){
@@ -358,13 +358,15 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   } 
   ## pedigree does not have genetic groups
   if(any(colnames(fuzz) %in% pedigree[, 1])){
-    cat("colnames:", which(colnames(fuzz) %in% pedigree[, 1]), "\nare in 'pedigree'\n")
-    stop("colnames of 'fuzz' (genetic groups) must NOT be identities in the first column of 'pedigree'")
+    stop("colnames:", which(colnames(fuzz) %in% pedigree[, 1]),
+    "\nare in 'pedigree'\n",
+    "colnames of 'fuzz' (genetic groups) must NOT be identities in the first column of 'pedigree'")
   }
   ## pedigree has phantom parents in 'fuzz'
   if(!all(rownames(fuzz) %in% pedigree[, 1])){
-    cat("rownames:", which(!rownames(fuzz) %in% pedigree[, 1]), "\nnot in 'pedigree'\n")
-    stop("rownames of 'fuzz' (phantom parents) must all be identities in the first column of 'pedigree'. See the `prepPed()` function to help prepare the pedigree")
+    stop("rownames:", which(!rownames(fuzz) %in% pedigree[, 1]),
+    "\nnot in 'pedigree'\n",
+    "rownames of 'fuzz' (phantom parents) must all be identities in the first column of 'pedigree'. See the `prepPed()` function to help prepare the pedigree")
   }
   ## individuals can only have both parents missing in 'pedigree' or none
   if(length(naPed2) != length(naPed3) | any(!naPed2 %in% naPed3)){
@@ -372,8 +374,10 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   }   
   ## IDs with missing parents (if passed above check, naPed2==naPed3) in 'pedigree' are phantom parents in 'fuzz'
   if(!all(pedigree[naPed2, 1] %in% rownames(fuzz))){
-    cat("IDs for 'pedigree' rows:", naPed2[which(!pedigree[naPed2, 1] %in% rownames(fuzz))], "\nare not rownames in 'fuzz'\n")
-    stop("Individuals with missing parents (phantom individuals) must have a rowname in 'fuzz'")
+    stop("IDs for 'pedigree' rows:",
+    naPed2[which(!pedigree[naPed2, 1] %in% rownames(fuzz))],
+    "\nare not rownames in 'fuzz'\n",
+    "Individuals with missing parents (phantom individuals) must have a rowname in 'fuzz'")
   }
 
 

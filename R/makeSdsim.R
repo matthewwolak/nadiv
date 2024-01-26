@@ -4,7 +4,7 @@
 makeSdsim <- function(pedigree, heterogametic, N,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
-	invertSd = TRUE, calcSE = FALSE, returnS = FALSE){
+	invertSd = TRUE, calcSE = FALSE, returnS = FALSE, verbose = TRUE){
 
   if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
 
@@ -14,7 +14,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
     dc.model <- "ngdc"
   }
   if(dc.model == "hopi" | dc.model == "hori"){
-    cat("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
+    warning("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
     return(NULL)
   }
 
@@ -48,7 +48,7 @@ makeSdsim <- function(pedigree, heterogametic, N,
   Ndalleles <- rep(dalleles, each = N)
   Nsalleles <- rep(salleles, each = N)
   
-  cat("making Sdsim ...")
+  if(verbose) cat("making Sdsim ...")
 
   # diversion to calculate maximum expected entries in sex-chromosome D matrix
   ## based on calculation for sex-chromosome S matrix (additive)
@@ -90,14 +90,14 @@ makeSdsim <- function(pedigree, heterogametic, N,
      listSdsim <- lapproxSd
   } 
 
-  cat(".done", "\n")
+  if(verbose) cat(".done", "\n")
   logDetSdsim <- determinant(Sdsim, logarithm = TRUE)$modulus[1]
 
   if(invertSd){
-    cat("inverting Sdsim ...")
+    if(verbose) cat("inverting Sdsim ...")
     Sdsiminv <- solve(Sdsim)
       Sdsiminv@Dimnames <- Sdsim@Dimnames
-    cat(".done", "\n")
+    if(verbose) cat(".done", "\n")
     listSdsiminv <- sm2list(Sdsiminv, rownames = Sdsim@Dimnames[[1L]],
 	colnames = c("row", "column", "simSdinverse"))
     Sdsim <- as(Sdsim, "generalMatrix")

@@ -13,7 +13,8 @@ makeDsim(
   ncores = getOption("mc.cores", 2L),
   invertD = TRUE,
   calcSE = FALSE,
-  returnA = FALSE
+  returnA = FALSE,
+  verbose = TRUE
 )
 
 makeSdsim(
@@ -25,7 +26,8 @@ makeSdsim(
   ncores = getOption("mc.cores", 2L),
   invertSd = TRUE,
   calcSE = FALSE,
-  returnS = FALSE
+  returnS = FALSE,
+  verbose = TRUE
 )
 }
 \arguments{
@@ -51,6 +53,8 @@ each coefficient of fraternity should be calculated}
 
 \item{returnA, returnS}{Logical, indicating if the numerator relationship
 matrix (A or S) should be stored and returned.}
+
+\item{verbose}{Logical, indicating if progress messages should be displayed.}
 
 \item{heterogametic}{Character indicating the label corresponding to the
 heterogametic sex used in the "Sex" column of the pedigree}

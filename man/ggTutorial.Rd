@@ -66,7 +66,7 @@ distribution with an expected mean of 0 and variance of 1.
 }
 \examples{
 
- \dontrun{
+ \donttest{
   rm(list = ls())
   set.seed(102)     #<-- seed value used originally
   library(nadiv)

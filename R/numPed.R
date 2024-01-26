@@ -105,12 +105,12 @@ numPed <- function(pedigree, check = TRUE){
      stop("Offspring appearing before their Sires: first use the 'prepPed' function")
   }
   if(any((nPed[, 1] - nPed[, 2]) == 0)){
-     cat("Individual(s):", nPed[which((nPed[, 1] - nPed[, 2]) == 0), 1], "\n")
-     stop("Individual appearing as its own Dam")
+     stop("Individual(s):", nPed[which((nPed[, 1] - nPed[, 2]) == 0), 1], "\n",
+     "Individual appearing as its own Dam")
   }
   if(any((nPed[, 1] - nPed[, 3]) == 0)){
-     cat("Individual(s):", nPed[which((nPed[, 1] - nPed[, 3]) == 0), 1], "\n")
-     stop("Individual appearing as its own Sire")
+     stop("Individual(s):", nPed[which((nPed[, 1] - nPed[, 3]) == 0), 1], "\n",
+     "Individual appearing as its own Sire")
   }
  }
   nPed <- structure(nPed, class = "numPed")
