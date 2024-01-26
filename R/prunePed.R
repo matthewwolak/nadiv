@@ -50,12 +50,12 @@
 #'   pruned_warcolak_ped <- prunePed(warcolak_ped, phenotyped = t1phenotyped$ID)
 #' 
 #' # Now compare the sizes (note, pruned_warcolak_ped retained its column indicating sex.
-#' # We could have kept all of the data associated with individuals who had phenotypic
-#' # information on "trait1" by instead specifying 
-#' #  prunePed(warcolak, phenotyped = t1phenotyped$ID) 
 #'   dim(warcolak_ped)
 #'   dim(pruned_warcolak_ped)
-#' 
+#' # We could have kept all of the data associated with individuals who had phenotypic
+#' # information on "trait1" by instead specifying 
+#'   pruned_fullt1_warcolak_ped <- prunePed(warcolak, phenotyped = t1phenotyped$ID) 
+#'   dim(pruned_fullt1_warcolak_ped)  #<-- compare number of columns with above
 #' 
 #' @export
 prunePed <- function(pedigree, phenotyped, ...){
