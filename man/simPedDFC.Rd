@@ -43,8 +43,8 @@ environmental variance (Meyer 2008).
 
 For a given unit of the design (\code{U} total), \code{2*gpn} 0-generation 
 (grandparental or GP) individuals are created and paired to make \code{gpn}
-full-sib families. Then the first \code{fws} families are each allocated \code{s}
-males/sires and \code{s*(fws-1)} females/dams in the 1 (parental or P)
+full-sib families. Then the first \code{fws} families are each allocated
+\code{s} males/sires and \code{s*(fws-1)} females/dams in the 1 (parental or P)
 generation. The remaining (\code{gpn-fws}) families (only when: 
 \code{gpn > fws}) are assigned \code{s*fws} females/dams. If
 \code{fsn > (s*fws)}, the remaining generation 1 (P) individuals in each 

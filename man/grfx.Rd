@@ -4,34 +4,22 @@
 \alias{grfx}
 \title{Simulated genetic random effects}
 \usage{
-grfx(
-  n,
-  G,
-  incidence = NULL,
-  saveIncidence = FALSE,
-  output = "matrix",
-  stdnorms = NULL,
-  warn = TRUE
-)
+grfx(n, G, incidence = NULL, output = "matrix", stdnorms = NULL, warn = TRUE)
 }
 \arguments{
 \item{n}{The number of individuals for which to simulate effects}
 
 \item{G}{The variance-covariance matrix to model the effects after}
 
-\item{incidence}{The covariance structure of the 'n' individuals}
-
-\item{saveIncidence}{A logical or NULL, indicating if the cholesky
-decomposition of the incidence matrix should be saved/retrieved to the
-global environment.  SEE details below!!}
+\item{incidence}{A matrix of the covariance structure of the 'n' individuals
+or the Cholesky factorization of class \code{CHMfactor} for this structure.}
 
 \item{output}{Format for the output}
 
 \item{stdnorms}{Standard normal deviates to use}
 
-\item{warn}{Should a warning be produced when \code{incidence = NULL}
-indicating that a previous incidence matrix is being used if one exists,
-otherwise an Identity matrix}
+\item{warn}{Should a warning message be produced when the function interprets
+what to do based on the object class supplied to \code{incidence}}
 }
 \value{
 The random effects coerced to be in the format specified by output.
@@ -48,22 +36,21 @@ columns in the 'G' matrix. The standard normal deviates can be supplied
 instead of generated within the function when \code{stdnorms != NULL}. The
 length of this vector must be \code{n*nrow(G)}.
 
-Supplied incidence matrices should be n-by-n symmetric matrices.  For
+Supplied incidence matrices should be n-by-n symmetric matrices or cholesky
+factorizations that resulted from a call to \code{Matrix::Cholesky()}.  For
 simulated random effects using design matrices, see \code{\link{drfx}}.  If
-no incidence matrix is supplied, \code{incidence = NULL}, the function first
-checks the environment to see if anything with the name
-'nadiv_prev_Mincidence' exists when checking \code{ls()}.  If so, this saved
-version is used with a warning.  Otherwise the Identity matrix is used,
-which assumes that all 'n' random effects are independently and identically
-distributed (default to Identity matrix).
+no incidence matrix is supplied, \code{incidence = NULL}, the Identity matrix
+is used, which assumes that all 'n' random effects are independently and
+identically distributed (default to Identity matrix).
 
-BE CAREFUL with \code{saveIncidence = TRUE} as this will save the incidence
-matrix outside of the function environment so as to be accessed within the
-function at a later call.  This can be useful for Monte Carlo simulation, to
-avoid performing the cholesky decomposition on a large matrix at each
-iteration.  Setting \code{warn = FALSE} will suppress the warnings that this
-is occurring. DO NOT turn this warning off unless you are sure which
-incidence matrix will be used by \code{grfx}.
+See examples for how to make and use a Cholesky factorized incidence matrix,
+for instance in a Monte Carlo simulation. Whether such an approach results
+in performance of speed improvements within the Monte Carlo simulation, by
+avoiding a Cholesky decomposition of a large matrix at each iteration, has
+not been tested. Setting \code{warn = FALSE} will suppress the warnings that
+the function is assuming a Cholesky factorization is contained in the object
+supplied to the \code{incidence} argument. Currently, Cholesky factorizations
+must inheriti from the class \dQuote{CHMfactor}.
 
 If G = x, where 'x' is a single number, then 'x' should still be specified
 as a 1-by-1 matrix (e.g., \code{matrix(x)}).  Note, the G-matrix should
@@ -78,17 +65,21 @@ of slightly less than (greater than) 1 (-1).  For example: 0.9999 or
 # with different additive genetic variances
   A <- makeA(warcolak[1:200, 1:3])
   Gmat <- matrix(c(20, 0, 0, 10), 2, 2)
-  breedingValues <- grfx(n = 200, G = Gmat, incidence = A, saveIncidence = FALSE)
+  breedingValues <- grfx(n = 200, G = Gmat, incidence = A)
 
  # Now with a user supplied set of standard normal deviates
   snorms <- rnorm(nrow(warcolak[1:200,]) * ncol(Gmat))
   breedingValues2a <- grfx(n = 200, G = Gmat, incidence = A, stdnorms = snorms)
   breedingValues2b <- grfx(n = 200, G = Gmat, incidence = A, stdnorms = snorms)
-  identical(breedingValues2a, breedingValues2b)  # TRUE
+  identical(breedingValues2a, breedingValues2b)  #<-- TRUE
   var(breedingValues2a)
   var(breedingValues2b)
 
-
+ # User supplied Cholesky factorization of the incidence matrix from above
+  cA <- Cholesky(A, LDL = FALSE, super = FALSE) 
+    inherits(cA, "CHMfactor")  #<-- TRUE
+  breedingValues3 <- grfx(n = 200, G = Gmat, incidence = cA, stdnorms = snorms)
+  all.equal(breedingValues2a, breedingValues3)  #<-- TRUE
 }
 \seealso{
 \code{\link[MCMCglmm]{MCMCglmm}}, \code{\link{drfx}},
