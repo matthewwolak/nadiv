@@ -80,11 +80,14 @@
 #' 
 #'   \dontrun{
 #'     library(asreml)
-#'     ginvA <- asreml.Ainverse(warcolak[, c(1,3,2)])$ginv
-#'     ginvD <- makeD(warcolak[,1:3])$listDinv
+#'     ginvA <- ainverse(warcolak)
+#'     ginvD <- makeD(warcolak[, 1:3])$listDinv
+#'       attr(ginvD, "rowNames") <- as.character(warcolak[, 1])
+#'       attr(ginvD, "INVERSE") <- TRUE
 #'     warcolak$IDD <- warcolak$ID
-#'     warcolak.mod <- asreml(trait1 ~ sex, random = ~ ped(ID) + giv(IDD), 
-#' 	ginverse = list(ID = ginvA, IDD = ginvD), rcov = ~ idv(units), data = warcolak) 
+#'     warcolak.mod <- asreml(trait1 ~ sex,
+#'      random = ~ vm(ID, ginvA) + vm(IDD, ginvD), 
+#' 	rcov = ~ idv(units), data = warcolak) 
 #'     summary(warcolak.mod)$varcomp
 #'     profileA <- proLik(full.model = warcolak.mod, component = "ped(ID)!ped", 
 #'         G = TRUE, negative = FALSE, nsample.units = 3, nse = 3)

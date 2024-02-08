@@ -26,11 +26,14 @@
 #' 
 #'   \dontrun{
 #'     library(asreml)
-#'     ginvA <- asreml.Ainverse(warcolak)$ginv
-#'     ginvD <- makeD(warcolak[,1:3])$listDinv
+#'     ginvA <- ainverse(warcolak)
+#'     ginvD <- makeD(warcolak[, 1:3])$listDinv
+#'       attr(ginvD, "rowNames") <- as.character(warcolak[, 1])
+#'       attr(ginvD, "INVERSE") <- TRUE
 #'     warcolak$IDD <- warcolak$ID
-#'     warcolak.mod <- asreml(trait1 ~ sex, random = ~ped(ID) + giv(IDD), 
-#' 	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
+#'     warcolak.mod <- asreml(trait1 ~ sex,
+#'      random = ~ vm(ID, ginvA) + vm(IDD, ginvD), 
+#' 	data = warcolak) 
 #'     summary(warcolak.mod)$varcomp
 #'     aiCI(warcolak.mod)    
 #'    }
