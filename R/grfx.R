@@ -69,35 +69,31 @@
 #' 
 #' 
 #' @export
-grfx <- function(n, G, incidence = NULL, saveIncidence = FALSE, output = "matrix", stdnorms = NULL, warn = TRUE){
+grfx <- function(n, G, incidence = NULL, output = "matrix", stdnorms = NULL,
+		  warn = TRUE){
   d <- nrow(G)
   if(d > 1 && all(G == G[1,1])) warning("variance-covariance matrix 'G' may have caused 'chol.default(G)' error.  If so, consider subtracting 0.0001 from the covariances to make correlations < 1 or >-1")
   Mg <- as(as(chol(G), "triangularMatrix"), "CsparseMatrix")
-  if(is.null(incidence)){
-     if(any(ls(envir = globalenv() ) == "nadiv_prev_Mincidence")){
-       if(warn) warning("using previous incidence matrix")
-     } else{
-          if(saveIncidence){
-	     nadiv_prev_Mincidence <<- Diagonal(n, 1)
-             } else{
-                  nadiv_prev_Mincidence <- Diagonal(n, 1)
-               }
-          if(warn) warning("Incidence matrix used = Identity matrix")
-       }
-  } else{
-       if(saveIncidence){
-          nadiv_prev_Mincidence <<- chol(incidence)
-       } else{
-            nadiv_prev_Mincidence <- chol(incidence)
-         }
-    }
 
-  M <- suppressMessages(kronecker(nadiv_prev_Mincidence, Mg))
+  if(is.null(incidence)){
+    chol_incidence <- Diagonal(n, 1)
+    if(warn) warning("Incidence matrix used = Identity matrix")
+  } else{
+      if(inherits(incidence, "CHMfactor")){
+        if(warn) warning("Object given to incidence inherits from class 'CHMfactor'. Object in incidence being used as a Cholesky factor of an incidence matrix")
+        chol_incidence <- Reduce("%*%",
+               expand2(incidence, LDL = FALSE)[c("P1.", "L.", "P1")])
+      } else chol_incidence <- chol(incidence)
+    }  
+
+  M <- kronecker(chol_incidence, Mg)
   if(is.null(stdnorms)){
      Z <- Matrix(rnorm(n*d), nrow = 1)
   } else{
-       if(length(stdnorms) != n*d) stop("length(stdnorms) must be equal to 'n' times the order of 'G'")
-       Z <- Matrix(stdnorms, nrow = 1)
+      if(length(stdnorms) != n*d){
+        stop("length(stdnorms) must be equal to 'n' times the order of 'G'")
+      }
+      Z <- Matrix(stdnorms, nrow = 1)
     }
   X <- Matrix((Z %*% M)@x, ncol = d, byrow = TRUE)
 
