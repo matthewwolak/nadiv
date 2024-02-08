@@ -75,8 +75,8 @@ ped
 #'
 #' For a given unit of the design (\code{U} total), \code{2*gpn} 0-generation 
 #' (grandparental or GP) individuals are created and paired to make \code{gpn}
-#' full-sib families. Then the first \code{fws} families are each allocated \code{s}
-#' males/sires and \code{s*(fws-1)} females/dams in the 1 (parental or P)
+#' full-sib families. Then the first \code{fws} families are each allocated
+#' \code{s} males/sires and \code{s*(fws-1)} females/dams in the 1 (parental or P)
 #' generation. The remaining (\code{gpn-fws}) families (only when: 
 #' \code{gpn > fws}) are assigned \code{s*fws} females/dams. If
 #' \code{fsn > (s*fws)}, the remaining generation 1 (P) individuals in each 
@@ -174,15 +174,21 @@ simPedDFC <- function(U, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
   } else pfsletters <- letters[seq(fsn)]
 
 
-  # make a generic 1/P generation block
-  design <- matrix(NA, nrow = fsn, ncol = gpn)
+  # locate sires in a generic 1/P generation block (created in `design` below)
   sirepos <- cbind(seq(s*fws), rep(seq(fws), each = s))
 
+
+  ####################################################################
+  # Begin FOR LOOP
   # conduct the following on the `Fx`th unit out of `U` total
-  unitFun <- function(Fx){
+  for(Fx in seq.int(U)){
+    # make a generic 1/P generation block
+    design <- matrix(NA, nrow = fsn, ncol = gpn)
     # setup mating females and males (dams/sires) for a unit
-    ## 1/P names are: unit | sire/dam/non-mating male/nom-mating female | gp family number | full-sib letter (order of full-sib within gp family)
-    sires <- paste0(rep(paste0(p, "u", Fx, "_s", seq(fws)), each = s), pfsletters[seq(pspu)])
+    ## 1/P names are: unit | sire/dam/non-mating male/nom-mating female | gp
+    ### family number | full-sib letter (order of full-sib within gp family)
+    sires <- paste0(rep(paste0(p, "u", Fx, "_s", seq(fws)), each = s),
+                                                         pfsletters[seq(pspu)])
 
     for(x in 1:pspu){
       design[x, sirepos[x,2]] <- sires[x]
@@ -194,39 +200,42 @@ simPedDFC <- function(U, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
         # below so that alternate sexes each row
         if((y/2) != ceiling(y/2)){
           design[y, ] <- paste0(p, "u", Fx, "_", "m", seq(gpn), pfsletters[y])  
-        } else design[y, ] <- paste0(p, "u", Fx, "_", "f", seq(gpn), pfsletters[y]) 
+        } else design[y, ] <- paste0(p, "u", Fx, "_", "f", seq(gpn),
+                                                                  pfsletters[y]) 
       }
     }
 
     # Record male==1==TRUE or female==0==FALSE for a unit of the 1/P generation
-    sexDesign <- grepl(paste("^", p, "u", Fx, "_s", sep = ""), design) | grepl(paste("^", p, "u", Fx, "_m", sep = ""), design)
+    sexDesign <- grepl(paste("^", p, "u", Fx, "_s", sep = ""), design) |
+                           grepl(paste("^", p, "u", Fx, "_m", sep = ""), design)
 
     #########################
     # Fill-in ped_out
     ## Fill-in 0/GP positions for `Fx`th unit of the pedigree
-    ped_out[gpsi[Fx]:gpei[Fx], ] <<- cbind(c(paste0(p, "u", Fx, "_gs", seq(gpn)), paste0(p, "u", Fx, "_gd", seq(gpn))),
+    ped_out[gpsi[Fx]:gpei[Fx], ] <- cbind(c(paste0(p, "u", Fx, "_gs", seq(gpn)),
+                                           paste0(p, "u", Fx, "_gd", seq(gpn))),
 	rep(NA, 2*gpn),
 	rep(NA, 2*gpn),
 	rep(c("M", "F"), each = gpn))
 
     ## Fill-in 1/P positions for `Fx`th unit of the pedigree
-    ped_out[psi[Fx]:pei[Fx], ] <<- cbind(c(design),
+    ped_out[psi[Fx]:pei[Fx], ] <- cbind(c(design),
 	rep(paste0(p, "u", Fx, "_gd", seq(gpn), sep = ""), each = fsn),
 	rep(paste0(p, "u", Fx, "_gs", seq(gpn), sep = ""), each = fsn),
 	c("F", "M")[sexDesign+1])
 
     ## Fill-in 2/F1 positions for `Fx`th unit of the pedigree
-    ped_out[f1si[Fx]:f1ei[Fx], ] <<- cbind(paste0(p, "u", Fx, "_m", rep(seq(pdpu), each = fsn), rep(c("m", "f"), each = (fsn/2)), rep(seq(fsn/2), (2*pdpu))),
-	rep(unlist(sapply(t(design), FUN = function(x) {x[grepl(paste("^", p, "u", Fx, "_d", sep = ""), x)]})), each = fsn),
+    ped_out[f1si[Fx]:f1ei[Fx], ] <- cbind(paste0(p, "u", Fx, "_m",
+          rep(seq(pdpu), each = fsn),
+          rep(c("m", "f"), each = (fsn/2)),
+          rep(seq(fsn/2), (2*pdpu))),
+	rep(unlist(sapply(t(design), FUN = function(x) {
+	   x[grepl(paste("^", p, "u", Fx, "_d", sep = ""), x)]})), each = fsn),
 	rep(sires, each = ((gpn-1)*fsn)),
 	rep(c("M", "F"), each = (fsn/2)))
+  }  #<-- end for Fx LOOP
+  ####################################################################
 
-
-   invisible(Fx)
-   }
-
-
-  sapply(seq(U), FUN = unitFun)
   ped_out$id <- as.factor(ped_out$id)
   ped_out$dam <- as.factor(ped_out$dam)
   ped_out$sire <- as.factor(ped_out$sire)
