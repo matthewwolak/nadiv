@@ -124,7 +124,7 @@
 #'   library(nadiv)
 #'   # create data using `simGG()`
 #'   ggTutorial <- simGG(K = 400, pairs = 200, noff = 4, g = 15,
-#'     nimm = 40, nimmG = seq(2, g-1, 1),		    # nimmG default value
+#'     nimm = 40, nimmG = seq(2, 14, 1),		    # nimmG default value
 #'     VAf = 1, VAi = 1, VRf = 1, VRi = 1,		    # all default values
 #'     mup = 20, muf = 0, mui = 3, murf = 0, muri = 0, # mup and mui non-default values
 #'     d_bvf = 0, d_bvi = 0, d_rf = 0, d_ri = 0)	    # all default values
