@@ -1,4 +1,4 @@
-# 2.17.3
+# 2.18.0
 
 ## NEW
   - `makeDiiF()` can now be given coefficients of inbreeding. Facilitates either:
