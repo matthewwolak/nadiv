@@ -30,7 +30,7 @@ There were no ERRORs or WARNINGs.
 
   - No public repository is available for package 'asreml', however, availability (with web address) is noted in DESCRIPTION.
 
-  - All ERRORs, WARNINGs, and NOTEs from the archived version under CRAN Package Check Results have been addressed with this update. 
+  - All ERRORs, WARNINGs, and NOTEs from the archived version under CRAN Package Check Results have been addressed with this update. All further correspondence with CRAN personnel regarding changes required after a code review have been addressed with this update.
 
 
 # Downstream dependencies
