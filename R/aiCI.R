@@ -21,7 +21,7 @@
 #' @note The vector of \code{Dimnames} should match the same order of variance
 #' components specified in the model.
 #' @author \email{matthewwolak@@gmail.com}
-#' @seealso \code{\link{aiFun}} \code{\link{proLik}}
+#' @seealso \code{\link{aiFun}}
 #' @examples
 #' 
 #'   \dontrun{
