@@ -117,7 +117,7 @@ coding for \sQuote{sex} and did not contain the random effects.
   tmp_s <- grfx(pedn, G = Gs_t2, incidence = makeS(warcolak[, 1:4],
 	heterogametic = "M", DosageComp = "ngdc", returnS = TRUE)$S)
     matrix(c(var(tmp_s[which(sexcol == 1), 1]),
-	rep(cov(tmp_s), 2), var(tmp_s[which(sexcol == 2), 2])), 2, 2)
+	rep(cov(tmp_s)[2, 1], 2), var(tmp_s[which(sexcol == 2), 2])), 2, 2)
     # NOTE above should be: covar = male var = 0.5* female var 
   warcolak$t2_s <- tmp_s[cbind(seq(pedn), sexcol)]
 
