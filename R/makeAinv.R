@@ -294,12 +294,12 @@ makeAinv.default <- function(pedigree, f = NULL,
   Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
-      f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
-      dii <- Cout[[4]][t(fsOrd)@perm][-seq(nggroups)]
+      f <- Cout[[3]][invPerm(fsOrd@perm)][-seq(nggroups)]
+      dii <- Cout[[4]][invPerm(fsOrd@perm)][-seq(nggroups)]
   } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-      f <- c(rep(0, nggroups), Cout[[3]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
-      dii <- c(rep(0, nggroups), Cout[[4]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
+      f <- c(rep(0, nggroups), Cout[[3]][invPerm(fsOrd@perm)][(nggroups+1):(nggroups + eN)])
+      dii <- c(rep(0, nggroups), Cout[[4]][invPerm(fsOrd@perm)][(nggroups+1):(nggroups + eN)])
     }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")

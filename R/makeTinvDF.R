@@ -229,8 +229,8 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
             as.integer(0),			#number genetic groups
 	    as.integer(fmiss - 1))		#first f to calculate (not supplied)
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  f <- Cout[[3]][t(fsOrd)@perm]
-  dii <- Cout[[4]][t(fsOrd)@perm]
+  f <- Cout[[3]][invPerm(fsOrd@perm)]
+  dii <- Cout[[4]][invPerm(fsOrd@perm)]
 
 
  return(list(D = Diagonal(x = dii, n = N),
@@ -265,8 +265,8 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
             as.integer(0),			#number genetic groups
 	    as.integer(fmiss))			#first f to calculate (not supplied)
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  f <- Cout[[3]][t(fsOrd)@perm]
-  dii <- Cout[[4]][t(fsOrd)@perm]
+  f <- Cout[[3]][invPerm(fsOrd@perm)]
+  dii <- Cout[[4]][invPerm(fsOrd@perm)]
 
 
  return(list(D = Diagonal(x = dii, n = N),
