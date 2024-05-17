@@ -80,7 +80,7 @@ coding for \sQuote{sex} and did not contain the random effects.
   set.seed(101)
   library(nadiv)
   # create pedigree
-  warcolak <- simPedDFC(F = 75, gpn = 4, fsn = 4, s = 2)
+  warcolak <- simPedDFC(U = 75, gpn = 4, fsn = 4, s = 2)
   names(warcolak)[1:3] <- c("ID", "Dam", "Sire")
   warcolak$trait2 <- warcolak$trait1 <- NA
 
