@@ -23,7 +23,7 @@
 #' not been tested. Setting \code{warn = FALSE} will suppress the warnings that
 #' the function is assuming a Cholesky factorization is contained in the object
 #' supplied to the \code{incidence} argument. Currently, Cholesky factorizations
-#' must inheriti from the class \dQuote{CHMfactor}.
+#' must inherit from the class \dQuote{CHMfactor}.
 #' 
 #' If G = x, where 'x' is a single number, then 'x' should still be specified
 #' as a 1-by-1 matrix (e.g., \code{matrix(x)}).  Note, the G-matrix should
