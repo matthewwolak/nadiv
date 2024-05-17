@@ -10,6 +10,7 @@
   - `proLik()` (and `proLik4()`) __REMOVED__ from the package.
     - these functions were _only_ to facilitate advanced use of the `asreml` R package (which requires purchasing an expensive license) and due to the __unstable__ behavior of `asreml` discovered when revising `proLik()` it was decided that `nadiv` should no longer support this other package in this way.
     - Instead, time will be spent improving the `gremlin` [R package](https://CRAN.R-project.org/package=gremlin) for a replacement to `asreml`.
+
   - `makeA()` was affected by a bug in `Matrix` <1.6-0
     - `Matrix::chol2inv()` bug highlighted a messy order of operations in `nadiv`
     - now perfected the order of operations and explicitly use `tcrossprod()` and
@@ -19,7 +20,12 @@
         - dtCMatrix is best for time (tried "dtrMatrix" and "dtpMatrix", but these
 were __much__ slower.
         - `chol2inv()` and `tcrossprod(solve())` allocated same amount of memory according to `profmem` package
-        
+
+  - bug in `makeAinv()`, `makeGGAinv()`, and `makeDiiF()` caused coefficients of inbreeding (`f`) and Mendelian sampling variances (`dii`) to be ordered incorrectly
+    - this did _not_ cause matrices from these functions to be incorrect (e.g., __Ainv__, __Tinv__, and their related matrices), but did cause matrices built directly from `dii` to be incorrect - namely the __A__ matrix from `makeA()` and so consequently anything built from __A__ (i.e., dominance and epistatic relatedness matrices through `makeD()` etc.)
+    - __this was FIXED__ with details in the [commit](https://github.com/matthewwolak/nadiv/commit/a410517bf76be2fbead3be746f3729dcbe488a04)
+    
+    
 ## Small changes
   - `nadiv` version 2.17.2 caused CRAN to archive due to error induced by `Matrix` updates
     - Mikael Jagan (`Matrix` author) helpfully provided excellent explanations and patches
