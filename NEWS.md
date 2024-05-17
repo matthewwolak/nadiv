@@ -7,6 +7,9 @@
     - can be used to speed up simulations where breeding values are calculated based on mid-parent value plus Mendelian sampling deviation (that needs to account for inbreeding of parents).
 
 ## Major changes
+  - `proLik()` (and `proLik4()`) __REMOVED__ from the package.
+    - these functions were _only_ to facilitate advanced use of the `asreml` R package (which requires purchasing an expensive license) and due to the __unstable__ behavior of `asreml` discovered when revising `proLik()` it was decided that `nadiv` should no longer support this other package in this way.
+    - Instead, time will be spent improving the `gremlin` [R package](https://CRAN.R-project.org/package=gremlin) for a replacement to `asreml`.
   - `makeA()` was affected by a bug in `Matrix` <1.6-0
     - `Matrix::chol2inv()` bug highlighted a messy order of operations in `nadiv`
     - now perfected the order of operations and explicitly use `tcrossprod()` and

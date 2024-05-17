@@ -53,7 +53,7 @@ components specified in the model.
 
 }
 \seealso{
-\code{\link{aiFun}} \code{\link{proLik}}
+\code{\link{aiFun}}
 }
 \author{
 \email{matthewwolak@gmail.com}

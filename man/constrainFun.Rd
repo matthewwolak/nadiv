@@ -2,8 +2,7 @@
 % Please edit documentation in R/constrainFun.R
 \name{constrainFun}
 \alias{constrainFun}
-\title{Function used in conjunction with others to produce a profile likelihood for
-a variance component}
+\title{Fix a Model Parameter and Conduct Likelihood Ratio Test}
 \usage{
 constrainFun(parameter.val, full, fm2, comp, G, mit = 600)
 }
@@ -33,11 +32,8 @@ parameter, the function will supply the likelihood ratio test statistic for
 the comparison of the full model to one where the parameter of interest is
 constrained.
 }
-\details{
-Used internally in the \code{proLik} function
-}
 \seealso{
-See also \code{\link{proLik}}
+See also \code{\link{LRTest}}
 }
 \author{
 \email{matthewwolak@gmail.com}
