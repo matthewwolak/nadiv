@@ -1,17 +1,11 @@
 # Test environments
   - Ubuntu 20.04.6 LTS
-    - R version 4.3.2 (2023-10-31 r85441) x86_64-pc-linux-gnu
+    - R version 4.4.0 (2024-04-24 r86474) x86_64-pc-linux-gnu
 
   - [win-builder](https://win-builder.r-project.org/)
-    - R version 4.2.3 (2023-03-15 ucrt)
-    
-  - R-hub (`devtools::check_rhub(".", interactive = FALSE)`)
-    - Ubuntu 20.04.6 LTS, R version 4.3.2 (2023-10-31)
-    - Windows Server 2022 x64 (build 20348), R Under development (unstable) (2023-11-18 r85554 ucrt)
-    - Fedora Linux 36 (Container Image), R Under development (unstable) (2023-12-26 r85738)
-
-  - Mac OS (`devtools::check_mac_release(".")`)
-    - macOS 13.3.1 (22E261) R version 4.3.0 Patched (2023-05-18 r84451)
+    - R version 4.3.3 (2024-02-29 ucrt) x86_64-w64-mingw32 (64-bit)
+    - R Under development (unstable) (2024-05-16 r86559 ucrt) x86_64-w64-mingw32
+    - R version 4.4.0 (2024-04-24 ucrt) x86_64-w64-mingw32
     
 # R CMD check results
 There were no ERRORs or WARNINGs.
@@ -34,11 +28,10 @@ There were no ERRORs or WARNINGs.
 
 
 # Downstream dependencies
-I have also run R CMD check (`devtools::check(..., manual = FALSE, cran = TRUE, remote = TRUE, vignettes = FALSE)` on the reverse dependencies and imports of nadiv: 
+I have also run R CMD check (`tools::check_packages_in_dir(..., Ncpus = 2, check_args = c("--as-cran", ""), reverse = NULL, clean = FALSE)`) on the reverse dependencies and imports of nadiv: 
   
-  the latest versions archived on CRAN dmm (2.1.9), optiSel (2.0)
+  - the latest versions archived on CRAN that depend on `nadiv` are `dmm` (2.1-8), `optiSel` (2.0.7)
   
-The package `dmm` installed and passed all checks.
+Both packages installed and passed all checks.
 
-Package `optiSel` failed on installation because the vignettes could not be built. I have been corresponding with the author of `optiSel` and will support them on any `nadiv` related issues regarding their package as they prepare a new version for CRAN.
 
