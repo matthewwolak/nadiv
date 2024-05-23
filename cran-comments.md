@@ -1,3 +1,7 @@
+# Resubmission
+  - This resubmission addresses the comment/request from Uwe Ligges on 22 May 2024 noting that in the inst/CITATION file angle brackets are not needed in the "url" field.
+    - Accordingly, a change was made which is the only change since the original submission
+    
 # Test environments
   - Ubuntu 20.04.6 LTS
     - R version 4.4.0 (2024-04-24 r86474) x86_64-pc-linux-gnu
