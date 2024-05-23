@@ -7,7 +7,7 @@ bibentry(bibtype = "Article",
   volume       = "3",
   number       = "5",
   pages        = "792--796",
-  url 	       = "<https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2012.00213.x>",
+  url 	       = "https://besjournals.onlinelibrary.wiley.com/doi/full/10.1111/j.2041-210X.2012.00213.x",
 
   header       = "To cite nadiv in publications use:",
   textVersion  =
