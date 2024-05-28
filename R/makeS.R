@@ -66,8 +66,8 @@ makeS <- function(pedigree, heterogametic,
 
     if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
     if(!heterogametic %in% pedigree[, 4]){
-      stop(cat("Error: value given to 'heterogametic' argument (", heterogametic,
-        ") not a value in the 'Sex' column of the pedigree\n"))
+      stop("Error: value given to 'heterogametic' argument (", heterogametic,
+        ") not a value in the 'Sex' column of the pedigree\n")
     }
     nPed <- numPed(pedigree[, 1:3])
 
@@ -77,8 +77,8 @@ makeS <- function(pedigree, heterogametic,
        pedigree <- pedigree[, c(1,3,2,4)]
        names(pedigree) <- pedname
        nPed <- numPed(pedigree[, 1:3])
-      cat("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system\n")
-    } else cat("Assuming male heterogametic (e.g., XX/XY) sex chromosome system\n")
+      warning("Assuming female heterogametic (e.g., ZZ/ZW) sex chromosome system\n")
+    } else warning("Assuming male heterogametic (e.g., XX/XY) sex chromosome system\n")
 
     sex <- rep(-998, dim(pedigree)[1])
     sex[homs <- which(pedigree[,4] != heterogametic)] <- 1
@@ -241,11 +241,9 @@ makeS <- function(pedigree, heterogametic,
     listSinv <- sm2list(Sinv, rownames = as.character(pedigree[, 1]),
                               colnames = c("Row", "Column", "Sinverse"))
     if(returnS){
-       cat("S-inverse made: Starting to make S...")
           T <- as(solve(Q), "CsparseMatrix")
           S <- as(crossprod(T, Diagonal(N, Vii)) %*% T, "dgCMatrix")
             S@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-       cat(".done", "\n")
     } else{
          S <- NULL
       }

@@ -34,7 +34,7 @@ makeTinv(pedigree, ...)
 triangle \code{T} matrix). The first generation is numbered 0, default is
 all generations.}
 
-\item{f}{A numeric indicating the level of inbreeding. See Details}
+\item{f}{A numeric vector indicating the level of inbreeding. See Details}
 }
 \value{
 a \code{list}:
@@ -63,9 +63,17 @@ algorithm (particularly, following the description of the algorithm in
 Mrode 2005) with some code borrowed from the \code{inverseA} function by
 Jarrod Hadfield in the \code{MCMCglmm} package. 
 
-At the moment, providing the inbreeding level of individuals or the base
-population has not been implemented. However, this argument is a placeholder
-for now.
+The inbreeding level of individuals can be provided instead of calculated.
+\code{f} must be a vector that is the same length as individuals in the
+pedigree. Supplied coefficients of inbreeding are used instead of being 
+calculated until a \code{NA} is encountered in the vector. From this position
+on, then coefficients of inbreeding are calculated and replace entries in 
+\code{f}. This can be used, for example, to calculate coefficients of
+inbreeding for later generations when coefficients of inbreeding in the
+previous generations have already been calculated. To specify an average
+coefficient of inbreeding for the base population, modify the pedigree to
+include a single phantom parent and specify this individual's non-zero
+coefficient of inbreeding in \code{f} with the rest of the terms as NA.
 }
 \examples{
 
@@ -87,6 +95,14 @@ for now.
    Ainv
    stopifnot(all(abs((Ainv - handAinv)@x) < 1e-6))
 
+ # supply previous generation coefficients of inbreeding (f)
+ ## to keep from re-calculating their f when analyzing subsequent generations
+ DF <- makeDiiF(Mrode2[, 1:3])
+ Mrode2$gen <- genAssign(Mrode2)
+ Mrode2$f_full <- DF$f
+ Mrode2$f_in <- with(Mrode2, c(f_full[gen <= 1], rep(NA, sum(gen > 1))))
+ DF2 <- makeDiiF(Mrode2[, 1:3], f = Mrode2$f_in) 
+ stopifnot(identical(DF, DF2))
 
 }
 \references{

@@ -119,7 +119,8 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
       }
   }  #<-- end for loop
 
-
+  # re-order Q to original/pedigree order
+  Q[] <- Q[invPerm(fsOrd@perm), ]
   if(ptype == "D"){
     attr(Q, "dimnames") <- list(as.character(pedigree[, 1]),
 				as.character(ggroups))
@@ -132,6 +133,6 @@ makeGGAinv <- function(pedigree, f = NULL, ggroups = NULL, det = TRUE, ...){
  return(list(Ainv = Ainv_list,
 	listAinv = lapply(Ainv_list, FUN = function(j){ structure(sm2list(j, rownames = rownames(j), colnames = c("row", "column", "Ainv")), geneticGroups = c(0, 0))}),
 	logDet = logDet_list,
-	Q = Q[t(fsOrd)@perm, ]))
+	Q = Q))
 }
 

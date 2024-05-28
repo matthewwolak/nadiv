@@ -154,7 +154,7 @@
 #'     ## genetic groups
 #'     ggAinv[1:8, 1:8]
 #'     noggAinv
-#'    stopifnot(all.equal(ggAinv[1:8, 1:8], noggAinv))
+#'    stopifnot(all.equal(ggAinv[1:8, 1:8], structure(noggAinv, geneticGroups = NULL)))
 #'    
 #'  ##  With fuzzy classification of genetic groups  ##
 #'   ## example in Fikse (2009)
@@ -294,12 +294,12 @@ makeAinv.default <- function(pedigree, f = NULL,
   Ainv <- crossprod(fsOrd, Ainv) %*% fsOrd
   if(ptype == "D"){
       Ainv@Dimnames <- list(as.character(pedalt[, 1]), NULL)
-      f <- Cout[[3]][t(fsOrd)@perm][-seq(nggroups)]
-      dii <- Cout[[4]][t(fsOrd)@perm][-seq(nggroups)]
+      f <- Cout[[3]][invPerm(fsOrd@perm)][-seq(nggroups)]
+      dii <- Cout[[4]][invPerm(fsOrd@perm)][-seq(nggroups)]
   } else {
       Ainv@Dimnames <- list(as.character(pedigree[, 1]), NULL)
-      f <- c(rep(0, nggroups), Cout[[3]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
-      dii <- c(rep(0, nggroups), Cout[[4]][t(fsOrd)@perm][(nggroups+1):(nggroups + eN)])
+      f <- c(rep(0, nggroups), Cout[[3]][invPerm(fsOrd@perm)][(nggroups+1):(nggroups + eN)])
+      dii <- c(rep(0, nggroups), Cout[[4]][invPerm(fsOrd@perm)][(nggroups+1):(nggroups + eN)])
     }
   if(!is.null(ggroups) && !gOnTop){ 
      permute <- as(as.integer(c(seq(eN+1, N, 1), seq(eN))), "pMatrix")
@@ -344,13 +344,13 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   # checks on fuzzy classification matrix and pedigree consistency:
   ## 'fuzz' is a type of matrix
   if(!is(fuzz, "matrix") && !is(fuzz, "Matrix")){
-    cat("'fuzz' of class", class(fuzz), "\n")
-    stop("class of 'fuzz' must be either 'matrix' or 'Matrix'")
+    stop("'fuzz' of class", class(fuzz), "\n",
+    "class of 'fuzz' must be either 'matrix' or 'Matrix'")
   }
   ## rows of 'fuzz' add up to 1
   if(any(rowSums(fuzz) != 1)){
-    cat("rows:", which(rowSums(fuzz) != 1), "\ndo not equal 1\n")
-    stop("all rowSums(fuzz) must equal 1\n(check for possible rounding errors, e.g., 3*0.33333 != 1)")
+    stop("rows:", which(rowSums(fuzz) != 1), "\ndo not equal 1\n",
+    "all rowSums(fuzz) must equal 1\n(check for possible rounding errors, e.g., 3*0.33333 != 1)")
   }
   ## fuzz has dimnames
   if(is.null(dimnames(fuzz)[[1]]) | is.null(dimnames(fuzz)[[2]])){
@@ -358,13 +358,15 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   } 
   ## pedigree does not have genetic groups
   if(any(colnames(fuzz) %in% pedigree[, 1])){
-    cat("colnames:", which(colnames(fuzz) %in% pedigree[, 1]), "\nare in 'pedigree'\n")
-    stop("colnames of 'fuzz' (genetic groups) must NOT be identities in the first column of 'pedigree'")
+    stop("colnames:", which(colnames(fuzz) %in% pedigree[, 1]),
+    "\nare in 'pedigree'\n",
+    "colnames of 'fuzz' (genetic groups) must NOT be identities in the first column of 'pedigree'")
   }
   ## pedigree has phantom parents in 'fuzz'
   if(!all(rownames(fuzz) %in% pedigree[, 1])){
-    cat("rownames:", which(!rownames(fuzz) %in% pedigree[, 1]), "\nnot in 'pedigree'\n")
-    stop("rownames of 'fuzz' (phantom parents) must all be identities in the first column of 'pedigree'. See the `prepPed()` function to help prepare the pedigree")
+    stop("rownames:", which(!rownames(fuzz) %in% pedigree[, 1]),
+    "\nnot in 'pedigree'\n",
+    "rownames of 'fuzz' (phantom parents) must all be identities in the first column of 'pedigree'. See the `prepPed()` function to help prepare the pedigree")
   }
   ## individuals can only have both parents missing in 'pedigree' or none
   if(length(naPed2) != length(naPed3) | any(!naPed2 %in% naPed3)){
@@ -372,8 +374,10 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
   }   
   ## IDs with missing parents (if passed above check, naPed2==naPed3) in 'pedigree' are phantom parents in 'fuzz'
   if(!all(pedigree[naPed2, 1] %in% rownames(fuzz))){
-    cat("IDs for 'pedigree' rows:", naPed2[which(!pedigree[naPed2, 1] %in% rownames(fuzz))], "\nare not rownames in 'fuzz'\n")
-    stop("Individuals with missing parents (phantom individuals) must have a rowname in 'fuzz'")
+    stop("IDs for 'pedigree' rows:",
+    naPed2[which(!pedigree[naPed2, 1] %in% rownames(fuzz))],
+    "\nare not rownames in 'fuzz'\n",
+    "Individuals with missing parents (phantom individuals) must have a rowname in 'fuzz'")
   }
 
 
@@ -404,7 +408,7 @@ makeAinv.fuzzy <- function(pedigree, f = NULL, ggroups = NULL, fuzz, gOnTop = FA
  
   groupFuzz <- Diagonal(x = 1, n = nggroups)
   groupFuzz@Dimnames <- list(as.character(ggroups), as.character(ggroups))
-  fuzzmat <- rbind(groupFuzz, fuzz)
+  fuzzmat <- as(rbind(groupFuzz, fuzz), "CsparseMatrix")
   # predict non-zero elements of Astar
   ## make H from Quaas 1988:
   ## H = [-Pb Qb : Tinv]

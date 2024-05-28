@@ -19,10 +19,10 @@ must be the row-wise lower triangle of the matrix (including the diagonal).}
 \item{Dimnames}{A vector of characters if names are desired for the output
 (co)variance matrix. If not specified, either the default labels from the
 \code{asreml} object will be used or the rows and columns will be
-un-labeled.}
+unlabeled.}
 }
 \value{
-A /code{matrix} of k x k dimensions is returned, if k is the number
+A \code{matrix} of k x k dimensions is returned, if k is the number
   of (co)variance components estimated in the model. Sampling covariances are
   above and below the diagonal while variances are located along the
    diagonal. If \code{Dimnames} is specified, the row and column names are
@@ -58,11 +58,14 @@ The vector of \code{Dimnames} should match the same order of variance
 
   \dontrun{
     library(asreml)
-    ginvA <- asreml.Ainverse(warcolak)$ginv
-    ginvD <- makeD(warcolak[,1:3])$listDinv
+    ginvA <- ainverse(warcolak)
+    ginvD <- makeD(warcolak[, 1:3])$listDinv
+      attr(ginvD, "rowNames") <- as.character(warcolak[, 1])
+      attr(ginvD, "INVERSE") <- TRUE
     warcolak$IDD <- warcolak$ID
-    warcolak.mod <- asreml(trait1 ~ sex, random = ~ped(ID) + giv(IDD), 
-	ginverse = list(ID = ginvA, IDD = ginvD), data = warcolak) 
+    warcolak.mod <- asreml(trait1 ~ sex,
+     random = ~ vm(ID, ginvA) + vm(IDD, ginvD), 
+	data = warcolak) 
     summary(warcolak.mod)$varcomp
     aiFun(model = warcolak.mod, Dimnames = c("Va", "Vd", "Ve"), inverse = TRUE)    
    }

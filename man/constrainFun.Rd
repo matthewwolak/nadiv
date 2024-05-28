@@ -2,8 +2,7 @@
 % Please edit documentation in R/constrainFun.R
 \name{constrainFun}
 \alias{constrainFun}
-\title{Function used in conjunction with others to produce a profile likelihood for
-a variance component}
+\title{Fix a Model Parameter and Conduct Likelihood Ratio Test}
 \usage{
 constrainFun(parameter.val, full, fm2, comp, G, mit = 600)
 }
@@ -22,17 +21,19 @@ be calculated}
 \item{mit}{numeric, indicating maximum number of iterations for the
 constrained asreml model}
 }
+\value{
+A \code{vector} of length 1 returning either a \code{numeric} value
+ corresponding to the likelihood ratio test statistic or else the missing 
+ value indicator \code{NA}.
+}
 \description{
 Given a model object from \code{asreml} and a range of estimates of the
 parameter, the function will supply the likelihood ratio test statistic for
 the comparison of the full model to one where the parameter of interest is
 constrained.
 }
-\details{
-Used internally in the \code{proLik} function
-}
 \seealso{
-See also \code{\link{proLik}}
+See also \code{\link{LRTest}}
 }
 \author{
 \email{matthewwolak@gmail.com}

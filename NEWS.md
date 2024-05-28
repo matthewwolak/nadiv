@@ -1,8 +1,44 @@
-#2.17.2
+# 2.18.0
 
-# DEPRECATED
-  - `pin()` does not work with asreml version 4 (should still work with asreml version 3 model objects)
-    - `nadiv` will not support this in the future as asreml v4 has `vpredict()`
+## NEW
+  - `makeDiiF()` can now be given coefficients of inbreeding. Facilitates either:
+    - calculating `f` in a new generation of the pedigree if `f` has already been calculated for previous generations
+    - creating a "phantom parent" to all founders to specify an average coefficient of inbreeding in the base population.
+    - can be used to speed up simulations where breeding values are calculated based on mid-parent value plus Mendelian sampling deviation (that needs to account for inbreeding of parents).
+
+## Major changes
+  - `proLik()` (and `proLik4()`) __REMOVED__ from the package.
+    - these functions were _only_ to facilitate advanced use of the `asreml` R package (which requires purchasing an expensive license) and due to the __unstable__ behavior of `asreml` discovered when revising `proLik()` it was decided that `nadiv` should no longer support this other package in this way.
+    - Instead, time will be spent improving the `gremlin` [R package](https://CRAN.R-project.org/package=gremlin) for a replacement to `asreml`.
+
+  - `makeA()` was affected by a bug in `Matrix` <1.6-0
+    - `Matrix::chol2inv()` bug highlighted a messy order of operations in `nadiv`
+    - now perfected the order of operations and explicitly use `tcrossprod()` and
+`solve()` which are just what `chol2inv()` uses
+        - done to be more explicit in `nadiv` and take 1 step away from future bugs like this
+    - checked speed and memory profiling for several options of types of matrices
+        - dtCMatrix is best for time (tried "dtrMatrix" and "dtpMatrix", but these
+were __much__ slower.
+        - `chol2inv()` and `tcrossprod(solve())` allocated same amount of memory according to `profmem` package
+
+  - bug in `makeAinv()`, `makeGGAinv()`, and `makeDiiF()` caused coefficients of inbreeding (`f`) and Mendelian sampling variances (`dii`) to be ordered incorrectly
+    - this did _not_ cause matrices from these functions to be incorrect (e.g., __Ainv__, __Tinv__, and their related matrices), but did cause matrices built directly from `dii` to be incorrect - namely the __A__ matrix from `makeA()` and so consequently anything built from __A__ (i.e., dominance and epistatic relatedness matrices through `makeD()` etc.)
+    - __this was FIXED__ with details in the [commit](https://github.com/matthewwolak/nadiv/commit/a410517bf76be2fbead3be746f3729dcbe488a04)
+    
+    
+## Small changes
+  - `nadiv` version 2.17.2 caused CRAN to archive due to error induced by `Matrix` updates
+    - Mikael Jagan (`Matrix` author) helpfully provided excellent explanations and patches
+    - errors in `nadiv` code caused by new methods for `all.equal()` and `rbind2()`
+    - removed methods `is.numPed()` and `is.proLik()`
+        - hardly use first and never second plus they just call `inherits()`       
+         
+                 
+# 2.17.2
+
+# DEPRECATED version 2.17.2
+  - `pin()` does not work with asreml 4 (should still work with asreml 3 model objects)
+    - `nadiv` will not support this in the future as asreml 4 has `vpredict()`
 
 ## NEW
   - `proLik4()`, essentially the same as `proLik()`, but works on `asreml` v4

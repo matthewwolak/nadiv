@@ -1,6 +1,6 @@
 makeDufam <- function(pedigree, parallel = FALSE,
 	ncores = getOption("mc.cores", 2L), invertD = TRUE,
-	returnA = FALSE, det = TRUE){
+	returnA = FALSE, det = TRUE, verbose = TRUE){
 
   N <- nrow(pedigree)
   pedigree <- cbind(pedigree, gen = genAssign(pedigree), oseq = seq.int(N))
@@ -17,7 +17,7 @@ makeDufam <- function(pedigree, parallel = FALSE,
   }
 
   if(!parallel){
-     cat(paste("starting to make D..."))
+     if(verbose) cat(paste("starting to make D..."))
      Cout <- .C("dijjskip", PACKAGE = "nadiv",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
@@ -58,7 +58,7 @@ makeDufam <- function(pedigree, parallel = FALSE,
          Cout[[9]]
         }
 
-        cat(paste("starting to make D..."))
+        if(verbose) cat(paste("starting to make D..."))
         Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
         D <- sparseMatrix(i = A@i,
@@ -72,7 +72,7 @@ makeDufam <- function(pedigree, parallel = FALSE,
 
      }
 
-  cat(paste(".done", "\n"))
+  if(verbose) cat(paste(".done", "\n"))
   D <- D[pedigree$oseq, pedigree$oseq]
   if(returnA) A <- A[pedigree$oseq, pedigree$oseq]
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL

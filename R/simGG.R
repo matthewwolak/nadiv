@@ -133,11 +133,11 @@
 #' Values, 2nd ed.  Cambridge, MA: CABI Publishing.
 #' @examples
 #' 
-#'   \dontrun{
+#'   \donttest{
 #'   # The dataset 'ggTutorial' was simulated as:
 #'   set.seed(102)      		# seed used to simulate ggTutorial
 #'   ggTutorial <- simGG(K = 400, pairs = 200, noff = 4, g = 15,
-#' 	nimm = 40,
+#' 	nimm = 40, nimmG = seq(2, 14, 1),
 #' 	muf = 0, mui = 3)
 #'   }
 #' 

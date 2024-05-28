@@ -119,13 +119,12 @@
 #' @keywords datasets
 #' @examples
 #' 
-#'  \dontrun{
-#'   rm(list = ls())
+#'  \donttest{
 #'   set.seed(102)     #<-- seed value used originally
 #'   library(nadiv)
 #'   # create data using `simGG()`
 #'   ggTutorial <- simGG(K = 400, pairs = 200, noff = 4, g = 15,
-#'     nimm = 40, nimmG = seq(2, g-1, 1),		    # nimmG default value
+#'     nimm = 40, nimmG = seq(2, 14, 1),		    # nimmG default value
 #'     VAf = 1, VAi = 1, VRf = 1, VRi = 1,		    # all default values
 #'     mup = 20, muf = 0, mui = 3, murf = 0, muri = 0, # mup and mui non-default values
 #'     d_bvf = 0, d_bvi = 0, d_rf = 0, d_ri = 0)	    # all default values
@@ -247,7 +246,7 @@
 #' Pedigree and phenotypic values for a mythical population of Warcolaks
 #' 
 #' A two trait example pedigree from the three generation breeding design of
-#' Fairbairn & Roff (2006) with two un-correlated traits.
+#' Fairbairn & Roff (2006) with two uncorrelated traits.
 #' 
 #' Unique sets of relatives are specified for a three generation breeding
 #' design (Fairbairn & Roff, 2006).  Each set contains 72 individuals. This
@@ -255,7 +254,7 @@
 #' Fairbairn & Roff's design. The pedigree was created using
 #' \code{simPedDFC()}.
 #' 
-#' The dataset was simulated to have two un-correlated traits with different
+#' The dataset was simulated to have two uncorrelated traits with different
 #' genetic architectures (see \code{examples} below). The trait means are both
 #' equal to 1 for males and 2 for females. The additive genetic, dominance
 #' genetic, and environmental (or residual) variances for both \code{trait1}
@@ -320,12 +319,11 @@
 #' @keywords datasets
 #' @examples
 #' 
-#'  \dontrun{
-#'   rm(list = ls())
+#'  \donttest{
 #'   set.seed(101)
 #'   library(nadiv)
 #'   # create pedigree
-#'   warcolak <- simPedDFC(F = 75, gpn = 4, fsn = 4, s = 2)
+#'   warcolak <- simPedDFC(U = 75, gpn = 4, fsn = 4, s = 2)
 #'   names(warcolak)[1:3] <- c("ID", "Dam", "Sire")
 #'   warcolak$trait2 <- warcolak$trait1 <- NA
 #' 
@@ -362,7 +360,7 @@
 #'   tmp_s <- grfx(pedn, G = Gs_t2, incidence = makeS(warcolak[, 1:4],
 #' 	heterogametic = "M", DosageComp = "ngdc", returnS = TRUE)$S)
 #'     matrix(c(var(tmp_s[which(sexcol == 1), 1]),
-#' 	rep(cov(tmp_s), 2), var(tmp_s[which(sexcol == 2), 2])), 2, 2)
+#' 	rep(cov(tmp_s)[2, 1], 2), var(tmp_s[which(sexcol == 2), 2])), 2, 2)
 #'     # NOTE above should be: covar = male var = 0.5* female var 
 #'   warcolak$t2_s <- tmp_s[cbind(seq(pedn), sexcol)]
 #' 

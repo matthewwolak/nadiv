@@ -13,7 +13,7 @@ aic(logLik, fp, n = NULL)
 included in the logLik vector}
 
 \item{n}{An optional vector of sample sizes for each model.  Used to
-calculate AICc (small sample un-biased AIC).}
+calculate AICc (small sample unbiased AIC).}
 }
 \value{
 a \code{list}:

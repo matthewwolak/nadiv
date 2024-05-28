@@ -4,7 +4,7 @@
 makeSd <- function(pedigree, heterogametic,
 	DosageComp = c(NULL, "ngdc", "hori", "hedo", "hoha", "hopi"),
 	parallel = FALSE, ncores = getOption("mc.cores", 2L),
-	invertSd = TRUE, returnS = FALSE, det = TRUE){
+	invertSd = TRUE, returnS = FALSE, det = TRUE, verbose = TRUE){
 
 
   if(length(unique(pedigree[,4])) > 2) stop("Error: more than 2 sexes specified")
@@ -15,7 +15,7 @@ makeSd <- function(pedigree, heterogametic,
     dc.model <- "ngdc"
   }
   if(dc.model == "hopi" | dc.model == "hori"){
-    cat("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
+    warning("Assume sex chromosomal dominance allelic interactions do not occur under 'hopi' or 'hori'\n")
     return(NULL)
   }
 
@@ -50,7 +50,7 @@ makeSd <- function(pedigree, heterogametic,
 #  }
 
   if(!parallel){
-     cat("starting to make Sd...")
+     if(verbose) cat("starting to make Sd...")
 
      Cout <- .C("sdij", PACKAGE = "nadiv",
                 as.integer(nPed[, 2] - 1), 		# [[1]] dam ID/No.
@@ -96,7 +96,7 @@ stop("code not yet written to parallelize function") #FIXME
 #         Cout[[9]]
 #        }
 
-#        cat("starting to make D...")
+#        if(verbose) cat("starting to make D...")
 #        Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1), FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE, mc.cores = ncores, mc.cleanup = TRUE)
   
 #        D <- sparseMatrix(i = A@i, p = A@p, x = Dijs, ...)
@@ -106,14 +106,14 @@ stop("code not yet written to parallelize function") #FIXME
 
      }
 
-  cat(".done", "\n")
+  if(verbose) cat(".done", "\n")
   
   if(det) logDet <- determinant(Sd, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertSd){
-    cat("starting to invert Sd...")
+    if(verbose) cat("starting to invert Sd...")
     Sdinv <- as(solve(Sd), "dgCMatrix")
       Sdinv@Dimnames <- Sd@Dimnames
-    cat(".done", "\n")
+    if(verbose) cat(".done", "\n")
     listSdinv <- sm2list(Sdinv, rownames = Sd@Dimnames[[1L]],
 	colnames = c("row", "column", "Sdinverse"))
  return(list(S = S, Sd = Sd, logDet = logDet,

@@ -184,7 +184,7 @@ set of equations.
     ## genetic groups
     ggAinv[1:8, 1:8]
     noggAinv
-   stopifnot(all.equal(ggAinv[1:8, 1:8], noggAinv))
+   stopifnot(all.equal(ggAinv[1:8, 1:8], structure(noggAinv, geneticGroups = NULL)))
    
  ##  With fuzzy classification of genetic groups  ##
   ## example in Fikse (2009)

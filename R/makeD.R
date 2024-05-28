@@ -74,6 +74,7 @@
 #'   matrix (A or S) should be stored and returned.
 #' @param det Logical, indicating if the determinant of the D or Sd matrix
 #'   should be returned.
+#' @param verbose Logical, indicating if progress messages should be displayed.
 #'
 #' @return a \code{list}:
 #'   \describe{
@@ -112,7 +113,7 @@
 #' 
 #' @export
 makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L),
-	invertD = TRUE, returnA = FALSE, det = TRUE){
+	invertD = TRUE, returnA = FALSE, det = TRUE, verbose = TRUE){
 
   numeric.pedigree <- numPed(pedigree) 
   N <- dim(pedigree)[1]
@@ -127,7 +128,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
   }
 
   if(!parallel){
-     cat("starting to make D...")
+     if(verbose) cat("starting to make D...")
      Cout <- .C("dij", PACKAGE = "nadiv",
                 as.integer(numeric.pedigree[, 2] - 1), 
 		as.integer(numeric.pedigree[, 3] - 1), 
@@ -168,7 +169,7 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
          Cout[[9]]
         }
 
-        cat("starting to make D...")
+        if(verbose) cat("starting to make D...")
         Dijs <- parallel::pvec(seq(1, dim(listA)[1], 1),
 		FUN = wrap_dij, mc.set.seed = FALSE, mc.silent = FALSE,
 		mc.cores = ncores, mc.cleanup = TRUE)
@@ -184,14 +185,14 @@ makeD <- function(pedigree, parallel = FALSE, ncores = getOption("mc.cores", 2L)
 
      }
 
-  cat(".done", "\n")
+  if(verbose) cat(".done", "\n")
   
   if(det) logDet <- determinant(D, logarithm = TRUE)$modulus[1] else logDet <- NULL
   if(invertD){
-    cat("starting to invert D...")
+    if(verbose) cat("starting to invert D...")
     Dinv <- as(solve(D), "dgCMatrix")
       Dinv@Dimnames <- D@Dimnames
-    cat(".done", "\n")
+    if(verbose) cat(".done", "\n")
     listDinv <- sm2list(Dinv, rownames=pedigree[,1], colnames=c("row", "column", "Dinverse"))
  return(list(A = A, D = D, logDet = logDet, Dinv=Dinv, listDinv=listDinv))
   } else{

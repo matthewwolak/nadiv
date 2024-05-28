@@ -145,14 +145,15 @@ prepPed <- function(pedigree, gender = NULL, check = TRUE){
  if(Cout[[5]] < npf){
    infLooper <- Cout[[5]] + 1
    if(Cout[[3]][1] == -999){
-     cat("\n Problem: infinite pedigree loop involving individual",
+     damFemMsg <- c("\n Problem: infinite pedigree loop involving individual",
        as.character(ped_fixed[infLooper, 1]), "and dam/female ancestors\n\n")
-   }
+   } else damFemMsg <- NULL
    if(Cout[[4]][1] == -999){
-     cat("\n Problem: infinite pedigree loop involving individual",
+     sireMaleMsg <- c("\n Problem: infinite pedigree loop involving individual",
        as.character(ped_fixed[infLooper, 1]), "and sire/male ancestors\n\n")
-   }
-   stop("Check for individuals that appear as their own ancestor")
+   } else sireMaleMsg <- NULL
+   stop(damFemMsg, sireMaleMsg,
+   "Check for individuals that appear as their own ancestor")
  }
 
   # Order by number of dam/sire paths to dam/sire founder:

@@ -14,9 +14,17 @@
 #' Mrode 2005) with some code borrowed from the \code{inverseA} function by
 #' Jarrod Hadfield in the \code{MCMCglmm} package. 
 #' 
-#' At the moment, providing the inbreeding level of individuals or the base
-#' population has not been implemented. However, this argument is a placeholder
-#' for now.
+#' The inbreeding level of individuals can be provided instead of calculated.
+#' \code{f} must be a vector that is the same length as individuals in the
+#' pedigree. Supplied coefficients of inbreeding are used instead of being 
+#' calculated until a \code{NA} is encountered in the vector. From this position
+#' on, then coefficients of inbreeding are calculated and replace entries in 
+#' \code{f}. This can be used, for example, to calculate coefficients of
+#' inbreeding for later generations when coefficients of inbreeding in the
+#' previous generations have already been calculated. To specify an average
+#' coefficient of inbreeding for the base population, modify the pedigree to
+#' include a single phantom parent and specify this individual's non-zero
+#' coefficient of inbreeding in \code{f} with the rest of the terms as NA.
 #' 
 #' @aliases makeT makeT.default makeT.numPed
 #'   makeTinv makeTinv.default makeTinv.numPed makeDiiF
@@ -25,7 +33,7 @@
 #'   \code{T} matrix is to be created (corresponding to columns of the lower
 #'   triangle \code{T} matrix). The first generation is numbered 0, default is
 #'   all generations.
-#' @param f A numeric indicating the level of inbreeding. See Details
+#' @param f A numeric vector indicating the level of inbreeding. See Details
 #' @param \dots Arguments to be passed to methods
 #'
 #' @return a \code{list}:
@@ -67,6 +75,14 @@
 #'    Ainv
 #'    stopifnot(all(abs((Ainv - handAinv)@x) < 1e-6))
 #' 
+#'  # supply previous generation coefficients of inbreeding (f)
+#'  ## to keep from re-calculating their f when analyzing subsequent generations
+#'  DF <- makeDiiF(Mrode2[, 1:3])
+#'  Mrode2$gen <- genAssign(Mrode2)
+#'  Mrode2$f_full <- DF$f
+#'  Mrode2$f_in <- with(Mrode2, c(f_full[gen <= 1], rep(NA, sum(gen > 1))))
+#'  DF2 <- makeDiiF(Mrode2[, 1:3], f = Mrode2$f_in) 
+#'  stopifnot(identical(DF, DF2))
 #'
 #' @export
 makeTinv <- function(pedigree, ...){
@@ -195,19 +211,26 @@ makeDiiF.default <- function(pedigree, f = NULL, ...){
   nPed <- numPed(pedigree[renPed, ])
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  if(fmiss <- missing(f)){
+    f <- rep(0, N)
+  } else{
+      f <- f[renPed]
+      nafInd <- which(is.na(f))
+        f[nafInd] <- 0.0
+      fmiss <- min(nafInd)     
+    }
   f <- c(f, -1)
   Cout <- .C("diif", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 			#dam
-	    as.integer(nPed[, 3] - 1),  		#sire
-	    as.double(f),				#f
-            as.double(rep(0, N)),  			#dii
-            as.integer(N),   				#n
-            as.integer(0),				#number genetic groups
-	    as.integer(fmiss))				#f missing or supplied
+	    as.integer(nPed[, 2] - 1), 		#dam
+	    as.integer(nPed[, 3] - 1),  	#sire
+	    as.double(f),			#f
+            as.double(rep(0, N)),  		#dii
+            as.integer(N),   			#n
+            as.integer(0),			#number genetic groups
+	    as.integer(fmiss - 1))		#first f to calculate (not supplied)
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  f <- Cout[[3]][t(fsOrd)@perm]
-  dii <- Cout[[4]][t(fsOrd)@perm]
+  f <- Cout[[3]][invPerm(fsOrd@perm)]
+  dii <- Cout[[4]][invPerm(fsOrd@perm)]
 
 
  return(list(D = Diagonal(x = dii, n = N),
@@ -224,19 +247,26 @@ makeDiiF.numPed <- function(pedigree, f = NULL, ...){
   nPed <- ronPed(pedigree, renPed)
   N <- nrow(nPed)
   nPed[nPed == -998] <- N + 1
-  if(fmiss <- missing(f)) f <- rep(0, N) else f <- f[renPed]
+  if(fmiss <- missing(f)){
+    f <- rep(0, N)
+  } else{
+      f <- f[renPed]
+      nafInd <- which(is.na(f))
+        f[nafInd] <- 0.0
+      fmiss <- min(nafInd)     
+    }
   f <- c(f, -1)
   Cout <- .C("diif", PACKAGE = "nadiv",
-	    as.integer(nPed[, 2] - 1), 				#dam
-	    as.integer(nPed[, 3] - 1),  			#sire
-	    as.double(f),					#f
-            as.double(rep(0, N)),  				#dii
-            as.integer(N),   					#n
-            as.integer(0),				#number genetic groups
-	    as.integer(fmiss))				#f missing or supplied
+	    as.integer(nPed[, 2] - 1), 		#dam
+	    as.integer(nPed[, 3] - 1),  	#sire
+	    as.double(f),			#f
+            as.double(rep(0, N)),  		#dii
+            as.integer(N),   			#n
+            as.integer(0),			#number genetic groups
+	    as.integer(fmiss))			#first f to calculate (not supplied)
   fsOrd <- as(as.integer(renPed), "pMatrix")
-  f <- Cout[[3]][t(fsOrd)@perm]
-  dii <- Cout[[4]][t(fsOrd)@perm]
+  f <- Cout[[3]][invPerm(fsOrd@perm)]
+  dii <- Cout[[4]][invPerm(fsOrd@perm)]
 
 
  return(list(D = Diagonal(x = dii, n = N),

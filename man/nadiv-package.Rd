@@ -3,7 +3,6 @@
 \docType{package}
 \name{nadiv-package}
 \alias{nadiv-package}
-\alias{_PACKAGE}
 \alias{nadiv}
 \title{(Non)Additive Genetic Relatedness Matrices in Animal Model Analyses}
 \description{
