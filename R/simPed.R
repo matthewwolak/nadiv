@@ -90,13 +90,14 @@ ped
 #' females and males).
 #' 
 #' @param U An integer number of units or blocks for the design
-#' @param gpn Number of grandparent pairs in the generation 0 (GP)
+#' @param gpn Number of grandparent pairs per unit in the generation 0 (GP)
 #'   (must be >= 2). Equals the number of full-sib families in generation 1 (P).
 #' @param fsn Number of offspring in each full-sib family of generations 1 and 2
 #'   (P and F1 - must be an even number >= 4).
 #' @param s Number of sires per full-sib family in generation 1 (P - must be >=2)
-#' @param fws Number of generation 1 (P) families with sires. Together, with
-#'   \code{s}, sets up how cousins and double first cousins are produced 
+#' @param fws Number of generation 1 (P) families with sires in each unit.
+#'   Together, with \code{s}, sets up how cousins and double first cousins are
+#'   produced 
 #' @param prefix Optional prefix to add to every identity
 #'
 #' @return A \code{data.frame} with columns corresponding to: id, dam, sire,
