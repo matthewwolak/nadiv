@@ -9,7 +9,7 @@ simPedDFC(U, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
 \arguments{
 \item{U}{An integer number of units or blocks for the design}
 
-\item{gpn}{Number of grandparent pairs in the generation 0 (GP)
+\item{gpn}{Number of grandparent pairs per unit in the generation 0 (GP)
 (must be >= 2). Equals the number of full-sib families in generation 1 (P).}
 
 \item{fsn}{Number of offspring in each full-sib family of generations 1 and 2
@@ -17,8 +17,9 @@ simPedDFC(U, gpn = 4, fsn = 4, s = 2, fws = 2, prefix = NULL)
 
 \item{s}{Number of sires per full-sib family in generation 1 (P - must be >=2)}
 
-\item{fws}{Number of generation 1 (P) families with sires. Together, with
-\code{s}, sets up how cousins and double first cousins are produced}
+\item{fws}{Number of generation 1 (P) families with sires in each unit.
+Together, with \code{s}, sets up how cousins and double first cousins are
+produced}
 
 \item{prefix}{Optional prefix to add to every identity}
 }
